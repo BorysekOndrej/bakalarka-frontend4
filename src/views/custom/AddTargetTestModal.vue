@@ -12,6 +12,9 @@
             :show.sync="modal1Visible"
     >
         <AddTargetComponent></AddTargetComponent>
+        <template #footer>
+            <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+        </template>
     </CModal>
     <CModal
             title="Existing target"
@@ -22,8 +25,12 @@
                 :notifications="{active:false}"
                 :target="{hostname:'test2', port:null}"
         ></AddTargetComponent>
-        </CModal>
+        <template #footer>
+            <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+        </template>
+    </CModal>
     </div>
+
 </template>
 
 <script>

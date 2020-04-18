@@ -57,6 +57,9 @@
                     :prefill="true"
                     :target="targetToEdit"
             ></AddTargetComponent>
+            <template #footer>
+                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+            </template>
         </CModal>
     </div>
 </template>
@@ -72,15 +75,16 @@
         props: {
             items: {
                 type: Array,
+                /*
                 default () {
                     return [{username: 'test1', 'registered': '2020-02-30', 'role': 'troll', 'status': 'Active'}]
                 }
+                */
             },
             fields: {
                 type: Array,
                 default () {
                     return ['hostname', 'port', 'ip_address', 'protocol', 'grade', 'expires', {key:'buttons', filter: false, sorter: false}]
-                    //return ['username', 'registered', 'role', 'status', {key:'buttons', filter: false, sorter: false}]
                 }
             },
         },

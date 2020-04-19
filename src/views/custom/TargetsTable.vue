@@ -19,17 +19,16 @@
                     hover
                     striped
                     border
+                    style="text-align: center"
                     caption="Primary test table"
                     :loading="loading"
                     :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                 >
-                    <!--
-                    <template #status="{item}">
+                    <template #grade="{item}">
                         <td>
-                            <CBadge :color="getBadge(item.status)">{{item.status}}</CBadge>
+                            <CBadge :color="getBadge(item.grade)">{{item.grade}}</CBadge>
                         </td>
                     </template>
-                    -->
 
                     <template #buttons="{item}">
                         <td class="button_only_td">
@@ -101,10 +100,10 @@
 
         methods: {
             getBadge (status) {
-                return status === 'Active' ? 'success'
-                    : status === 'Inactive' ? 'secondary'
-                        : status === 'Pending' ? 'warning'
-                            : status === 'Banned' ? 'danger' : 'primary'
+                return status === 'A' ? 'success'
+                    : status === 'B' ? 'secondary'
+                        : status === 'C' ? 'warning'
+                            : status === 'D' ? 'danger' : 'danger'
             },
             shuffleArray (array) {
                 for (let i = array.length - 1; i > 0; i--) {

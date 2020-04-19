@@ -69,7 +69,7 @@
 <script>
     import {callGetUserTargets} from "@/api";
     import AddTargetComponent from "./AddTargetComponent";
-    import {filterObjToTargetDefinition} from "../../utils";
+    import {filterObjToTargetDefinition, EventBus} from "../../utils";
 
     export default {
         name: 'TargetsTable',
@@ -95,6 +95,11 @@
         },
         created() {
             this.syncGetUserTargets()
+
+            var self = this;
+            EventBus.$on('users-targets-modified', () => {
+                self.syncGetUserTargets()
+            });
         },
 
         methods: {

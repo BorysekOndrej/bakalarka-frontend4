@@ -46,7 +46,7 @@ const actions = {
     removeTarget(context, userData) {
         Vue.$log.debug("Remove scan order triggered")
         return callDeleteTarget(userData)
-            .then()
+            .then(() => EventBus.$emit('users-targets-modified'))
             .catch(error => {
                 Vue.$log.warn('Error removing scan order: ', error)
                 return Promise.reject(error);
@@ -55,7 +55,10 @@ const actions = {
     addTarget(context, userData) {
         Vue.$log.debug("Add target triggered")
         return callAddTarget(userData)
-            .then(context.commit('targetAdded', userData))
+            .then(userData => {
+                context.commit('targetAdded', userData)
+                EventBus.$emit('users-targets-modified')
+            })
             .catch(error => {
                 Vue.$log.warn('Error adding new target: ', error)
                 EventBus.emit('failedAddTarget: ', error)

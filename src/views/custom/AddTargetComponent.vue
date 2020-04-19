@@ -189,6 +189,7 @@
             target: {
                 type: Object,
                 default: () => ({
+                    id: null,
                     hostname: '',
                     port: null,
                     ip_address: null,
@@ -247,6 +248,9 @@
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {
+                if (this.target.id === undefined){
+                    return;
+                }
                 // Reset our form values
                 this.form.target = {...this.target};
                 if (!this.modifying_existing){

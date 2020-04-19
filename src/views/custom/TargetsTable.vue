@@ -88,7 +88,7 @@
         },
         data() {
             return {
-                caption: 'Test Table 1',
+                caption: 'List of your targets',
                 editTargetModalVisible: false,
                 targetToEdit: null,
                 loading: false

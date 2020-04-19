@@ -25,8 +25,8 @@
                     :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                 >
                     <template #grade="{item}">
-                        <td>
-                            <CBadge :color="getBadge(item.grade)">{{item.grade}}</CBadge>
+                        <td style="padding-top: 0px; padding-bottom: 0px; vertical-align: middle;">
+                            <h3><CBadge :color="getBadge(item.grade)">{{item.grade}}</CBadge></h3>
                         </td>
                     </template>
 

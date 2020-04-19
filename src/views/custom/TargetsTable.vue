@@ -39,7 +39,8 @@
                                      v-c-tooltip="{content: 'Edit'}"
                             ><CIcon name="cil-pencil"/></CButton>
 
-                            <CButton color="danger"
+                            <CButton v-if="item.active == 'yes'"
+                                     color="danger"
                                      class="btn-mi"
                                      v-on:click="delete_target(item)"
                                      v-c-tooltip="{content: 'Archive'}"

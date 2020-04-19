@@ -248,7 +248,7 @@
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {
-                if (this.target.id === undefined){
+                if (this.target === null || this.target.id === null){
                     return;
                 }
                 // Reset our form values

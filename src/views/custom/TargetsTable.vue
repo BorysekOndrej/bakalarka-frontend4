@@ -68,6 +68,7 @@
     import usersData from '../users/UsersData'
     import {callGetUserTargets} from "@/api";
     import AddTargetComponent from "./AddTargetComponent";
+    import {filterObjToTargetDefinition} from "../../utils";
 
     export default {
         name: 'TargetsTable',
@@ -121,7 +122,7 @@
             },
             edit_target(row){
                 console.log("edit_target", {...row});
-                this.targetToEdit = {...row};
+                this.targetToEdit = filterObjToTargetDefinition({...row});
                 this.editTargetModalVisible = true;
             },
             delete_target(row){

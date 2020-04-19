@@ -4,6 +4,7 @@
 import Vue from 'vue'
 
 export const EventBus = new Vue()
+const target_properties = ['hostname', 'port', 'ip_address', 'protocol']
 
 export function jwtValidUntil(jwt){
     if (!jwt || jwt.split('.').length < 3) {
@@ -23,7 +24,6 @@ export function isValidJwt(jwt) {
 }
 
 
-
 export function makeColumnsSortable(all_column_names, except_column_names){
     return all_column_names.map(x => {
         let obj = {}
@@ -33,4 +33,17 @@ export function makeColumnsSortable(all_column_names, except_column_names){
         }
         return obj
     })
+}
+
+
+export function filterObjToTargetDefinition(obj){
+    // https://stackoverflow.com/a/38750895/5769940
+    const filtered = Object.keys(obj)
+        .filter(key => target_properties.includes(key))
+        .reduce((answer, key) => {
+            answer[key] = obj[key];
+            return answer;
+        }, {});
+
+    return filtered
 }

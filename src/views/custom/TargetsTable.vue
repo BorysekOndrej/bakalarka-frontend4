@@ -19,6 +19,8 @@
                     striped
                     border
                     caption="Primary test table"
+                    :loading="loading"
+                    :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                 >
                     <!--
                     <template #status="{item}">
@@ -94,6 +96,7 @@
                 caption: 'Test Table 1',
                 editTargetModalVisible: false,
                 targetToEdit: null,
+                loading: false
             }
         },
         created() {
@@ -129,9 +132,11 @@
                 this.$store.dispatch('removeTarget', row.id)
             },
             async syncGetUserTargets() {
+                this.loading = true
                 const response = await callGetUserTargets();
-                console.log(response)
+                // console.log(response)
                 this.items = response.data;
+                this.loading = false
             }
         }
     }

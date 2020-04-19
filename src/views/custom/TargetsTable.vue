@@ -13,6 +13,7 @@
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
+                    :columnFilterValue="{ active: 'yes' }"
                     sorter
                     pagination
                     hover
@@ -78,16 +79,11 @@
         props: {
             items: {
                 type: Array,
-                /*
-                default () {
-                    return [{username: 'test1', 'registered': '2020-02-30', 'role': 'troll', 'status': 'Active'}]
-                }
-                */
             },
             fields: {
                 type: Array,
                 default () {
-                    return ['hostname', 'port', 'ip_address', 'protocol', 'grade', 'expires', {key:'buttons', filter: false, sorter: false}]
+                    return ['hostname', 'port', 'ip_address', 'protocol', 'grade', 'expires', 'active', {key:'buttons', filter: false, sorter: false}]
                 }
             },
         },

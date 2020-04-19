@@ -67,7 +67,6 @@
 </template>
 
 <script>
-    import usersData from '../users/UsersData'
     import {callGetUserTargets} from "@/api";
     import AddTargetComponent from "./AddTargetComponent";
     import {filterObjToTargetDefinition} from "../../utils";
@@ -104,19 +103,6 @@
                     : status === 'B' ? 'secondary'
                         : status === 'C' ? 'warning'
                             : status === 'D' ? 'danger' : 'danger'
-            },
-            shuffleArray (array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    let j = Math.floor(Math.random() * (i + 1))
-                    let temp = array[i]
-                    array[i] = array[j]
-                    array[j] = temp
-                }
-                return array
-            },
-
-            getShuffledUsersData () {
-                return this.shuffleArray(usersData.slice(0))
             },
             edit_target(row){
                 console.log("edit_target", {...row});

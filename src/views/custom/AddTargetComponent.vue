@@ -248,16 +248,13 @@
         methods: {
             prefillFormToDefaultOrPassedValues() {
                 // Reset our form values
-                // console.log("Prefill triggered")
-                // console.log(this.target)
-                // console.log(this.form.target)
                 this.form.target = {...this.target};
                 if (!this.modifying_existing){
                     this.form.scanOrder = {...this.scanOrder};
                     this.form.notifications = {...this.notifications};
                 }else{
                     let self = this
-                    callGetTargetInfoForEditDialog(this.form.target)
+                    callGetTargetInfoForEditDialog(this.form.target.id)
                         .then(function (response) {
                             self.form.scanOrder = response.data.scanOrder
                             self.form.notifications = response.data.notifications
@@ -271,10 +268,14 @@
             },
             onSubmit(evt) {
                 evt.preventDefault();
-                //alert(JSON.stringify(this.form));
                 console.log(JSON.stringify(this.form))
                 this.$store.dispatch('addTarget', JSON.stringify(this.form))
                     .then(() => this.$router.push('/'))
+                    .then(() => {
+                        if (this.modifying_existing && this.target_definition_changed){
+                            this.$store.dispatch('removeTarget', this.target.id)
+                        }
+                    })
             },
             onReset(evt) {
                 evt.preventDefault();

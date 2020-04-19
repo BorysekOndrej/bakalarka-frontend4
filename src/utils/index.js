@@ -4,7 +4,7 @@
 import Vue from 'vue'
 
 export const EventBus = new Vue()
-const target_properties = ['hostname', 'port', 'ip_address', 'protocol']
+const target_properties = ['id', 'hostname', 'port', 'ip_address', 'protocol']
 
 export function jwtValidUntil(jwt){
     if (!jwt || jwt.split('.').length < 3) {

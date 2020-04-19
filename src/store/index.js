@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import {authenticate, register, callAddTarget, jwtRefreshAccessToken} from '../api'
+import {authenticate, register, callAddTarget, jwtRefreshAccessToken, callDeleteTarget} from '../api'
 import {isValidJwt, EventBus} from '../utils'
 
 
@@ -40,6 +40,15 @@ const actions = {
             .catch(error => {
                 Vue.$log.warn('Error Registering: ', error)
                 EventBus.$emit('failedRegistering: ', error)
+                return Promise.reject(error);
+            })
+    },
+    removeTarget(context, userData) {
+        Vue.$log.debug("Remove scan order triggered")
+        return callDeleteTarget(userData)
+            .then()
+            .catch(error => {
+                Vue.$log.warn('Error removing scan order: ', error)
                 return Promise.reject(error);
             })
     },

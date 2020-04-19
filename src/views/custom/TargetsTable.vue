@@ -126,7 +126,7 @@
                 this.editTargetModalVisible = true;
             },
             delete_target(row){
-                console.log("delete_target", JSON.stringify(row));
+                this.$store.dispatch('removeTarget', row.id)
             },
             async syncGetUserTargets() {
                 const response = await callGetUserTargets();

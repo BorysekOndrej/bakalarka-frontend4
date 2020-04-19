@@ -77,6 +77,15 @@ function postToAPI(path, data) {
         });
 }
 
+function deleteToAPI(path) {
+    Vue.$log.debug(`sentToApi sending request to ${path}\n with access_token ${getJwtAccesTokenLocalWrapper()}`);
+    return apiAxios.delete(`${API_URL}${path}`,
+        {
+            ...axios_api_options,
+            Authorization: `Bearer ${getJwtAccesTokenLocalWrapper()}`
+        });
+}
+
 export function callAddTarget(data) {
     return postToAPI('/api/v1/add_target', data);
 }
@@ -85,6 +94,10 @@ export function callGetUserTargets() {
     return getFromAPI('/api/v1/get_user_targets');
 }
 
-export function callGetTargetInfoForEditDialog(targetDef){
-    return postToAPI('/api/v1/get_target_info_for_dialog', targetDef);
+export function callGetTargetInfoForEditDialog(target_id){
+    return getFromAPI('/api/v1/target/' + target_id);
+}
+
+export function callDeleteTarget(target_id){
+    return deleteToAPI('/api/v1/target/' + target_id);
 }

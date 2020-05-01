@@ -91,7 +91,7 @@
             fields: {
                 type: Array,
                 default () {
-                    return ['hostname', 'port', 'ip_address', 'protocol', 'grade', 'expires', 'active', {key:'buttons', filter: false, sorter: false}]
+                    return ['hostname', 'port', {key: 'ip_address', label: 'IP address'}, 'protocol', 'grade', 'expires', 'active', {key:'buttons', filter: false, sorter: false}]
                 }
             },
         },

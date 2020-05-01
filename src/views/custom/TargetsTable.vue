@@ -30,6 +30,17 @@
                         </td>
                     </template>
 
+                    <template #ip_address="{item}">
+                        <td>
+                            <p v-if="item.ip_address">
+                                {{ item.ip_address }}
+                            </p>
+                            <p v-else>
+                                DNS
+                            </p>
+                        </td>
+                    </template>
+
                     <template #buttons="{item}">
                         <td class="button_only_td">
                             <!-- The whole row could be clickable, but that would make the copying values for difficult.-->

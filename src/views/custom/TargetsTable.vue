@@ -31,13 +31,11 @@
                     </template>
 
                     <template #ip_address="{item}">
-                        <td>
-                            <p v-if="item.ip_address">
-                                {{ item.ip_address }}
-                            </p>
-                            <p v-else>
-                                DNS
-                            </p>
+                        <td v-if="item.ip_address">
+                            {{ item.ip_address }}
+                        </td>
+                        <td v-else>
+                            DNS
                         </td>
                     </template>
 

@@ -61,7 +61,7 @@ const actions = {
             })
             .catch(error => {
                 Vue.$log.warn('Error adding new target: ', error)
-                EventBus.emit('failedAddTarget: ', error)
+                EventBus.$emit('failedAddTarget: ', error)
                 return Promise.reject(error);
             })
     },

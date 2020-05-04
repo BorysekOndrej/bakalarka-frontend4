@@ -42,6 +42,12 @@
                     <template #buttons="{item}">
                         <td class="button_only_td">
                             <!-- The whole row could be clickable, but that would make the copying values for difficult.-->
+                            <CButton color="info"
+                                     class="btn-mi"
+                                     v-on:click="show_latest_scan_result(item)"
+                                     v-c-tooltip="{content: 'Info'}"
+                            ><CIcon name="cil-magnifying-glass"/></CButton>
+
                             <CButton color="warning"
                                      class="btn-mi"
                                      v-on:click="edit_target(item)"
@@ -73,17 +79,29 @@
                 <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
             </template>
         </CModal>
+        <CModal
+                title="Latest scan result for this target"
+                :show.sync="latestScanResultsVisible"
+        >
+            <LatestScanResults
+                :target_id="latestScanResultsData"
+            ></LatestScanResults>
+            <template #footer>
+                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+            </template>
+        </CModal>
     </div>
 </template>
 
 <script>
     import {callGetUserTargets} from "@/api";
     import AddTargetComponent from "./AddTargetComponent";
+    import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
 
     export default {
         name: 'TargetsTable',
-        components: {AddTargetComponent},
+        components: {AddTargetComponent, LatestScanResults},
         props: {
             items: {
                 type: Array,
@@ -99,6 +117,8 @@
             return {
                 caption: 'List of your targets',
                 editTargetModalVisible: false,
+                latestScanResultsVisible: false,
+                latestScanResultsData: -1,
                 targetToEdit: null,
                 loading: false
             }
@@ -118,6 +138,10 @@
                     : status === 'B' ? 'secondary'
                         : status === 'C' ? 'warning'
                             : status === 'D' ? 'danger' : 'danger'
+            },
+            show_latest_scan_result(row){
+                this.latestScanResultsData = row.id;
+                this.latestScanResultsVisible = true;
             },
             edit_target(row){
                 console.log("edit_target", {...row});

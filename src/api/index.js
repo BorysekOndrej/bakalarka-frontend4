@@ -101,3 +101,7 @@ export function callGetTargetInfoForEditDialog(target_id){
 export function callDeleteTarget(target_id){
     return deleteToAPI('/api/v1/target/' + target_id);
 }
+
+export function callGetResultForTarget(target_id){
+    return getFromAPI('/api/v1/get_result_for_target/' + target_id);
+}

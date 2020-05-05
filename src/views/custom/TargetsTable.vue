@@ -134,10 +134,15 @@
 
         methods: {
             getBadge (status) {
-                return status === 'A' ? 'success'
-                    : status === 'B' ? 'secondary'
-                        : status === 'C' ? 'warning'
-                            : status === 'D' ? 'danger' : 'danger'
+                switch (status) {
+                    case 'A': return 'success';
+                    case 'B': return 'secondary';
+                    case 'C': return 'warning';
+                    case 'D':
+                    case 'E': return 'danger';
+                    case 'Not scanned yet':
+                    default: return 'secondary'
+                }
             },
             show_latest_scan_result(row){
                 this.latestScanResultsData = row.id;

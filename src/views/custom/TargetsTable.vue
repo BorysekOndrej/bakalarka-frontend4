@@ -82,6 +82,7 @@
         <CModal
                 title="Latest scan result for this target"
                 :show.sync="latestScanResultsVisible"
+                size="xl"
         >
             <LatestScanResults
                 :target_id="latestScanResultsData"

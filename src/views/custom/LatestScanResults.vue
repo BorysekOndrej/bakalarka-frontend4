@@ -1,5 +1,5 @@
 <template>
-    <div style="max-width: 600px; margin: auto;">
+    <div>
         <h1>{{ msg }}</h1>
         <CCard>
             <pre class="m-0" style="text-align: left;">{{ last_scan_json }}</pre>

@@ -119,21 +119,7 @@
                             </div>
                         </CCardHeader>
                         <CCollapse :show="visible_notification_options">
-                            <CCard>
-                                <div class="form-group row">
-                                    <label for="scanNotificationsActive" class="col-sm-8 col-form-label">Send notifications when situation for this target changes</label>
-                                    <div class="col-sm-2">
-                                        <CSwitch
-                                                id="scanNotificationsActive"
-                                                class="mx-1"
-                                                color="success"
-                                                shape="pill"
-                                                horizontal
-                                                :checked.sync="form.notifications.active"
-                                        />
-                                    </div>
-                                </div>
-                            </CCard>
+                            <NotificationsSettings></NotificationsSettings>
                         </CCollapse>
 
                     </CCard>
@@ -160,7 +146,6 @@
                 <CButton type="reset" size="sm" color="danger" v-on:click="onReset" ><CIcon name="cil-ban"/> Reset</CButton>
             </CCardFooter>
         </CCard>
-
         <CCard>
             <pre class="m-0" style="text-align: left;">{{ form }}</pre>
         </CCard>
@@ -169,9 +154,11 @@
 
 <script>
     import {callGetTargetInfoForEditDialog} from "../../api";
+    import NotificationsSettings from "./NotificationsSettings";
 
     export default {
         name: "addTargetComponent",
+        components: {NotificationsSettings},
         props: {
             msg: String,
             modifying_existing: {
@@ -205,9 +192,7 @@
             },
             notifications: {
                 type: Object,
-                default: () => ({
-                    active: true
-                })
+                default: null
             },
         },
         data() {

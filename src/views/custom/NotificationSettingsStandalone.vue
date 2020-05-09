@@ -13,7 +13,7 @@
                 <CButton type="reset" size="sm" color="danger" v-on:click="onReset" ><CIcon name="cil-ban"/> Reset</CButton>
             </CCardFooter>
         </CCard>
-        <CCard>
+        <CCard v-if="displayDebugInUI">
             <pre class="m-0" style="text-align: left;">{{ form }}</pre>
         </CCard>
     </div>

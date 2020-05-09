@@ -42,7 +42,7 @@
                 </CCollapse>
             </CCard>
         </transition>
-        <CCard>
+        <CCard v-if="displayDebugInUI">
             <pre class="m-0" style="text-align: left;">{{ value }}</pre>
         </CCard>
     </div>

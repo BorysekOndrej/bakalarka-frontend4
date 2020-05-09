@@ -3,28 +3,10 @@
         <h1>{{ msg }}</h1>
         <CCard>
             <CCardBody>
-                <transition name="fade">
-                    <CCard v-if="show">
-                        <CCardHeader>
-                            <CIcon name="cil-envelope-open"/> Notification options
-                            <div class="card-header-actions">
-                                <CLink
-                                        class="card-header-action btn-minimize"
-                                        @click="visible_notification_options=!visible_notification_options"
-                                >
-                                    <CIcon :name="`cil-chevron-${visible_notification_options ? 'bottom' : 'top'}`"/>
-                                </CLink>
-                            </div>
-                        </CCardHeader>
-                        <CCollapse :show="visible_notification_options">
-                            <NotificationsSettings
-                                    v-model="form.notifications"
-                            ></NotificationsSettings>
-                        </CCollapse>
-
-                    </CCard>
-                </transition>
-
+                <NotificationsSettings
+                        v-model="form"
+                        ref="notificationsComponent"
+                ></NotificationsSettings>
             </CCardBody>
             <CCardFooter>
                 <CButton type="submit" size="sm" color="primary" v-on:click="onSubmit"><CIcon name="cil-check-circle"/> Submit</CButton>
@@ -38,7 +20,7 @@
 </template>
 
 <script>
-    import {callGetTargetInfoForEditDialog} from "../../api";
+    import {callGetNotifications} from "../../api";
     import NotificationsSettings from "./NotificationsSettings";
 
     export default {
@@ -57,39 +39,56 @@
                     emails_list: ""
                 })
             },
+            user_id: {
+                type: Number,
+                default: 42     // todo: make dynamic call here
+            },
+            target_id: {
+                type: Number,
+                default: null
+            }
         },
         data() {
             return {
-                form: {
-                    notifications: null
-                },
+                form: null,
                 show: true,
                 visible_notification_options: false
             }
         },
         created() {
-            this.prefillFormToDefaultOrPassedValues()
+            this.prefillFormToDefaultOrPassedValues(true)
         },
         mounted(){
             this.prefillFormToDefaultOrPassedValues()
         },
+        watch: {
+            notifications: {
+                deep:true,
+                // eslint-disable-next-line no-unused-vars
+                handler(newVal) {
+                    this.prefillFormToDefaultOrPassedValues()
+                }
+            }
+        },
+
         methods: {
-            prefillFormToDefaultOrPassedValues() {
-                this.form.notifications = {...this.notifications};
+            prefillFormToDefaultOrPassedValues(beforeMounted=false) {
+                this.form = {...this.notifications};
+
+                if (!beforeMounted){
+                    this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
+                }
 
                 if (this.notifications === null ){
                     return;
                 }
                 // Reset our form values
-                if (this.modifying_existing){
-                    let self = this
-                    /* // todo:
-                    callGetTargetInfoForEditDialog(this.form.target.id)
-                        .then(function (response) {
-                            self.form.notifications = response.data.notifications
-                        })
-                     */
-                }
+                let self = this
+                callGetNotifications(this.user_id, this.target_id)
+                    .then(function (response) {
+                        self.form = response.data
+                    })
+
                 // Trick to reset/clear native browser form validation state
                 this.show = false;
                 this.$nextTick(() => {
@@ -98,16 +97,7 @@
             },
             onSubmit(evt) {
                 evt.preventDefault();
-                /*
                 console.log(JSON.stringify(this.form))
-                this.$store.dispatch('addTarget', JSON.stringify(this.form))
-                    .then(() => this.$router.push('/'))
-                    .then(() => {
-                        if (this.modifying_existing && this.target_definition_changed){
-                            this.$store.dispatch('removeTarget', this.target.id)
-                        }
-                    })
-                 */
             },
             onReset(evt) {
                 evt.preventDefault();
@@ -119,17 +109,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    h3 {
-        margin: 40px 0 0;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
     a {
         color: #42b983;
     }

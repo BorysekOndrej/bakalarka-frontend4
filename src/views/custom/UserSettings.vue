@@ -3,9 +3,19 @@
         <h1>{{ msg }}</h1>
         <CCard>
             <CCardBody>
-                <NotificationSettingsStandalone
-                        :user_id="user_id"
-                ></NotificationSettingsStandalone>
+                <CTabs>
+                    <CTab title="Profile" active>
+                        Here will be form with main user email and other properties.
+                    </CTab>
+                    <CTab title="Change password" active>
+                        Here will be form for changing password.
+                    </CTab>
+                    <CTab title="Notification settings" active>
+                        <NotificationSettingsStandalone
+                                :user_id="user_id"
+                        ></NotificationSettingsStandalone>
+                    </CTab>
+                </CTabs>
             </CCardBody>
         </CCard>
     </div>

@@ -121,6 +121,7 @@
                         <CCollapse :show="visible_notification_options">
                             <NotificationsSettings
                                     v-model="form.notifications"
+                                    ref="notificationsComponent"
                             ></NotificationsSettings>
                         </CCollapse>
 
@@ -234,7 +235,7 @@
                 this.form.target = {...this.target};
                 this.form.scanOrder = {...this.scanOrder};
                 this.form.notifications = {...this.notifications};
-
+                this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
                 if (this.target === null || this.target.id === null){
                     return;
                 }

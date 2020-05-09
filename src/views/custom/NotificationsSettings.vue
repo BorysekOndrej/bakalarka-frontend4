@@ -76,9 +76,7 @@
             this.prefillFormToDefaultOrPassedValues()
         },
         watch: {
-            notifications: function(newVal, oldVal) {
-                this.prefillFormToDefaultOrPassedValues()
-            },
+            // Watcher on prop notifications (object) doesn't work as I'd hoped, prefillFormToDefaultOrPassedValues needs to be called from parrent.
             notifications_data: {
                 deep:true,
                 // eslint-disable-next-line no-unused-vars
@@ -94,6 +92,11 @@
             },
             prefillFormToDefaultOrPassedValues() {
                 this.notifications_data = {...this.notifications};
+                // Trick to reset/clear native browser form validation state
+                this.show = false;
+                this.$nextTick(() => {
+                    this.show = true;
+                })
             },
         },
     }

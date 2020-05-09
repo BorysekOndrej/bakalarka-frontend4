@@ -3,58 +3,37 @@
         <h1>{{ msg }}</h1>
         <CCard>
             <CCardBody>
-                <NotificationsSettings
-                        v-model="form"
-                        ref="notificationsComponent"
-                ></NotificationsSettings>
+                <NotificationSettingsStandalone
+                        :user_id="user_id"
+                ></NotificationSettingsStandalone>
             </CCardBody>
-            <CCardFooter>
-                <CButton type="submit" size="sm" color="primary" v-on:click="onSubmit"><CIcon name="cil-check-circle"/> Submit</CButton>
-                <CButton type="reset" size="sm" color="danger" v-on:click="onReset" ><CIcon name="cil-ban"/> Reset</CButton>
-            </CCardFooter>
-        </CCard>
-        <CCard>
-            <pre class="m-0" style="text-align: left;">{{ form }}</pre>
         </CCard>
     </div>
 </template>
 
 <script>
-    import {callGetNotifications} from "../../api";
-    import NotificationsSettings from "./NotificationsSettings";
+    import NotificationSettingsStandalone from "./NotificationSettingsStandalone";
 
     export default {
         name: "UserSettings",
-        components: {NotificationsSettings},
+        components: {NotificationSettingsStandalone},
         props: {
             msg: String,
             prefill: {
                 type: Boolean,
                 default: false
             },
-            notifications: {
-                type: Object,
-                default: () => ({
-                    emails_active: true,
-                    emails_list: ""
-                })
-            },
             user_id: {
                 type: Number,
                 default: 42     // todo: make dynamic call here
             },
-            target_id: {
-                type: Number,
-                default: null
-            }
         },
         data() {
             return {
-                form: null,
                 show: true,
-                visible_notification_options: false
             }
         },
+/*
         created() {
             this.prefillFormToDefaultOrPassedValues(true)
         },
@@ -104,6 +83,7 @@
                 this.prefillFormToDefaultOrPassedValues()
             }
         },
+*/
     }
 </script>
 

@@ -194,28 +194,18 @@
             },
             notifications: {
                 type: Object,
-                default: null
+                default: () => ({
+                    emails_active: true,
+                    emails_list: ""
+                })
             },
         },
         data() {
             return {
                 form: {
-                    target: {
-                        hostname: null,
-                        port: null,
-                        ip_address: null,
-                        protocol: null,
-                    },
-                    scanOrder: {
-                        periodicity: null,
-                        active: null,
-                    },
-                    notifications: {
-                        default: () => ({
-                            emails_active: true,
-                            emails: ""
-                        })
-                    }
+                    target: null,
+                    scanOrder: null,
+                    notifications: null
                 },
                 ssl_protocols: ['HTTPS', 'SMTPS'],
                 periodicity_options: [{label: '5 minutes', value: 5*60}, {label: '12 hours', value: 12*60*60}],
@@ -224,6 +214,9 @@
                 visible_scan_order_options: false,
                 visible_notification_options: false
             }
+        },
+        created() {
+            this.prefillFormToDefaultOrPassedValues()
         },
         mounted(){
             this.prefillFormToDefaultOrPassedValues()
@@ -238,9 +231,9 @@
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {
-                if (this.target === null || this.target.id === null){
-                    return;
-                }
+                // if (this.target === null || this.target.id === null){
+                //     return;
+                // }
                 // Reset our form values
                 this.form.target = {...this.target};
                 if (!this.modifying_existing){

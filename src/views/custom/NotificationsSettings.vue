@@ -25,14 +25,14 @@
                                         color="success"
                                         shape="pill"
                                         horizontal
-                                        :checked.sync="notifications_data.emails_active"
+                                        :checked.sync="value.emails_active"
                                 />
                             </div>
                         </div>
 
                         <CInput
                                 label="Emails:"
-                                :value.sync="notifications_data.emails_list"
+                                :value.sync="value.emails_list"
                                 type="text"
                                 horizontal
                                 required
@@ -43,7 +43,7 @@
             </CCard>
         </transition>
         <CCard>
-            <pre class="m-0" style="text-align: left;">{{ notifications_data }}</pre>
+            <pre class="m-0" style="text-align: left;">{{ value }}</pre>
         </CCard>
     </div>
 </template>
@@ -53,7 +53,7 @@
         name: "NotificationsSettings",
         props: {
             msg: String,
-            notifications: {
+            value: {
                 type: Object,
                 default: () => ({
                     emails_active: true,
@@ -65,33 +65,10 @@
             return {
                 show: true,
                 visible_mail_options: true,
-                debug: null,
-                notifications_data: null
-            }
-        },
-        created(){
-            this.prefillFormToDefaultOrPassedValues()
-        },
-        mounted(){
-            this.prefillFormToDefaultOrPassedValues()
-        },
-        watch: {
-            // Watcher on prop notifications (object) doesn't work as I'd hoped, prefillFormToDefaultOrPassedValues needs to be called from parrent.
-            notifications_data: {
-                deep:true,
-                // eslint-disable-next-line no-unused-vars
-                handler(newVal) {
-                    this.emitDataUpdate()
-                }
             }
         },
         methods: {
-            emitDataUpdate() {
-                // console.log(`emitDataUpdate`)
-                this.$emit('input', {...this.notifications_data})
-            },
             prefillFormToDefaultOrPassedValues() {
-                this.notifications_data = {...this.notifications};
                 // Trick to reset/clear native browser form validation state
                 this.show = false;
                 this.$nextTick(() => {
@@ -103,7 +80,5 @@
 </script>
 
 <style scoped>
-    div {
-        /* background-color: lightgray; */
-    }
+
 </style>

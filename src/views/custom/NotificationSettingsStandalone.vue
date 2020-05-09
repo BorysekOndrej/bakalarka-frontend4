@@ -77,22 +77,28 @@
         },
 
         methods: {
+
+            load_values_from_server(){
+                let self = this
+                callGetNotificationSettings(this.user_id, this.target_id).then(function (response) {
+                    self.form = response.data
+                    // console.log("A1")
+                    // self.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
+                    // console.log("A2")
+                    // console.log("RESET DONE")
+                })
+            },
             prefillFormToDefaultOrPassedValues(beforeMounted=false) {
                 this.form = {...this.notifications};
-
+                /*
                 if (!beforeMounted){
-                    this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
+                    //this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
                 }
 
                 if (this.notifications === null ){
                     return;
                 }
-                // Reset our form values
-                let self = this
-                callGetNotificationSettings(this.user_id, this.target_id)
-                    .then(function (response) {
-                        self.form = response.data
-                    })
+                */
 
                 // Trick to reset/clear native browser form validation state
                 this.show = false;
@@ -110,7 +116,8 @@
             },
             onReset(evt) {
                 evt.preventDefault();
-                this.prefillFormToDefaultOrPassedValues()
+                this.load_values_from_server()
+                // this.prefillFormToDefaultOrPassedValues()
             }
         },
     }

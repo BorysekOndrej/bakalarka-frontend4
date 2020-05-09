@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import {callGetNotifications} from "../../api";
+    import {callGetNotificationSettings, callPostNotificationSettings} from "../../api";
     import NotificationsSettings from "./NotificationsSettings";
 
     export default {
@@ -89,7 +89,7 @@
                 }
                 // Reset our form values
                 let self = this
-                callGetNotifications(this.user_id, this.target_id)
+                callGetNotificationSettings(this.user_id, this.target_id)
                     .then(function (response) {
                         self.form = response.data
                     })
@@ -103,6 +103,10 @@
             onSubmit(evt) {
                 evt.preventDefault();
                 console.log(JSON.stringify(this.form))
+                callPostNotificationSettings(this.user_id, this.target_id, JSON.stringify(this.form))
+                    .then(() => {
+                    // todo: flash
+                    })
             },
             onReset(evt) {
                 evt.preventDefault();

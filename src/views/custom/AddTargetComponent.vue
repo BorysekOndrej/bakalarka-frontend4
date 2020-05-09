@@ -217,7 +217,7 @@
             }
         },
         created() {
-            this.prefillFormToDefaultOrPassedValues()
+            this.prefillFormToDefaultOrPassedValues(true)
         },
         mounted(){
             this.prefillFormToDefaultOrPassedValues()
@@ -231,11 +231,15 @@
             }
         },
         methods: {
-            prefillFormToDefaultOrPassedValues() {
+            prefillFormToDefaultOrPassedValues(beforeMounted=false) {
                 this.form.target = {...this.target};
                 this.form.scanOrder = {...this.scanOrder};
                 this.form.notifications = {...this.notifications};
-                this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
+
+                if (!beforeMounted){
+                    this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
+                }
+
                 if (this.target === null || this.target.id === null){
                     return;
                 }

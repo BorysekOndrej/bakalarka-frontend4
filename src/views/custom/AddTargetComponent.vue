@@ -231,15 +231,15 @@
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {
-                // if (this.target === null || this.target.id === null){
-                //     return;
-                // }
-                // Reset our form values
                 this.form.target = {...this.target};
-                if (!this.modifying_existing){
-                    this.form.scanOrder = {...this.scanOrder};
-                    this.form.notifications = {...this.notifications};
-                }else{
+                this.form.scanOrder = {...this.scanOrder};
+                this.form.notifications = {...this.notifications};
+
+                if (this.target === null || this.target.id === null){
+                    return;
+                }
+                // Reset our form values
+                if (this.modifying_existing){
                     let self = this
                     callGetTargetInfoForEditDialog(this.form.target.id)
                         .then(function (response) {

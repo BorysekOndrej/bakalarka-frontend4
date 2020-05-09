@@ -40,6 +40,13 @@ export default [
         name: 'Login or register',
         to: '/login',
       },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'User profile',
+        to: '/profile',
+      },
+
+
 
       {
         _name: 'CSidebarNavTitle',

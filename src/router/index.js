@@ -63,6 +63,7 @@ import AddTargetPage from "../views/custom/AddTargetPage";
 import TargetsTable from "../views/custom/TargetsTable";
 import RegisterCustom from "../views/custom/RegisterCustom";
 import LoginCustom from "../views/custom/LoginCustom";
+import UserSettingsPage from "../views/custom/UserSettingsPage";
 
 
 Vue.use(Router)
@@ -108,6 +109,11 @@ function configRoutes () {
           component: RegisterCustom
         },
 
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: UserSettingsPage
+        },
 
 
         {

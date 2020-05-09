@@ -362,13 +362,13 @@ function configRoutes () {
           component: Page500
         },
         {
-          path: 'login',
-          name: 'Login',
+          path: 'loginCoreUI',
+          name: 'LoginCoreUI',
           component: Login
         },
         {
-          path: 'register',
-          name: 'Register',
+          path: 'registerCoreUI',
+          name: 'RegisterCoreUI',
           component: Register
         }
       ]

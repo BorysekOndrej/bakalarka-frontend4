@@ -26,6 +26,22 @@ const options = {
 };
 Vue.use(VueLogger, options);
 
+Vue.mixin({
+  data: function() {
+    return {
+      get displayDebugInUI() {
+        if (isProduction){
+          return false;
+        }
+        return true; // this line is changed manually when debugging UI. However it should never affect Production.
+      }
+    }
+  }
+})
+
+// Vue.prototype.$displayDebugInUI = !isProduction // todo: make this work
+
+
 new Vue({
   el: '#app',
   router,

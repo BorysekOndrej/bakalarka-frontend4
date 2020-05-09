@@ -42,7 +42,7 @@
       <strong>Settings</strong>
     </CDropdownHeader>
     <CDropdownItem>
-      <CIcon name="cil-user" /> Profile
+      <router-link class="routerLink" :to="{ name: 'Profile' }"> <CIcon name="cil-user" />Profile & Settings</router-link>
     </CDropdownItem>
     <CDropdownItem>
       <CIcon name="cil-settings" /> Settings
@@ -79,5 +79,9 @@ export default {
 <style scoped>
   .c-icon {
     margin-right: 0.3rem;
+  }
+  .routerLink {
+    color: unset;
+    text-underline: none;
   }
 </style>

@@ -105,3 +105,7 @@ export function callDeleteTarget(target_id){
 export function callGetResultForTarget(target_id){
     return getFromAPI('/api/v1/get_result_for_target/' + target_id);
 }
+
+export function callGetNotifications(user_id, target_id){
+    return getFromAPI(`/api/v1/get_notifications_settings/${user_id}/${target_id}`);
+}

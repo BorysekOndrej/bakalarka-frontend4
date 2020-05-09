@@ -32,7 +32,7 @@
                 type: Boolean,
                 default: false
             },
-            notifications: {
+            form_default: {
                 type: Object,
                 default: () => ({
                     emails_active: true,
@@ -61,44 +61,17 @@
         },
 
         created() {
-            this.prefillFormToDefaultOrPassedValues(true)
-        },
-        mounted(){
             this.prefillFormToDefaultOrPassedValues()
         },
-        watch: {
-            notifications: {
-                deep:true,
-                // eslint-disable-next-line no-unused-vars
-                handler(newVal) {
-                    this.prefillFormToDefaultOrPassedValues()
-                }
-            }
-        },
-
         methods: {
-
             load_values_from_server(){
                 let self = this
                 callGetNotificationSettings(this.user_id, this.target_id).then(function (response) {
                     self.form = response.data
-                    // console.log("A1")
-                    // self.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
-                    // console.log("A2")
-                    // console.log("RESET DONE")
                 })
             },
-            prefillFormToDefaultOrPassedValues(beforeMounted=false) {
-                this.form = {...this.notifications};
-                /*
-                if (!beforeMounted){
-                    //this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
-                }
-
-                if (this.notifications === null ){
-                    return;
-                }
-                */
+            prefillFormToDefaultOrPassedValues() {
+                this.form = {...this.form_default};
 
                 // Trick to reset/clear native browser form validation state
                 this.show = false;
@@ -117,7 +90,6 @@
             onReset(evt) {
                 evt.preventDefault();
                 this.load_values_from_server()
-                // this.prefillFormToDefaultOrPassedValues()
             }
         },
     }

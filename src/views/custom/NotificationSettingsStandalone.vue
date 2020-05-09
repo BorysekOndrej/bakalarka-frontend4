@@ -62,6 +62,7 @@
 
         created() {
             this.prefillFormToDefaultOrPassedValues()
+            this.load_values_from_server()
         },
         methods: {
             load_values_from_server(){

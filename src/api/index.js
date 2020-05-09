@@ -107,5 +107,5 @@ export function callGetResultForTarget(target_id){
 }
 
 export function callGetNotifications(user_id, target_id){
-    return getFromAPI(`/api/v1/get_notifications_settings/${user_id}/${target_id}`);
+    return getFromAPI(`/api/v1/notification_settings/${user_id}/${target_id}`);
 }

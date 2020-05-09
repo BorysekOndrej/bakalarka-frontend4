@@ -25,14 +25,14 @@
                                         color="success"
                                         shape="pill"
                                         horizontal
-                                        :checked.sync="form_notifications.emails_active"
+                                        :checked.sync="notifications_data.emails_active"
                                 />
                             </div>
                         </div>
 
                         <CInput
                                 label="Emails:"
-                                :value.sync="form_notifications.emails"
+                                :value.sync="notifications_data.emails_list"
                                 type="text"
                                 horizontal
                                 required
@@ -43,14 +43,12 @@
             </CCard>
         </transition>
         <CCard>
-            <pre class="m-0" style="text-align: left;">{{ form_notifications }}</pre>
+            <pre class="m-0" style="text-align: left;">{{ notifications_data }}</pre>
         </CCard>
     </div>
 </template>
 
 <script>
-    // import {callGetTargetInfoForEditDialog} from "../../api";
-
     export default {
         name: "NotificationsSettings",
         props: {
@@ -59,71 +57,44 @@
                 type: Object,
                 default: () => ({
                     emails_active: true,
-                    emails: ""
+                    emails_list: ""
                 })
             },
         },
         data() {
             return {
-                form_notifications: {
-                    emails_active: true,
-                    emails: "",
-                },
                 show: true,
                 visible_mail_options: true,
+                debug: null,
+                notifications_data: null
             }
+        },
+        created(){
+            this.prefillFormToDefaultOrPassedValues()
         },
         mounted(){
             this.prefillFormToDefaultOrPassedValues()
         },
         watch: {
-            // eslint-disable-next-line no-unused-vars
-            target: function(newVal, oldVal) {
-                if (this.prefill) {
-                    this.prefillFormToDefaultOrPassedValues()
+            notifications: function(newVal, oldVal) {
+                this.prefillFormToDefaultOrPassedValues()
+            },
+            notifications_data: {
+                deep:true,
+                // eslint-disable-next-line no-unused-vars
+                handler(newVal) {
+                    this.emitDataUpdate()
                 }
             }
         },
         methods: {
+            emitDataUpdate() {
+                // console.log(`emitDataUpdate`)
+                this.$emit('input', {...this.notifications_data})
+            },
             prefillFormToDefaultOrPassedValues() {
-                /*
-                // Reset our form values
-                this.form.target = {...this.target};
-                if (!this.modifying_existing){
-                    this.form.scanOrder = {...this.scanOrder};
-                    this.form.notifications = {...this.notifications};
-                }else{
-                    let self = this
-                    callGetTargetInfoForEditDialog(this.form.target.id)
-                        .then(function (response) {
-                            self.form.scanOrder = response.data.scanOrder
-                            self.form.notifications = response.data.notifications
-                        })
-                }
-                // Trick to reset/clear native browser form validation state
-                this.show = false;
-                this.$nextTick(() => {
-                    this.show = true;
-                })
-                */
+                this.notifications_data = {...this.notifications};
             },
-            onSubmit(evt) {
-                /*
-                evt.preventDefault();
-                console.log(JSON.stringify(this.form))
-                this.$store.dispatch('addTarget', JSON.stringify(this.form))
-                    .then(() => this.$router.push('/'))
-                    .then(() => {
-                        if (this.modifying_existing && this.target_definition_changed){
-                            this.$store.dispatch('removeTarget', this.target.id)
-                        }
-                    })
-                 */
-            },
-            onReset(evt) {
-                evt.preventDefault();
-                // this.prefillFormToDefaultOrPassedValues()
-            }
         },
     }
 </script>

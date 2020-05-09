@@ -119,7 +119,9 @@
                             </div>
                         </CCardHeader>
                         <CCollapse :show="visible_notification_options">
-                            <NotificationsSettings></NotificationsSettings>
+                            <NotificationsSettings
+                                    v-model="form.notifications"
+                            ></NotificationsSettings>
                         </CCollapse>
 
                     </CCard>
@@ -209,7 +211,10 @@
                         active: null,
                     },
                     notifications: {
-                        active: null,
+                        default: () => ({
+                            emails_active: true,
+                            emails: ""
+                        })
                     }
                 },
                 ssl_protocols: ['HTTPS', 'SMTPS'],

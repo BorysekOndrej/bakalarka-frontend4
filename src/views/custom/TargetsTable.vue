@@ -104,9 +104,6 @@
         name: 'TargetsTable',
         components: {AddTargetComponent, LatestScanResults},
         props: {
-            items: {
-                type: Array,
-            },
             fields: {
                 type: Array,
                 default () {
@@ -121,7 +118,8 @@
                 latestScanResultsVisible: false,
                 latestScanResultsData: -1,
                 targetToEdit: null,
-                loading: false
+                loading: false,
+                items: [],
             }
         },
         created() {

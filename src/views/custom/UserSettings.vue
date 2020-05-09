@@ -29,9 +29,8 @@
         components: {NotificationSettingsStandalone},
         props: {
             msg: String,
-            user_id: {
+            user_id_prop: {
                 type: Number,
-                default: 42     // todo: make dynamic call here
             },
         },
         data() {
@@ -39,6 +38,11 @@
                 show: true,
             }
         },
+        computed: {
+            user_id: function(){
+                return this.user_id_prop ? this.user_id_prop : this.$store.getters.getUserID
+            }
+        }
     }
 </script>
 

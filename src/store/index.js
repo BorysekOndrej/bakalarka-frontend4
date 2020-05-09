@@ -17,7 +17,6 @@ const state = {
 const actions = {
     // asynchronous operations
     login(context, userData) {
-        context.commit('setUserData', {userData})
         return authenticate(userData)
             .then(function (response) {
                 console.log("Setting jwt from login, response data ", response.data.access_token)
@@ -31,7 +30,6 @@ const actions = {
             })
     },
     register(context, userData) {
-        context.commit('setUserData', {userData})
         return register(userData)
             .then(function(response) {
                 console.warn("Register: dispatching load after response: ", response)
@@ -104,11 +102,6 @@ const mutations = {
         console.debug(`Set: ${variable} = ${value}`)
         state[variable] = value
     },
-    setUserData(state, payload) {
-        // Vue.$log.debug('setUserData payload = ', payload)
-        state.userData = payload.userData
-    },
-
     setJwt(state, access_token) {
         console.debug("setJwt", access_token)
         if (access_token === undefined) {
@@ -130,6 +123,15 @@ const getters = {
     },
     getJwt(state) {
         return state.jwt;
+    },
+    getJwtData(state){
+        return getters.getJwt(state) ? JSON.parse(atob(getters.getJwt(state).split('.')[1])) : null
+    },
+    getUserIdentity(state){
+        return getters.getJwt(state) ? getters.getJwtData(state).identity : null
+    },
+    getUserID(state){
+        return getters.getJwt(state) ? getters.getUserIdentity(state).id : null
     }
 }
 

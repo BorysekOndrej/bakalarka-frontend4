@@ -39,9 +39,8 @@
                     emails_list: ""
                 })
             },
-            user_id: {
+            user_id_prop: {
                 type: Number,
-                default: 42     // todo: make dynamic call here
             },
             target_id: {
                 type: Number,
@@ -55,6 +54,12 @@
                 visible_notification_options: false
             }
         },
+        computed: {
+            user_id: function(){
+                return this.user_id_prop ? this.user_id_prop : this.$store.getters.getUserID
+            }
+        },
+
         created() {
             this.prefillFormToDefaultOrPassedValues(true)
         },

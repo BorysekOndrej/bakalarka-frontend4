@@ -24,7 +24,7 @@
     import NotificationsSettings from "./NotificationsSettings";
 
     export default {
-        name: "addTargetComponent",
+        name: "NotificationSettingsStandalone",
         components: {NotificationsSettings},
         props: {
             msg: String,

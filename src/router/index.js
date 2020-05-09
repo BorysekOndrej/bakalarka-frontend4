@@ -63,7 +63,7 @@ import AddTargetPage from "../views/custom/AddTargetPage";
 import TargetsTable from "../views/custom/TargetsTable";
 import RegisterCustom from "../views/custom/RegisterCustom";
 import LoginCustom from "../views/custom/LoginCustom";
-import UserSettingsPage from "../views/custom/UserSettingsPage";
+import NotificationSettingsStandalone from "../views/custom/NotificationSettingsStandalone";
 
 
 Vue.use(Router)
@@ -108,12 +108,19 @@ function configRoutes () {
           name: 'Register',
           component: RegisterCustom
         },
-
+/*
         {
           path: 'profile',
           name: 'Profile',
           component: UserSettingsPage
         },
+ */
+        {
+          path: 'notificationSettingsStandalone',
+          name: 'NotificationSettingsStandalone',
+          component: NotificationSettingsStandalone
+        },
+
 
 
         {

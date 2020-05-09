@@ -29,10 +29,6 @@
         components: {NotificationSettingsStandalone},
         props: {
             msg: String,
-            prefill: {
-                type: Boolean,
-                default: false
-            },
             user_id: {
                 type: Number,
                 default: 42     // todo: make dynamic call here
@@ -43,57 +39,6 @@
                 show: true,
             }
         },
-/*
-        created() {
-            this.prefillFormToDefaultOrPassedValues(true)
-        },
-        mounted(){
-            this.prefillFormToDefaultOrPassedValues()
-        },
-        watch: {
-            notifications: {
-                deep:true,
-                // eslint-disable-next-line no-unused-vars
-                handler(newVal) {
-                    this.prefillFormToDefaultOrPassedValues()
-                }
-            }
-        },
-
-        methods: {
-            prefillFormToDefaultOrPassedValues(beforeMounted=false) {
-                this.form = {...this.notifications};
-
-                if (!beforeMounted){
-                    this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
-                }
-
-                if (this.notifications === null ){
-                    return;
-                }
-                // Reset our form values
-                let self = this
-                callGetNotifications(this.user_id, this.target_id)
-                    .then(function (response) {
-                        self.form = response.data
-                    })
-
-                // Trick to reset/clear native browser form validation state
-                this.show = false;
-                this.$nextTick(() => {
-                    this.show = true;
-                })
-            },
-            onSubmit(evt) {
-                evt.preventDefault();
-                console.log(JSON.stringify(this.form))
-            },
-            onReset(evt) {
-                evt.preventDefault();
-                this.prefillFormToDefaultOrPassedValues()
-            }
-        },
-*/
     }
 </script>
 

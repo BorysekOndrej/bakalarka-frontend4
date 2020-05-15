@@ -45,6 +45,11 @@ export default [
         name: 'User profile',
         to: '/profile',
       },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Dashboard custom',
+        to: '/dashboardcustom',
+      },
 
 
 

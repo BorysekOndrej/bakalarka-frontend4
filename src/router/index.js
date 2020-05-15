@@ -65,6 +65,7 @@ import RegisterCustom from "../views/custom/RegisterCustom";
 import LoginCustom from "../views/custom/LoginCustom";
 import NotificationSettingsStandalone from "../views/custom/NotificationSettingsStandalone";
 import UserSettings from "../views/custom/UserSettings";
+import DashboardCustom from "../views/custom/DashboardCustom";
 
 
 Vue.use(Router)
@@ -118,6 +119,11 @@ function configRoutes () {
           path: 'notificationSettingsStandalone',
           name: 'NotificationSettingsStandalone',
           component: NotificationSettingsStandalone
+        },
+        {
+          path: 'dashboardcustom',
+          name: 'Dashboard Custom',
+          component: DashboardCustom
         },
 
 

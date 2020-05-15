@@ -1,7 +1,7 @@
 <template>
     <CChartDoughnut
             :datasets="defaultDatasets"
-            :labels="gradeLetters"
+            :labels="levelLabels"
     />
 </template>
 
@@ -22,11 +22,11 @@
             },
             precalculatedGradesCount(){
                 let res = [];
-                for (let i = 0; i < this.gradeLetters.length; i++){
+                for (let i = 0; i < this.levelLabels.length; i++){
                     res[i] = 0;
                 }
                 for (const x of this.userTargets){
-                    let gradeIndex = this.gradeLetters.indexOf(x.grade)
+                    let gradeIndex = this.levelLabels.indexOf(x.grade)
                     if (gradeIndex < 0){
                         console.warn(`Unknown grade ${x.grade}. Skipping`)
                         continue
@@ -38,15 +38,15 @@
             defaultDatasets () {
                 return [
                     {
-                        backgroundColor: this.gradeColors,
+                        backgroundColor: this.levelColors,
                         data: this.precalculatedGradesCount
                     }
                 ]
             },
-            gradeLetters (){
+            levelLabels (){
                 return ['A', 'B', 'C', 'D', 'E', 'F', 'Not scanned yet']
             },
-            gradeColors(){
+            levelColors(){
                 return [
                     '#639B4B', // A
                     '#8AC271', // B

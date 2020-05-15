@@ -1,7 +1,7 @@
 <template>
     <CChartDoughnut
             :datasets="defaultDatasets"
-            :labels="expirationLevels"
+            :labels="levelLabels"
     />
 </template>
 
@@ -23,7 +23,7 @@
             },
             precalculatedGradesCount(){
                 let res = [];
-                for (let i = 0; i < this.expirationLevels.length; i++){
+                for (let i = 0; i < this.levelLabels.length; i++){
                     res[i] = 0;
                 }
                 for (const x of this.userTargets){
@@ -35,7 +35,7 @@
             defaultDatasets () {
                 return [
                     {
-                        backgroundColor: this.gradeColors,
+                        backgroundColor: this.levelColors,
                         data: this.precalculatedGradesCount
                     }
                 ]
@@ -43,7 +43,7 @@
             expirationLevelsNumbericalThresholds (){
                 return [30, 10, 1, 0, -30]
             },
-            expirationLevels (){
+            levelLabels (){
                 let res = []
                 res.push(`> ${this.expirationLevelsNumbericalThresholds[0]} days`)
                 for (const x of this.expirationLevelsNumbericalThresholds){
@@ -56,7 +56,7 @@
                 res.push(`Not scanned yet`)
                 return res
             },
-            gradeColors(){
+            levelColors(){
                 return [
                     '#639B4B', // A
                     '#8AC271', // B

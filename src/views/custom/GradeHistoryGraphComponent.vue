@@ -2,7 +2,7 @@
     <CChartLine
             :datasets="defaultDatasets"
             :options="defaultOptions"
-            :labels="['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']"
+            :labels="dates"
     />
 </template>
 
@@ -19,13 +19,30 @@
         components: {
             CChartLine
         },
+        props: {
+            number_of_days: {
+                default: 30
+            }
+        },
         computed: {
+            dates() {
+                let res = []
+                let today = new Date()
+                let new_date = today;
+                today.get
+                for (let i = 0; i < this.number_of_days; i++){
+                    res.push(`${new_date.getDate()}. ${new_date.getMonth()+1}`)
+                    new_date.setDate(new_date.getDate()-1);
+                }
+                res.reverse()
+                return res
+            },
             defaultDatasets () {
                 const brandSuccess = getStyle('success2') || '#4dbd74'
                 const brandInfo = getStyle('info') || '#20a8d8'
                 const brandDanger = getStyle('danger') || '#f86c6b'
 
-                let elements = 27
+                let elements = this.number_of_days
                 const data1 = []
                 const data2 = []
                 const data3 = []

@@ -10,6 +10,10 @@
                 <hr>
             </div>
             <hr>
+            <SSLTLS
+                :result="last_scan_json.result"
+            ></SSLTLS>
+            <hr>
             <pre class="m-0" style="text-align: left;">{{ last_scan_json }}</pre>
         </CCard>
     </div>
@@ -18,10 +22,11 @@ received_certificate_chain_list
 <script>
     import {callGetResultForTarget} from "../../api";
     import CertificateViewComponent from "./CertificateViewComponent";
+    import SSLTLS from "./SSLTLS";
 
     export default {
         name: "latestScanResults",
-        components: {CertificateViewComponent},
+        components: {SSLTLS, CertificateViewComponent},
         props: {
             msg: String,
             target_id: {

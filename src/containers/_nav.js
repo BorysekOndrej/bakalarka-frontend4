@@ -50,6 +50,11 @@ export default [
         name: 'Dashboard custom',
         to: '/dashboardcustom',
       },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Single certificate',
+        to: '/singlecertificate',
+      },
 
 
 

@@ -66,6 +66,7 @@ import LoginCustom from "../views/custom/LoginCustom";
 import NotificationSettingsStandalone from "../views/custom/NotificationSettingsStandalone";
 import UserSettings from "../views/custom/UserSettings";
 import DashboardCustom from "../views/custom/DashboardCustom";
+import CertificateViewComponent from "../views/custom/CertificateViewComponent";
 
 
 Vue.use(Router)
@@ -124,6 +125,11 @@ function configRoutes () {
           path: 'dashboardcustom',
           name: 'Dashboard Custom',
           component: DashboardCustom
+        },
+        {
+          path: 'singlecertificate',
+          name: 'Single Certificate',
+          component: CertificateViewComponent
         },
 
 

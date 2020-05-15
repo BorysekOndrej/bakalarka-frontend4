@@ -67,3 +67,24 @@ export function expiresToGradeIndex(expires_string, expiration_levels) {
     }
     return 5
 }
+
+
+export function testCertificate(){
+    return {
+        "as_pem": "-----BEGIN CERTIFICATE-----\nMIIE4zCCBImgAwIBAgIQCHfsVTf9BrUvH8uVnuIv8TAKBggqhkjOPQQDAjBvMQsw\nCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28x\nGTAXBgNVBAoTEENsb3VkRmxhcmUsIEluYy4xIDAeBgNVBAMTF0Nsb3VkRmxhcmUg\nSW5jIEVDQyBDQS0yMB4XDTIwMDEzMDAwMDAwMFoXDTIwMTAwOTEyMDAwMFowbTEL\nMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2Nv\nMRkwFwYDVQQKExBDbG91ZGZsYXJlLCBJbmMuMR4wHAYDVQQDExVzbmkuY2xvdWRm\nbGFyZXNzbC5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASe8WZxKR+W4Rng\nSdm9YK+P21ARfqFz8pdW2kx90f5CWPNIBgjhepWj86YvLFaZnpskqMTGzOKb533R\n1IMTYmtbo4IDBzCCAwMwHwYDVR0jBBgwFoAUPnQtH89FdQR+P8Cihz5MQ4NRE8Yw\nHQYDVR0OBBYEFE0Olba6PZvLYPk7SQ6oAy+FTGirMDoGA1UdEQQzMDGCDCouYm9y\neXNlay5ldYIVc25pLmNsb3VkZmxhcmVzc2wuY29tggpib3J5c2VrLmV1MA4GA1Ud\nDwEB/wQEAwIHgDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIweQYDVR0f\nBHIwcDA2oDSgMoYwaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0Nsb3VkRmxhcmVJ\nbmNFQ0NDQTIuY3JsMDagNKAyhjBodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vQ2xv\ndWRGbGFyZUluY0VDQ0NBMi5jcmwwTAYDVR0gBEUwQzA3BglghkgBhv1sAQEwKjAo\nBggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAIBgZngQwB\nAgIwdgYIKwYBBQUHAQEEajBoMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdp\nY2VydC5jb20wQAYIKwYBBQUHMAKGNGh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNv\nbS9DbG91ZEZsYXJlSW5jRUNDQ0EtMi5jcnQwDAYDVR0TAQH/BAIwADCCAQUGCisG\nAQQB1nkCBAIEgfYEgfMA8QB3ALvZ37wfinG1k5Qjl6qSe0c4V5UKq1LoGpCWZDaO\nHtGFAAABb/R9TPQAAAQDAEgwRgIhANeUGX2fm+4zDRgKDyDYLEy948PjPDtXMBA3\nZKGPSUU9AiEAqptnsbnM5KZ2bYBxALjnR3k2hazRDVaM06eUiRetK5AAdgBep3P5\n31bA57U2SH3QSeAyepGaDIShEhKEGHWWgXFFWAAAAW/0fUyZAAAEAwBHMEUCIQCW\nuL4l8MMsaNO9o3kl+lxlNakLReJErx1/3aKNLwP/ZQIgWHbqHI+ZcKBAUukz0FEy\nYGS69lB2B/X0A5gQ+bbmQdMwCgYIKoZIzj0EAwIDSAAwRQIhANJhswKqbY1FSsIy\nWcLAvH3c+j18s92/QukBahyMHaBtAiAdbVfUDrIOoXd6j1NaFXK2jGabwjOl2+Km\nwISZkAe6kA==\n-----END CERTIFICATE-----\n",
+        "hpkp_pin": "w3CFyTvRgyoBFemN2XIkI+6fE/dJXG7Rj2YOWpeSv9M=",
+        "issuer": "countryName=US, stateOrProvinceName=CA, localityName=San Francisco, organizationName=CloudFlare, Inc., commonName=CloudFlare Inc ECC CA-2",
+        "notAfter": "2020-10-09T12:00:00",
+        "notBefore": "2020-01-30T00:00:00",
+        "publicKey_algorithm": "EllipticCurve",
+        "publicKey_curve": "secp256r1",
+        "publicKey_exponent": null,
+        "publicKey_size": 256,
+        "serialNumber": "11256500692832812426706043555859804145",
+        "signatureAlgorithm": "sha256",
+        "subject": "countryName=US, stateOrProvinceName=CA, localityName=San Francisco, organizationName=Cloudflare, Inc., commonName=sni.cloudflaressl.com",
+        "subject_alternative_name_list": "*.borysek.eu,sni.cloudflaressl.com,borysek.eu",
+        "thumbprint_sha1": "C6:7E:B7:4B:1D:E4:D3:DB:06:BE:9D:D8:39:51:4F:F1:A4:E8:18:F9",
+        "thumbprint_sha256": "19:E6:87:BE:C8:BA:5E:AE:A0:F1:EB:AD:66:98:69:18:AC:8A:BA:6E:DB:86:90:C8:30:74:41:B5:44:F3:0C:09"
+    }
+}

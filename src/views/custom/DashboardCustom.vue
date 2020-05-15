@@ -9,7 +9,7 @@
             <div class="small text-muted">November 2017</div>
           </CCol>
         </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;"/>
+        <GradeHistoryGraphComponent style="height:300px;margin-top:40px;"/>
       </CCardBody>
 
     </CCard>
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import MainChartExample from '../charts/MainChartExample'
+import GradeHistoryGraphComponent from './GradeHistoryGraphComponent'
 import GradesDonutComponent from "./GradesDonutComponent";
 
 export default {
   name: 'DashboardCustom',
   components: {
-    MainChartExample,
+    GradeHistoryGraphComponent,
     GradesDonutComponent
   },
   data () {

@@ -47,7 +47,14 @@
             <td>{{certificate.issuer}}</td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+            <th scope="row">Other services</th>
+            <td><a :href="censys">Censys</a> <a :href="crtsh">Crt.sh</a></td>
+        </tr>
+        </tfoot>
     </table>
+
     </CCard>
 </template>
 
@@ -66,6 +73,16 @@
         },
         mounted() {
             this.certificate = testCertificate() // todo: this modifies, prop. disable after done with debug
+        },
+        computed: {
+            censys: function(){
+                let a = this.certificate.thumbprint_sha256.replace(/:/g, "")
+                return "https://censys.io/certificates/" + a
+            },
+            crtsh: function(){
+                let a = this.certificate.thumbprint_sha256.replace(/:/g, "")
+                return "https://crt.sh/?q=" + a
+            }
         }
     }
 </script>

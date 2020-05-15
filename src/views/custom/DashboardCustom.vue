@@ -12,8 +12,7 @@
       <CCardBody>
         <CRow>
           <CCol sm="5">
-            <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-            <div class="small text-muted">November 2017</div>
+            <h4 id="traffic" class="card-title mb-0">Grade history</h4>
           </CCol>
         </CRow>
         <GradeHistoryGraphComponent style="height:300px;margin-top:40px;"/>

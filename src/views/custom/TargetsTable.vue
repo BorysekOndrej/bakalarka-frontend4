@@ -95,7 +95,7 @@
 </template>
 
 <script>
-    import {callGetUserTargets} from "@/api";
+    import {callGetUserTargets} from "../../api";
     import AddTargetComponent from "./AddTargetComponent";
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";

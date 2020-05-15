@@ -121,7 +121,7 @@ const mutations = {
         state.sidebarShow = sidebarClosed ? true : 'responsive'
     },
     set(state, [variable, value]) {
-        console.debug(`Set: ${variable} = ${value}`)
+        console.debug('Set: ', variable,' = ', value)
         state[variable] = value
     },
     setJwt(state, access_token) {

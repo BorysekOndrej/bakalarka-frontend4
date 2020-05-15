@@ -85,7 +85,7 @@
 
                     maintainAspectRatio: false,
                     legend: {
-                        display: false
+                        display: true
                     },
                     scales: {
                         xAxes: [{

@@ -1,7 +1,13 @@
 <template>
   <div>
-    <GradesDonutComponent></GradesDonutComponent>
-    <ExpirationDonutComponent></ExpirationDonutComponent>
+    <CRow>
+      <CCol>
+        <GradesDonutComponent></GradesDonutComponent>
+      </CCol>
+      <CCol>
+        <ExpirationDonutComponent></ExpirationDonutComponent>
+      </CCol>
+    </CRow>
     <CCard>
       <CCardBody>
         <CRow>

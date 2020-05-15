@@ -38,21 +38,24 @@
             defaultDatasets () {
                 return [
                     {
-                        backgroundColor: [
-                            '#639B4B',
-                            '#8AC271',
-                            '#F6B26B',
-                            '#E4834C',
-                            '#DD624E',
-                            '#CC0000',
-                            '#CED2D8',
-                        ],
+                        backgroundColor: this.gradeColors,
                         data: this.precalculatedGradesCount
                     }
                 ]
             },
             gradeLetters (){
                 return ['A', 'B', 'C', 'D', 'E', 'F', 'Not scanned yet']
+            },
+            gradeColors(){
+                return [
+                    '#639B4B', // A
+                    '#8AC271', // B
+                    '#F6B26B', // C
+                    '#E4834C', // D
+                    '#DD624E', // E
+                    '#CC0000', // F
+                    '#CED2D8', // Not scanned yet
+                ]
             }
         }
     }

@@ -555,12 +555,12 @@ export default {
       return [
         {
           backgroundColor: [
-            '#41B883',
-            '#E46651',
-            '#00D8FF',
-            '#DD1B16',
-            '#DD1B16',
-            '#DD1B16',
+            '#639B4B',
+            '#8AC271',
+            '#F6B26B',
+            '#E4834C',
+            '#DD624E',
+            '#CC0000',
             '#CED2D8',
           ],
           data: [5, 1, 2, 5, 1, 20, 0]

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <CChartDoughnut
-            :datasets="defaultDatasets"
-            :labels="gradeLetters"
-    />
+    <GradesDonutComponent></GradesDonutComponent>
     <WidgetsDropdown/>
     <CCard>
       <CCardBody>
@@ -461,8 +458,7 @@
 import MainChartExample from '../charts/MainChartExample'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import WidgetsBrand from '../widgets/WidgetsBrand'
-import { CChartDoughnut } from '@coreui/vue-chartjs'
-
+import GradesDonutComponent from "./GradesDonutComponent";
 
 export default {
   name: 'DashboardCustom',
@@ -470,7 +466,7 @@ export default {
     MainChartExample,
     WidgetsDropdown,
     WidgetsBrand,
-    CChartDoughnut
+    GradesDonutComponent
   },
   data () {
     return {
@@ -550,27 +546,6 @@ export default {
       return $color
     }
   },
-  computed: {
-    defaultDatasets () {
-      return [
-        {
-          backgroundColor: [
-            '#639B4B',
-            '#8AC271',
-            '#F6B26B',
-            '#E4834C',
-            '#DD624E',
-            '#CC0000',
-            '#CED2D8',
-          ],
-          data: [5, 1, 2, 5, 1, 20, 0]
-        }
-      ]
-    },
-    gradeLetters (){
-      return ['A', 'B', 'C', 'D', 'E', 'F', 'T']
-    }
-  }
 
 }
 </script>

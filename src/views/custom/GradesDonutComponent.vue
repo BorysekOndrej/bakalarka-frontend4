@@ -13,7 +13,28 @@
         components: {
             CChartDoughnut
         },
+        created() {
+            this.$store.dispatch('syncUserTargetsWithBasicResults')
+        },
         computed: {
+            userTargets() {
+                return this.$store.getters.getUserTargets
+            },
+            precalculatedGradesCount(){
+                let res = [];
+                for (let i = 0; i < this.gradeLetters.length; i++){
+                    res[i] = 0;
+                }
+                for (const x of this.userTargets){
+                    let gradeIndex = this.gradeLetters.indexOf(x.grade)
+                    if (gradeIndex < 0){
+                        console.warn(`Unknown grade ${x.grade}. Skipping`)
+                        continue
+                    }
+                    res[gradeIndex]++
+                }
+                return res
+            },
             defaultDatasets () {
                 return [
                     {
@@ -26,12 +47,12 @@
                             '#CC0000',
                             '#CED2D8',
                         ],
-                        data: [5, 1, 2, 5, 1, 20, 0]
+                        data: this.precalculatedGradesCount
                     }
                 ]
             },
             gradeLetters (){
-                return ['A', 'B', 'C', 'D', 'E', 'F', 'T']
+                return ['A', 'B', 'C', 'D', 'E', 'F', 'Not scanned yet']
             }
         }
     }

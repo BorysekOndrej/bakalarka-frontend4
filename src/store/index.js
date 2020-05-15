@@ -3,7 +3,14 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import {authenticate, register, callAddTarget, jwtRefreshAccessToken, callDeleteTarget} from '../api'
+import {
+    authenticate,
+    register,
+    callAddTarget,
+    jwtRefreshAccessToken,
+    callDeleteTarget,
+    callGetUserTargets
+} from '../api'
 import {isValidJwt, EventBus} from '../utils'
 
 
@@ -12,6 +19,7 @@ const state = {
     sidebarMinimize: false,
     user: {},
     jwt: '',
+    userTargets: [],
 }
 
 const actions = {
@@ -85,8 +93,22 @@ const actions = {
                 return Promise.reject(error);
             })
     },
-
-
+    syncUserTargetsWithBasicResults(context){
+        callGetUserTargets().then(function (response) {
+            console.log("callGetUserTargets result received", response.data)
+            let original_data = store.getters.getUserTargets
+            if (original_data === response.data){
+                console.log("callGetUserTargets refresh returned the same result as was already saved")
+                return;
+            }
+            context.commit('set', ["userTargets", response.data])
+            EventBus.$emit('userTargetsSynchronizedAndChanged')
+        })
+        .catch(function (error) {
+            Vue.$log.warn('callGetUserTargets error', error)
+            return Promise.reject(error);
+        })
+    },
 }
 
 const mutations = {
@@ -132,6 +154,9 @@ const getters = {
     },
     getUserID(state){
         return getters.getJwt(state) ? getters.getUserIdentity(state).id : null
+    },
+    getUserTargets(){
+        return state.userTargets;
     }
 }
 

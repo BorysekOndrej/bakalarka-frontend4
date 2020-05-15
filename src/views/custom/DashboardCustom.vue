@@ -1,6 +1,7 @@
 <template>
   <div>
     <GradesDonutComponent></GradesDonutComponent>
+    <ExpirationDonutComponent></ExpirationDonutComponent>
     <CCard>
       <CCardBody>
         <CRow>
@@ -19,12 +20,14 @@
 <script>
 import GradeHistoryGraphComponent from './GradeHistoryGraphComponent'
 import GradesDonutComponent from "./GradesDonutComponent";
+import ExpirationDonutComponent from "./ExpirationDonutComponent";
 
 export default {
   name: 'DashboardCustom',
   components: {
     GradeHistoryGraphComponent,
-    GradesDonutComponent
+    GradesDonutComponent,
+    ExpirationDonutComponent
   },
   data () {
     return {

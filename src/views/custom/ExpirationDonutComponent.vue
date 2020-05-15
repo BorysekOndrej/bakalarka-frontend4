@@ -1,15 +1,16 @@
 <template>
     <CChartDoughnut
             :datasets="defaultDatasets"
-            :labels="gradeLetters"
+            :labels="expirationLevels"
     />
 </template>
 
 <script>
     import {CChartDoughnut} from "@coreui/vue-chartjs";
+    import {expiresToGradeIndex} from "../../utils";
 
     export default {
-        name: "GradesDonutComponent",
+        name: "ExpirationDonutComponent",
         components: {
             CChartDoughnut
         },
@@ -22,15 +23,11 @@
             },
             precalculatedGradesCount(){
                 let res = [];
-                for (let i = 0; i < this.gradeLetters.length; i++){
+                for (let i = 0; i < this.expirationLevels.length; i++){
                     res[i] = 0;
                 }
                 for (const x of this.userTargets){
-                    let gradeIndex = this.gradeLetters.indexOf(x.grade)
-                    if (gradeIndex < 0){
-                        console.warn(`Unknown grade ${x.grade}. Skipping`)
-                        continue
-                    }
+                    let gradeIndex = expiresToGradeIndex(x.expires, this.expirationLevelsNumbericalThresholds)
                     res[gradeIndex]++
                 }
                 return res
@@ -43,8 +40,21 @@
                     }
                 ]
             },
-            gradeLetters (){
-                return ['A', 'B', 'C', 'D', 'E', 'F', 'Not scanned yet']
+            expirationLevelsNumbericalThresholds (){
+                return [30, 10, 1, 0, -30]
+            },
+            expirationLevels (){
+                let res = []
+                res.push(`> ${this.expirationLevelsNumbericalThresholds[0]} days`)
+                for (const x of this.expirationLevelsNumbericalThresholds){
+                    if (x > 0){
+                        res.push(`Expires in less than ${x} days`)
+                    }else{
+                        res.push(`Expired more than ${-x} days ago`)
+                    }
+                }
+                res.push(`Not scanned yet`)
+                return res
             },
             gradeColors(){
                 return [

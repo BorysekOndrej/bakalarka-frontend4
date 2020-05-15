@@ -2,6 +2,7 @@
 // MIT
 
 import Vue from 'vue'
+import moment from "moment";
 
 export const EventBus = new Vue()
 const target_properties = ['id', 'hostname', 'port', 'ip_address', 'protocol']
@@ -46,4 +47,23 @@ export function filterObjToTargetDefinition(obj){
         }, {});
 
     return filtered
+}
+
+
+export function expiresToGradeIndex(expires_string, expiration_levels) {
+    if (expires_string === "Not scanned yet"){
+        return 6;
+    }
+    console.log(expires_string)
+    let expires_moment = moment(expires_string, moment.ISO_8601)
+    let today_moment = moment()
+    let day_diff = expires_moment.diff(today_moment, 'days')
+    // console.log(expires_moment.format(), today_moment.format(), day_diff)
+    let i = 0
+    for (const cur_level of expiration_levels){
+        if (day_diff > cur_level){
+            return i
+        }
+    }
+    return 5
 }

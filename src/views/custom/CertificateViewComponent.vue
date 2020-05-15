@@ -72,7 +72,7 @@
 
         },
         mounted() {
-            this.certificate = testCertificate() // todo: this modifies, prop. disable after done with debug
+            // this.certificate = testCertificate() // todo: this modifies, prop. disable after done with debug
         },
         computed: {
             censys: function(){

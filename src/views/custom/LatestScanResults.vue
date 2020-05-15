@@ -2,16 +2,26 @@
     <div>
         <h1>{{ msg }}</h1>
         <CCard>
+            <div v-for="x in last_scan_json.result.certificate_information.received_certificate_chain_list.verified_certificate_chain">
+                <CertificateViewComponent
+                    :certificate="x"
+                ></CertificateViewComponent>
+                <br>
+                <hr>
+            </div>
+            <hr>
             <pre class="m-0" style="text-align: left;">{{ last_scan_json }}</pre>
         </CCard>
     </div>
 </template>
-
+received_certificate_chain_list
 <script>
     import {callGetResultForTarget} from "../../api";
+    import CertificateViewComponent from "./CertificateViewComponent";
 
     export default {
         name: "latestScanResults",
+        components: {CertificateViewComponent},
         props: {
             msg: String,
             target_id: {

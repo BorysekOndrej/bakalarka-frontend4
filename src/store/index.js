@@ -9,7 +9,7 @@ import {
     callAddTarget,
     jwtRefreshAccessToken,
     callDeleteTarget,
-    callGetUserTargets
+    callGetUserTargets, callGetScanResultHistory
 } from '../api'
 import {isValidJwt, EventBus} from '../utils'
 
@@ -21,6 +21,7 @@ const state = {
     jwt: '',
     userTargets: [],
     userTargetsLoading: false,
+    userTargetsHistory: []
 }
 
 const actions = {
@@ -114,6 +115,16 @@ const actions = {
             return Promise.reject(error);
         })
     },
+    syncUserTargetsHistory(context){
+        callGetScanResultHistory().then(function (response) {
+            context.commit('set', ["userTargetsHistory", response.data])
+        })
+        .catch(function (error) {
+            Vue.$log.warn('syncUserTargetsHistory error', error)
+            return Promise.reject(error);
+        })
+    },
+
 }
 
 const mutations = {

@@ -24,7 +24,16 @@
                 default: 30
             }
         },
+        created() {
+            this.$store.dispatch('syncUserTargetsHistory')
+        },
         computed: {
+            rawDataFromHistory(){
+                return this.$store.getters.userTargetsHistory
+            },
+            processedDataFromHistory(){
+                return [1, 2, 3, 4, 50, 100, 20, 30]
+            },
             dates() {
                 let res = []
                 let today = new Date()
@@ -76,7 +85,7 @@
                         pointHoverBackgroundColor: brandDanger,
                         borderWidth: 1,
                         borderDash: [8, 5],
-                        data: data3
+                        data: this.processedDataFromHistory
                     }
                 ]
             },

@@ -9,7 +9,7 @@
             <CCardBody>
 
                 <CDataTable
-                    :items="items"
+                    :items="userTargets"
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
@@ -21,7 +21,7 @@
                     border
                     style="text-align: center"
                     caption="Primary test table"
-                    :loading="loading"
+                    :loading="userTargetsLoading"
                     :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                 >
                     <template #grade="{item}">
@@ -95,7 +95,6 @@
 </template>
 
 <script>
-    import {callGetUserTargets} from "../../api";
     import AddTargetComponent from "./AddTargetComponent";
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
@@ -118,19 +117,24 @@
                 latestScanResultsVisible: false,
                 latestScanResultsData: -1,
                 targetToEdit: null,
-                loading: false,
-                items: [],
             }
         },
         created() {
-            this.syncGetUserTargets()
+            this.$store.dispatch('syncUserTargetsWithBasicResults')
 
             var self = this;
             EventBus.$on('users-targets-modified', () => {
-                self.syncGetUserTargets()
+                self.$store.dispatch('syncUserTargetsWithBasicResults')
             });
         },
-
+        computed: {
+            userTargets() {
+                return this.$store.getters.getUserTargets
+            },
+            userTargetsLoading() {
+                return this.$store.state.userTargetsLoading
+            }
+        },
         methods: {
             getBadge (status) {
                 switch (status) {
@@ -155,13 +159,6 @@
             delete_target(row){
                 this.$store.dispatch('removeTarget', row.id)
             },
-            async syncGetUserTargets() {
-                this.loading = true
-                const response = await callGetUserTargets();
-                // console.log(response)
-                this.items = response.data;
-                this.loading = false
-            }
         }
     }
 </script>

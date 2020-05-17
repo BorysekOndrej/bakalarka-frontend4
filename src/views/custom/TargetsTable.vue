@@ -9,7 +9,7 @@
             <CCardBody>
 
                 <CDataTable
-                    :items="items"
+                    :items="userTargets"
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
@@ -21,7 +21,7 @@
                     border
                     style="text-align: center"
                     caption="Primary test table"
-                    :loading="loading"
+                    :loading="userTargetsLoading"
                     :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                 >
                     <template #grade="{item}">
@@ -39,9 +39,17 @@
                         </td>
                     </template>
 
-                    <template #buttons="{item}">
+                    <template #actions="{item}">
                         <td class="button_only_td">
                             <!-- The whole row could be clickable, but that would make the copying values for difficult.-->
+
+                            <CButton v-if="item.active == 'yes'"
+                                     color="secondary"
+                                     class="btn-mi"
+                                     v-on:click="force_rescan(item)"
+                                     v-c-tooltip="{content: 'Scan Now'}"
+                            ><CIcon :content="freeSetVar.cilSync"/></CButton>
+
                             <CButton color="info"
                                      class="btn-mi"
                                      v-on:click="show_latest_scan_result(item)"
@@ -60,6 +68,14 @@
                                      v-on:click="delete_target(item)"
                                      v-c-tooltip="{content: 'Archive'}"
                             ><CIcon name="cil-ban"/></CButton>
+
+                            <CButton v-if="item.active == 'no'"
+                                     color="success"
+                                     class="btn-mi"
+                                     v-on:click="reenable_target(item)"
+                                     v-c-tooltip="{content: 'Enable'}"
+                            ><CIcon :content="freeSetVar.cilMediaPlay"/></CButton>
+
                         </td>
                     </template>
                 </CDataTable>
@@ -95,10 +111,10 @@
 </template>
 
 <script>
-    import {callGetUserTargets} from "../../api";
     import AddTargetComponent from "./AddTargetComponent";
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
+    import { freeSet } from '@coreui/icons'
 
     export default {
         name: 'TargetsTable',
@@ -107,7 +123,7 @@
             fields: {
                 type: Array,
                 default () {
-                    return ['hostname', 'port', {key: 'ip_address', label: 'IP address'}, 'protocol', 'grade', 'expires', 'active', {key:'buttons', filter: false, sorter: false}]
+                    return ['hostname', 'port', {key: 'ip_address', label: 'IP address'}, 'protocol', 'grade', 'expires', 'active', {key:'actions', filter: false, sorter: false}]
                 }
             },
         },
@@ -118,19 +134,27 @@
                 latestScanResultsVisible: false,
                 latestScanResultsData: -1,
                 targetToEdit: null,
-                loading: false,
-                items: [],
             }
         },
         created() {
-            this.syncGetUserTargets()
+            this.$store.dispatch('syncUserTargetsWithBasicResults')
 
             var self = this;
             EventBus.$on('users-targets-modified', () => {
-                self.syncGetUserTargets()
+                self.$store.dispatch('syncUserTargetsWithBasicResults')
             });
         },
-
+        computed: {
+            userTargets() {
+                return this.$store.getters.getUserTargets
+            },
+            userTargetsLoading() {
+                return this.$store.state.userTargetsLoading
+            },
+            freeSetVar(){
+                return freeSet
+            }
+        },
         methods: {
             getBadge (status) {
                 switch (status) {
@@ -155,12 +179,11 @@
             delete_target(row){
                 this.$store.dispatch('removeTarget', row.id)
             },
-            async syncGetUserTargets() {
-                this.loading = true
-                const response = await callGetUserTargets();
-                // console.log(response)
-                this.items = response.data;
-                this.loading = false
+            reenable_target(row){
+                // todo:
+            },
+            force_rescan(row){
+                // todo:
             }
         }
     }
@@ -173,6 +196,7 @@
         margin-right: 0.21875rem;
     }
     td.button_only_td{
+        min-width: 155px;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
     }

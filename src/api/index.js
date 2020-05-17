@@ -113,3 +113,7 @@ export function callGetNotificationSettings(user_id, target_id){
 export function callPostNotificationSettings(user_id, target_id, data){
     return postToAPI(`/api/v1/notification_settings/${user_id}/${target_id}`, data);
 }
+
+export function callGetScanResultHistory(){
+    return getFromAPI(`/api/v1/scan_result_history`);
+}

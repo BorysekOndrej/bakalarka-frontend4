@@ -9,7 +9,7 @@ import {
     callAddTarget,
     jwtRefreshAccessToken,
     callDeleteTarget,
-    callGetUserTargets
+    callGetUserTargets, callGetScanResultHistory
 } from '../api'
 import {isValidJwt, EventBus} from '../utils'
 
@@ -20,6 +20,8 @@ const state = {
     user: {},
     jwt: '',
     userTargets: [],
+    userTargetsLoading: false,
+    userTargetsHistory: []
 }
 
 const actions = {
@@ -94,21 +96,35 @@ const actions = {
             })
     },
     syncUserTargetsWithBasicResults(context){
+        context.commit('set', ["userTargetsLoading", true])
+
         callGetUserTargets().then(function (response) {
             console.log("callGetUserTargets result received", response.data)
             let original_data = store.getters.getUserTargets
             if (original_data === response.data){
                 console.log("callGetUserTargets refresh returned the same result as was already saved")
+                context.commit('set', ["userTargetsLoading", false])
                 return;
             }
             context.commit('set', ["userTargets", response.data])
-            EventBus.$emit('userTargetsSynchronizedAndChanged')
+            context.commit('set', ["userTargetsLoading", false])
         })
         .catch(function (error) {
             Vue.$log.warn('callGetUserTargets error', error)
+            context.commit('set', ["userTargetsLoading", false])
             return Promise.reject(error);
         })
     },
+    syncUserTargetsHistory(context){
+        callGetScanResultHistory().then(function (response) {
+            context.commit('set', ["userTargetsHistory", response.data])
+        })
+        .catch(function (error) {
+            Vue.$log.warn('syncUserTargetsHistory error', error)
+            return Promise.reject(error);
+        })
+    },
+
 }
 
 const mutations = {

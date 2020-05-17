@@ -9,6 +9,7 @@
 <script>
     import { CChartLine } from '@coreui/vue-chartjs'
     import { getStyle, hexToRgba } from '@coreui/utils/src'
+    import moment from "moment";
 
     function random (min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min)
@@ -22,7 +23,18 @@
         props: {
             number_of_days: {
                 default: 30
+            },
+            unified_date_format: {
+                default: "D. M."
+            },
+            grades: {
+                default () {
+                    return ["A", "B", "C", "D", "E", "F", "Not scanned yet"]
+                }
             }
+        },
+        created() {
+            this.$store.dispatch('syncUserTargetsHistory')
         },
         computed: {
             rawDataFromHistory(){
@@ -171,12 +183,9 @@
             },
             dates() {
                 let res = []
-                let today = new Date()
-                let new_date = today;
-                today.get
                 for (let i = 0; i < this.number_of_days; i++){
-                    res.push(`${new_date.getDate()}. ${new_date.getMonth()+1}`)
-                    new_date.setDate(new_date.getDate()-1);
+                    let date_string = moment().subtract(i, 'days').format(this.unified_date_format)
+                    res.push(date_string)
                 }
                 res.reverse()
                 return res
@@ -203,7 +212,7 @@
                         borderColor: brandInfo,
                         pointHoverBackgroundColor: brandInfo,
                         borderWidth: 2,
-                        data: data1
+                        data: this.preprocessDataFromHistoryA
                     },
                     {
                         label: 'My Second dataset',
@@ -211,7 +220,7 @@
                         borderColor: brandSuccess,
                         pointHoverBackgroundColor: brandSuccess,
                         borderWidth: 2,
-                        data: data2
+                        data: this.preprocessDataFromHistoryD
                     },
                     {
                         label: 'My Third dataset',
@@ -220,7 +229,7 @@
                         pointHoverBackgroundColor: brandDanger,
                         borderWidth: 1,
                         borderDash: [8, 5],
-                        data: data3
+                        data: this.preprocessDataFromHistoryF
                     }
                 ]
             },
@@ -241,8 +250,8 @@
                             ticks: {
                                 beginAtZero: true,
                                 maxTicksLimit: 5,
-                                stepSize: Math.ceil(250 / 5),
-                                max: 250
+                                stepSize: Math.ceil(this.maxYScale / 5),
+                                max: this.maxYScale
                             },
                             gridLines: {
                                 display: true

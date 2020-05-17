@@ -25,6 +25,150 @@
             }
         },
         computed: {
+            rawDataFromHistory(){
+                return this.$store.state.userTargetsHistory
+            },
+            preprocessDataFromHistory1(){
+                let target_ids = new Set()
+                for (const x of this.rawDataFromHistory){
+                    let target_id = x.target.id
+                    target_ids.add(target_id)
+                }
+
+                let targets_dict = {}
+                for (const x of target_ids){
+                    targets_dict[x] = []
+                }
+
+                for (const x of this.rawDataFromHistory){
+                    let timestamp = x.timestamp
+                    let target_id = x.target.id
+                    let grade =  x.result_simplified.grade
+                    targets_dict[target_id].push({timestamp, grade})
+                }
+
+                for (const x of target_ids){
+                    let sortedArr = targets_dict[x].sort(function(a, b) { return a[0] - b[0]; });
+                    targets_dict[x] = sortedArr
+                }
+                return targets_dict
+            },
+            preprocessDataFromHistory2(){
+                let targets_dict = this.preprocessDataFromHistory1
+                let targets_res = {}
+                for(let target_id in targets_dict){
+                    targets_res[target_id] = {}
+                    for (const x of this.dates){
+                        targets_res[target_id][x] = undefined
+                    }
+                }
+                for(let target_id in targets_dict){
+                    let single_target_arr = targets_dict[target_id]
+                    for (const single_scan of single_target_arr){
+                        let timestamp_numerical = single_scan.timestamp
+                        let timestamp_moment_start_of_day = moment.unix(timestamp_numerical).startOf('day')
+                        let timestamp_string_start_of_day = timestamp_moment_start_of_day.format(this.unified_date_format);
+
+                        if (targets_res[target_id][timestamp_string_start_of_day] !== undefined){
+                            console.warn("duplicate scan thrown away", targets_res[target_id][timestamp_string_start_of_day], single_scan.grade)
+                            // todo:
+                            continue
+                        }
+
+                        targets_res[target_id][timestamp_string_start_of_day] = single_scan.grade
+                    }
+                }
+                console.log("preprocessDataFromHistory2", targets_res)
+                return targets_res
+            },
+            preprocessDataFromHistory3(){
+                let resulting_dict = {}
+                let targets_date_dict = this.preprocessDataFromHistory2
+                for (let single_date in this.dates){
+                    resulting_dict[this.dates[single_date]] = {}
+                    for (const single_grade of this.grades){
+                        resulting_dict[this.dates[single_date]][single_grade] = 0
+                    }
+                }
+                for (const single_date of this.dates) {
+                    for (let target_id in targets_date_dict) {
+                        //console.warn(targets_date_dict[target_id][single_date])
+                        let grade = targets_date_dict[target_id][single_date]
+                        resulting_dict[single_date][grade]++
+                    }
+                }
+                console.log("preprocessDataFromHistory3", resulting_dict)
+                return resulting_dict
+            },
+            preprocessDataFromHistory4(){
+                let date_grade_dict = this.preprocessDataFromHistory3
+                let grade_date_dict = {}
+                for (const single_grade of this.grades){
+                    grade_date_dict[single_grade] = {}
+                    for (let single_date in this.dates) {
+                        grade_date_dict[single_grade][this.dates[single_date]] = date_grade_dict[this.dates[single_date]][single_grade]
+                    }
+                }
+                console.log("preprocessDataFromHistory4", grade_date_dict)
+                return grade_date_dict
+            },
+            preprocessDataFromHistory5(){
+                let grade_date_dict = this.preprocessDataFromHistory4
+                let grade_date_dict_sorted = {}
+                for (const single_grade of this.grades){
+                    grade_date_dict_sorted[single_grade] = []
+                    for (let single_date in this.dates) {
+                        grade_date_dict_sorted[single_grade].push(grade_date_dict[single_grade][this.dates[single_date]])
+                    }
+                }
+                console.log("preprocessDataFromHistory5", grade_date_dict_sorted)
+                return grade_date_dict_sorted
+            },
+            preprocessDataFromHistory6(){
+                let x = this.preprocessDataFromHistory5['D']
+                console.log("preprocessDataFromHistory6", x)
+                // return [1, 2, 3, 4, 50, 100, 20, 30]
+                return x
+            },
+            sumarize_lower_levels(){
+                let highestLevel = 'C'
+                let input = {}
+
+                let levels_arrs_to_sumarize = []
+                for (const single_grade of this.grades){
+                    if (this.grades.indexOf(highestLevel) > this.grades.indexOf(single_grade)){
+                        levels_arrs_to_sumarize.push(input[single_grade])
+                    }
+                }
+                let result1 = []
+                for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
+                    result1.push(0)
+                }
+                for (const single_level of levels_arrs_to_sumarize){
+                    for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
+                        result1[i] += single_level[i]
+                    }
+                }
+                return result1
+            },
+            preprocessDataFromHistoryA(){
+                return this.preprocessDataFromHistory5['A']
+            },
+            preprocessDataFromHistoryD(){
+                return this.preprocessDataFromHistory5['D']
+            },
+            preprocessDataFromHistoryF(){
+                return this.preprocessDataFromHistory5['F']
+            },
+            maxYScale(){
+                let currentMax = 1
+                let grade_date_dict_sorted = this.preprocessDataFromHistory5
+                for (const single_grade of this.grades){
+                    currentMax = Math.max(currentMax, Math.max(...grade_date_dict_sorted[single_grade]))
+                }
+                //console.warn(currentMax)
+                return currentMax + 2
+            },
             dates() {
                 let res = []
                 let today = new Date()

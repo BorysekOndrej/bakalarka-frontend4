@@ -104,7 +104,7 @@
                 }
                 for (const single_date of this.dates) {
                     for (let target_id in targets_date_dict) {
-                        console.warn(targets_date_dict[target_id][single_date])
+                        //console.warn(targets_date_dict[target_id][single_date])
                         let grade = targets_date_dict[target_id][single_date]
                         resulting_dict[single_date][grade]++
                     }
@@ -142,6 +142,24 @@
                 // return [1, 2, 3, 4, 50, 100, 20, 30]
                 return x
             },
+            preprocessDataFromHistoryA(){
+                return this.preprocessDataFromHistory5['A']
+            },
+            preprocessDataFromHistoryD(){
+                return this.preprocessDataFromHistory5['D']
+            },
+            preprocessDataFromHistoryF(){
+                return this.preprocessDataFromHistory5['F']
+            },
+            maxYScale(){
+                let currentMax = 1
+                let grade_date_dict_sorted = this.preprocessDataFromHistory5
+                for (const single_grade of this.grades){
+                    currentMax = Math.max(currentMax, Math.max(...grade_date_dict_sorted[single_grade]))
+                }
+                //console.warn(currentMax)
+                return currentMax + 2
+            },
             dates() {
                 let res = []
                 for (let i = 0; i < this.number_of_days; i++){
@@ -173,7 +191,7 @@
                         borderColor: brandInfo,
                         pointHoverBackgroundColor: brandInfo,
                         borderWidth: 2,
-                        data: data1
+                        data: this.preprocessDataFromHistoryA
                     },
                     {
                         label: 'My Second dataset',
@@ -181,7 +199,7 @@
                         borderColor: brandSuccess,
                         pointHoverBackgroundColor: brandSuccess,
                         borderWidth: 2,
-                        data: data2
+                        data: this.preprocessDataFromHistoryD
                     },
                     {
                         label: 'My Third dataset',
@@ -190,7 +208,7 @@
                         pointHoverBackgroundColor: brandDanger,
                         borderWidth: 1,
                         borderDash: [8, 5],
-                        data: this.preprocessDataFromHistory6
+                        data: this.preprocessDataFromHistoryF
                     }
                 ]
             },
@@ -211,8 +229,8 @@
                             ticks: {
                                 beginAtZero: true,
                                 maxTicksLimit: 5,
-                                stepSize: Math.ceil(250 / 5),
-                                max: 250
+                                stepSize: Math.ceil(this.maxYScale / 5),
+                                max: this.maxYScale
                             },
                             gridLines: {
                                 display: true

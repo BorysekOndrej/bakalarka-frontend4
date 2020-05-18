@@ -136,22 +136,17 @@
                 console.log("preprocessDataFromHistory5", grade_date_dict_sorted)
                 return grade_date_dict_sorted
             },
-            preprocessDataFromHistory6(){
-                let x = this.preprocessDataFromHistory5['D']
-                console.log("preprocessDataFromHistory6", x)
-                // return [1, 2, 3, 4, 50, 100, 20, 30]
-                return x
-            },
             sumarize_lower_levels(){
                 let highestLevel = 'C'
-                let input = {}
+                let input = this.preprocessDataFromHistory5
 
                 let levels_arrs_to_sumarize = []
                 for (const single_grade of this.grades){
-                    if (this.grades.indexOf(highestLevel) > this.grades.indexOf(single_grade)){
+                    if (this.grades.indexOf(highestLevel) <= this.grades.indexOf(single_grade)){
                         levels_arrs_to_sumarize.push(input[single_grade])
                     }
                 }
+                // console.log(levels_arrs_to_sumarize)
                 let result1 = []
                 for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
                     result1.push(0)
@@ -229,7 +224,7 @@
                         pointHoverBackgroundColor: brandDanger,
                         borderWidth: 1,
                         borderDash: [8, 5],
-                        data: this.preprocessDataFromHistoryF
+                        data: this.sumarize_lower_levels
                     }
                 ]
             },

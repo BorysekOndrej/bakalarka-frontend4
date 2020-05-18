@@ -123,7 +123,7 @@ function configRoutes () {
         },
         {
           path: 'dashboard',
-          name: 'Dashboard Custom',
+          name: 'Dashboard',
           component: DashboardCustom
         },
         {

@@ -11,11 +11,7 @@ export default [
         _name: 'CSidebarNavItem',
         name: 'Add target',
         to: '/addTarget',
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Add target Test Modal',
-        to: '/addTargetTestModal',
+        icon: 'cil-cursor',
       },
 
       {
@@ -25,31 +21,22 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'List of targets',
-        to: '/listTargets',
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Login or register',
-        to: '/login',
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'User profile',
-        to: '/profile',
-      },
-      {
-        _name: 'CSidebarNavItem',
         name: 'Dashboard',
         to: '/dashboardcustom',
         icon: 'cil-speedometer',
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Single certificate',
-        to: '/singlecertificate',
+        name: 'List of targets',
+        to: '/listTargets',
+        icon: 'cil-grid',
       },
 
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Login or register',
+        to: '/login',
+      },
     ]
   }
 ]

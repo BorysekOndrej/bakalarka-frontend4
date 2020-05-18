@@ -11,10 +11,6 @@
     import { hexToRgba } from '@coreui/utils/src'
     import moment from "moment";
 
-    function random (min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min)
-    }
-
     export default {
         name: 'GradeHistoryGraphComponent',
         components: {

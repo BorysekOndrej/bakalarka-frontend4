@@ -4,7 +4,7 @@ import store from '../store'
 import Vue from 'vue'
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-const API_URL = 'http://bakalarka3.borysek:5000'
+const API_URL = process.env.VUE_APP_API_URL ? process.env.VUE_APP_API_URL : 'http://bakalarka3.borysek:5000';
 const options_non_jwt_access_endpoints = {withCredentials: true} // allow cookies
 const axios_api_options = {
     headers: {

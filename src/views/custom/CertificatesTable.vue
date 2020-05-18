@@ -1,0 +1,203 @@
+<template>
+    <div class="wrapper">
+        <CCard>
+            <CCardHeader>
+                <slot name="header">
+                    <CIcon name="cil-grid"/> {{caption}}
+                </slot>
+            </CCardHeader>
+            <CCardBody>
+
+                <CDataTable
+                    :items="userTargets"
+                    :fields="fields"
+                    :items-per-page=10
+                    columnFilter
+                    :columnFilterValue="{ active: 'yes' }"
+                    sorter
+                    pagination
+                    hover
+                    striped
+                    border
+                    style="text-align: center"
+                    caption="Primary test table"
+                    :loading="userTargetsLoading"
+                    :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
+                >
+                    <template #grade="{item}">
+                        <td style="padding-top: 0px; padding-bottom: 0px; vertical-align: middle;">
+                            <h3><CBadge :color="getBadge(item.grade)">{{item.grade}}</CBadge></h3>
+                        </td>
+                    </template>
+
+                    <template #ip_address="{item}">
+                        <td v-if="item.ip_address">
+                            {{ item.ip_address }}
+                        </td>
+                        <td v-else>
+                            DNS
+                        </td>
+                    </template>
+
+                    <template #actions="{item}">
+                        <td class="button_only_td">
+                            <!-- The whole row could be clickable, but that would make the copying values for difficult.-->
+
+                            <CButton v-if="item.active == 'yes'"
+                                     color="secondary"
+                                     class="btn-mi"
+                                     v-on:click="force_rescan(item)"
+                                     v-c-tooltip="{content: 'Scan Now'}"
+                            ><CIcon :content="freeSetVar.cilSync"/></CButton>
+
+                            <CButton color="info"
+                                     class="btn-mi"
+                                     v-on:click="show_latest_scan_result(item)"
+                                     v-c-tooltip="{content: 'Info'}"
+                            ><CIcon name="cil-magnifying-glass"/></CButton>
+
+                            <CButton color="warning"
+                                     class="btn-mi"
+                                     v-on:click="edit_target(item)"
+                                     v-c-tooltip="{content: 'Edit'}"
+                            ><CIcon name="cil-pencil"/></CButton>
+
+                            <CButton v-if="item.active == 'yes'"
+                                     color="danger"
+                                     class="btn-mi"
+                                     v-on:click="delete_target(item)"
+                                     v-c-tooltip="{content: 'Archive'}"
+                            ><CIcon name="cil-ban"/></CButton>
+
+                            <CButton v-if="item.active == 'no'"
+                                     color="success"
+                                     class="btn-mi"
+                                     v-on:click="reenable_target(item)"
+                                     v-c-tooltip="{content: 'Enable'}"
+                            ><CIcon :content="freeSetVar.cilMediaPlay"/></CButton>
+
+                        </td>
+                    </template>
+                </CDataTable>
+
+            </CCardBody>
+        </CCard>
+        <CModal
+                title="Existing target"
+                :show.sync="editTargetModalVisible"
+        >
+            <AddTargetComponent
+                    :modifying_existing="true"
+                    :prefill="true"
+                    :target="targetToEdit"
+            ></AddTargetComponent>
+            <template #footer>
+                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+            </template>
+        </CModal>
+        <CModal
+                title="Latest scan result for this target"
+                :show.sync="latestScanResultsVisible"
+                size="xl"
+        >
+            <LatestScanResults
+                :target_id="latestScanResultsData"
+            ></LatestScanResults>
+            <template #footer>
+                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+            </template>
+        </CModal>
+    </div>
+</template>
+
+<script>
+    import AddTargetComponent from "./AddTargetComponent";
+    import LatestScanResults from "./LatestScanResults";
+    import {filterObjToTargetDefinition, EventBus} from "../../utils";
+    import { freeSet } from '@coreui/icons'
+
+    export default {
+        name: 'CertificatesTable',
+        components: {AddTargetComponent, LatestScanResults},
+        props: {
+            fields: {
+                type: Array,
+                default () {
+                    return ['hostname', 'port', {key: 'ip_address', label: 'IP address'}, 'protocol', 'grade', 'expires', 'active', {key:'actions', filter: false, sorter: false}]
+                }
+            },
+        },
+        data() {
+            return {
+                caption: 'List of your targets',
+                editTargetModalVisible: false,
+                latestScanResultsVisible: false,
+                latestScanResultsData: -1,
+                targetToEdit: null,
+            }
+        },
+        created() {
+            this.$store.dispatch('syncUserTargetsWithBasicResults')
+
+            var self = this;
+            EventBus.$on('users-targets-modified', () => {
+                self.$store.dispatch('syncUserTargetsWithBasicResults')
+            });
+        },
+        computed: {
+            userTargets() {
+                return this.$store.getters.getUserTargets
+            },
+            userTargetsLoading() {
+                return this.$store.state.userTargetsLoading
+            },
+            freeSetVar(){
+                return freeSet
+            }
+        },
+        methods: {
+            getBadge (status) {
+                switch (status) {
+                    case 'A': return 'success';
+                    case 'B': return 'secondary';
+                    case 'C': return 'warning';
+                    case 'D':
+                    case 'E': return 'danger';
+                    case 'Not scanned yet':
+                    default: return 'secondary'
+                }
+            },
+            show_latest_scan_result(row){
+                this.latestScanResultsData = row.id;
+                this.latestScanResultsVisible = true;
+            },
+            edit_target(row){
+                console.log("edit_target", {...row});
+                this.targetToEdit = filterObjToTargetDefinition({...row});
+                this.editTargetModalVisible = true;
+            },
+            delete_target(row){
+                this.$store.dispatch('removeTarget', row.id)
+            },
+            reenable_target(row){
+                // todo:
+            },
+            force_rescan(row){
+                // todo:
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    button.btn-mi {
+        padding: 0.05rem 0.2rem;
+        margin-left: 0.21875rem;
+        margin-right: 0.21875rem;
+    }
+    td.button_only_td{
+        min-width: 155px;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+</style>

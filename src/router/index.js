@@ -69,6 +69,7 @@ import DashboardCustom from "../views/custom/DashboardCustom";
 import CertificateViewComponent from "../views/custom/CertificateViewComponent";
 import store from "../store";
 import SearchCertificateTransparency from "../views/custom/SearchCertificateTransparency";
+import CertificatesTable from "../views/custom/CertificatesTable";
 
 
 Vue.use(Router)
@@ -152,6 +153,12 @@ function configRoutes () {
           name: 'Certificate Transparency',
           component: SearchCertificateTransparency
         },
+        {
+          path: 'certificatesTable',
+          name: 'Certificates Table',
+          component: CertificatesTable
+        },
+
 
         {
           path: 'dashboardOriginal',

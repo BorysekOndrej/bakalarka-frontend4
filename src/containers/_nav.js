@@ -36,7 +36,14 @@ export default [
         name: 'List of targets',
         to: '/listTargets',
         icon: 'cil-grid',
+      },/*
+      {
+        _name: 'CSidebarNavItem',
+        name: 'List of leaf certificates',
+        to: '/certificatesTable',
+        icon: 'cil-grid',
       },
+      */
     ]
   }
 ]

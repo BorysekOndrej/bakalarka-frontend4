@@ -26,17 +26,27 @@
       <router-link class="routerLink" :to="{ name: 'Profile' }"> <CIcon name="cil-user" />Profile & Settings</router-link>
     </CDropdownItem>
     <CDropdownItem>
-      <CIcon name="cil-lock-locked" /> Logout
+      <a href="#" v-on:click="logout" class="routerLink">
+        <CIcon name="cil-lock-locked"/>Logout
+      </a>
     </CDropdownItem>
   </CDropdown>
 </template>
 
 <script>
+
 export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
     return { 
       itemsCount: 42
+    }
+  },
+  methods: {
+    logout(){
+      console.debug("logout")
+      this.$store.dispatch("logout");
+      this.$router.push({ name: 'Login'})
     }
   }
 }

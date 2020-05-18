@@ -51,6 +51,11 @@ const actions = {
                 return Promise.reject(error);
             })
     },
+    logout(context) {
+        context.commit('setJwt', "logout")
+        // todo: emit server side logout
+        // todo: cleanup all private info client side after logout
+    },
     removeTarget(context, userData) {
         Vue.$log.debug("Remove scan order triggered")
         return callDeleteTarget(userData)

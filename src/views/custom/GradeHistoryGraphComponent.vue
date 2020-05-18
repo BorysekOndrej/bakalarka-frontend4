@@ -136,28 +136,6 @@
                 console.log("preprocessDataFromHistory5", grade_date_dict_sorted)
                 return grade_date_dict_sorted
             },
-            sumarize_lower_levels(){
-                let highestLevel = 'C'
-                let input = this.preprocessDataFromHistory5
-
-                let levels_arrs_to_sumarize = []
-                for (const single_grade of this.grades){
-                    if (this.grades.indexOf(highestLevel) <= this.grades.indexOf(single_grade)){
-                        levels_arrs_to_sumarize.push(input[single_grade])
-                    }
-                }
-                // console.log(levels_arrs_to_sumarize)
-                let result1 = []
-                for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
-                    result1.push(0)
-                }
-                for (const single_level of levels_arrs_to_sumarize){
-                    for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
-                        result1[i] += single_level[i]
-                    }
-                }
-                return result1
-            },
             preprocessDataFromHistoryA(){
                 return this.preprocessDataFromHistory5['A']
             },
@@ -202,29 +180,29 @@
                 }
                 return [
                     {
-                        label: 'My First dataset',
+                        label: 'A or worse',
+                        backgroundColor: hexToRgba(brandSuccess, 10),
+                        borderColor: brandSuccess,
+                        pointHoverBackgroundColor: brandSuccess,
+                        borderWidth: 2,
+                        data: this.sumarize_lower_levels("A")
+                    },
+                    {
+                        label: 'D or worse',
                         backgroundColor: hexToRgba(brandInfo, 10),
                         borderColor: brandInfo,
                         pointHoverBackgroundColor: brandInfo,
                         borderWidth: 2,
-                        data: this.preprocessDataFromHistoryA
+                        data: this.sumarize_lower_levels("D")
                     },
                     {
-                        label: 'My Second dataset',
-                        backgroundColor: 'transparent',
-                        borderColor: brandSuccess,
-                        pointHoverBackgroundColor: brandSuccess,
-                        borderWidth: 2,
-                        data: this.preprocessDataFromHistoryD
-                    },
-                    {
-                        label: 'My Third dataset',
-                        backgroundColor: 'transparent',
+                        label: 'F or worse',
+                        backgroundColor: hexToRgba(brandDanger, 10),
                         borderColor: brandDanger,
                         pointHoverBackgroundColor: brandDanger,
                         borderWidth: 1,
                         borderDash: [8, 5],
-                        data: this.sumarize_lower_levels
+                        data: this.sumarize_lower_levels("F")
                     }
                 ]
             },
@@ -263,6 +241,29 @@
                     }
                 }
             }
+        },
+        methods: {
+            sumarize_lower_levels(highestLevel){
+                let input = this.preprocessDataFromHistory5
+
+                let levels_arrs_to_sumarize = []
+                for (const single_grade of this.grades){
+                    if (this.grades.indexOf(highestLevel) <= this.grades.indexOf(single_grade)){
+                        levels_arrs_to_sumarize.push(input[single_grade])
+                    }
+                }
+                // console.log(levels_arrs_to_sumarize)
+                let result1 = []
+                for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
+                    result1.push(0)
+                }
+                for (const single_level of levels_arrs_to_sumarize){
+                    for (let i = 0; i < levels_arrs_to_sumarize[0].length; i++){
+                        result1[i] += single_level[i]
+                    }
+                }
+                return result1
+            },
         }
     }
 </script>

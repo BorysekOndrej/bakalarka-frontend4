@@ -90,7 +90,7 @@
                         targets_res[target_id][timestamp_string_start_of_day] = single_scan.grade
                     }
                 }
-                console.log("preprocessDataFromHistory2", targets_res)
+                // console.debug("preprocessDataFromHistory2", targets_res)
                 return targets_res
             },
             preprocessDataFromHistory3(){
@@ -109,7 +109,7 @@
                         resulting_dict[single_date][grade]++
                     }
                 }
-                console.log("preprocessDataFromHistory3", resulting_dict)
+                // console.debug("preprocessDataFromHistory3", resulting_dict)
                 return resulting_dict
             },
             preprocessDataFromHistory4(){
@@ -121,7 +121,7 @@
                         grade_date_dict[single_grade][this.dates[single_date]] = date_grade_dict[this.dates[single_date]][single_grade]
                     }
                 }
-                console.log("preprocessDataFromHistory4", grade_date_dict)
+                // console.debug("preprocessDataFromHistory4", grade_date_dict)
                 return grade_date_dict
             },
             preprocessDataFromHistory5(){
@@ -133,17 +133,8 @@
                         grade_date_dict_sorted[single_grade].push(grade_date_dict[single_grade][this.dates[single_date]])
                     }
                 }
-                console.log("preprocessDataFromHistory5", grade_date_dict_sorted)
+                console.debug("preprocessDataFromHistory5", grade_date_dict_sorted)
                 return grade_date_dict_sorted
-            },
-            preprocessDataFromHistoryA(){
-                return this.preprocessDataFromHistory5['A']
-            },
-            preprocessDataFromHistoryD(){
-                return this.preprocessDataFromHistory5['D']
-            },
-            preprocessDataFromHistoryF(){
-                return this.preprocessDataFromHistory5['F']
             },
             maxYScale(){
                 let currentMax = 1
@@ -152,7 +143,7 @@
                     currentMax = Math.max(currentMax, Math.max(...grade_date_dict_sorted[single_grade]))
                 }
                 //console.warn(currentMax)
-                return currentMax + 2
+                return currentMax + 1
             },
             dates() {
                 let res = []
@@ -170,7 +161,7 @@
                 for (const single_grade of gradesReversed){
                     let indexOfGrade = this.grades.indexOf(single_grade)
                     let newColor = this.levelColors[indexOfGrade]
-                    console.log(single_grade, indexOfGrade, newColor)
+                    // console.log(single_grade, indexOfGrade, newColor)
                     let newSingleRes = {
                             label: `${single_grade} or worse`,
                             backgroundColor: hexToRgba(newColor, 10*indexOfGrade),

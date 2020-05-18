@@ -22,7 +22,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Dashboard',
-        to: '/dashboardcustom',
+        to: '/dashboard',
         icon: 'cil-speedometer',
       },
       {

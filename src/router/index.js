@@ -122,7 +122,7 @@ function configRoutes () {
           component: NotificationSettingsStandalone
         },
         {
-          path: 'dashboardcustom',
+          path: 'dashboard',
           name: 'Dashboard Custom',
           component: DashboardCustom
         },
@@ -134,7 +134,7 @@ function configRoutes () {
 
 
         {
-          path: 'dashboard',
+          path: 'dashboardOriginal',
           name: 'Dashboard',
           component: Dashboard
         },

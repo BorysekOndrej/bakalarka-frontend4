@@ -8,7 +8,7 @@
 
 <script>
     import { CChartLine } from '@coreui/vue-chartjs'
-    import { getStyle, hexToRgba } from '@coreui/utils/src'
+    import { hexToRgba } from '@coreui/utils/src'
     import moment from "moment";
 
     function random (min, max) {
@@ -164,10 +164,6 @@
                 return res
             },
             defaultDatasets () {
-                const brandSuccess = getStyle('success2') || '#4dbd74'
-                const brandInfo = getStyle('info') || '#20a8d8'
-                const brandDanger = getStyle('danger') || '#f86c6b'
-
                 let elements = this.number_of_days
                 const data1 = []
                 const data2 = []
@@ -178,33 +174,27 @@
                     data2.push(random(80, 100))
                     data3.push(65)
                 }
-                return [
-                    {
-                        label: 'A or worse',
-                        backgroundColor: hexToRgba(brandSuccess, 10),
-                        borderColor: brandSuccess,
-                        pointHoverBackgroundColor: brandSuccess,
-                        borderWidth: 2,
-                        data: this.sumarize_lower_levels("A")
-                    },
-                    {
-                        label: 'D or worse',
-                        backgroundColor: hexToRgba(brandInfo, 10),
-                        borderColor: brandInfo,
-                        pointHoverBackgroundColor: brandInfo,
-                        borderWidth: 2,
-                        data: this.sumarize_lower_levels("D")
-                    },
-                    {
-                        label: 'F or worse',
-                        backgroundColor: hexToRgba(brandDanger, 10),
-                        borderColor: brandDanger,
-                        pointHoverBackgroundColor: brandDanger,
-                        borderWidth: 1,
-                        borderDash: [8, 5],
-                        data: this.sumarize_lower_levels("F")
+
+                let res = []
+                for (const single_grade of this.grades){
+                    let indexOfGrade = this.grades.indexOf(single_grade)
+                    let newColor = this.levelColors[indexOfGrade]
+                    console.log(single_grade, indexOfGrade, newColor)
+                    let newSingleRes = {
+                            label: `${single_grade} or worse`,
+                            backgroundColor: hexToRgba(newColor, 10*indexOfGrade),
+                            borderColor: newColor,
+                            pointHoverBackgroundColor: newColor,
+                            borderWidth: 2,
+                            data: this.sumarize_lower_levels(single_grade)
+                        }
+                    if (single_grade === "Not scanned yet"){
+                        newSingleRes.label = single_grade
                     }
-                ]
+                    res.push(newSingleRes)
+                }
+                res.reverse()
+                return res
             },
             defaultOptions () {
                 return {
@@ -240,6 +230,17 @@
                         }
                     }
                 }
+            },
+            levelColors(){
+                return [
+                    '#639B4B', // A
+                    '#8AC271', // B
+                    '#F6B26B', // C
+                    '#E4834C', // D
+                    '#DD624E', // E
+                    '#CC0000', // F
+                    '#CED2D8', // Not scanned yet
+                ]
             }
         },
         methods: {

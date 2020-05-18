@@ -68,6 +68,7 @@ import UserSettings from "../views/custom/UserSettings";
 import DashboardCustom from "../views/custom/DashboardCustom";
 import CertificateViewComponent from "../views/custom/CertificateViewComponent";
 import store from "../store";
+import SearchCertificateTransparency from "../views/custom/SearchCertificateTransparency";
 
 
 Vue.use(Router)
@@ -146,7 +147,11 @@ function configRoutes () {
           name: 'Single Certificate',
           component: CertificateViewComponent
         },
-
+        {
+          path: 'certificateTransparency',
+          name: 'Certificate Transparency',
+          component: SearchCertificateTransparency
+        },
 
         {
           path: 'dashboardOriginal',

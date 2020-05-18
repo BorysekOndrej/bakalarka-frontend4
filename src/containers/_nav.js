@@ -13,6 +13,12 @@ export default [
         to: '/addTarget',
         icon: 'cil-cursor',
       },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Certificate Transparency',
+        to: '/certificateTransparency',
+        icon: 'cil-cursor',
+      },
 
       {
         _name: 'CSidebarNavTitle',

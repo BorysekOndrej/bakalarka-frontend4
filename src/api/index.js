@@ -117,3 +117,8 @@ export function callPostNotificationSettings(user_id, target_id, data){
 export function callGetScanResultHistory(){
     return getFromAPI(`/api/v1/scan_result_history`);
 }
+
+export function callGetCertificateTransparency(hostname){
+    return getFromAPI(`/api/v1/ct_get_subdomains/${hostname}`);
+}
+

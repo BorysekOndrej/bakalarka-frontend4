@@ -164,19 +164,10 @@
                 return res
             },
             defaultDatasets () {
-                let elements = this.number_of_days
-                const data1 = []
-                const data2 = []
-                const data3 = []
-
-                for (let i = 0; i <= elements; i++) {
-                    data1.push(random(50, 200))
-                    data2.push(random(80, 100))
-                    data3.push(65)
-                }
+                let gradesReversed = this.grades.slice().reverse();
 
                 let res = []
-                for (const single_grade of this.grades){
+                for (const single_grade of gradesReversed){
                     let indexOfGrade = this.grades.indexOf(single_grade)
                     let newColor = this.levelColors[indexOfGrade]
                     console.log(single_grade, indexOfGrade, newColor)
@@ -190,6 +181,9 @@
                         }
                     if (single_grade === "Not scanned yet"){
                         newSingleRes.label = single_grade
+                    }
+                    if (res.length > 0 && res[res.length - 1].data.toString() === newSingleRes.data.toString()){
+                        continue;
                     }
                     res.push(newSingleRes)
                 }

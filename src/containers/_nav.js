@@ -31,12 +31,6 @@ export default [
         to: '/listTargets',
         icon: 'cil-grid',
       },
-
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Login or register',
-        to: '/login',
-      },
     ]
   }
 ]

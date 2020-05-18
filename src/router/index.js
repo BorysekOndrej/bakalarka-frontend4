@@ -67,16 +67,31 @@ import NotificationSettingsStandalone from "../views/custom/NotificationSettings
 import UserSettings from "../views/custom/UserSettings";
 import DashboardCustom from "../views/custom/DashboardCustom";
 import CertificateViewComponent from "../views/custom/CertificateViewComponent";
+import store from "../store";
 
 
 Vue.use(Router)
 
-export default new Router({
+
+
+const router = new Router(
+{
   mode: 'hash', // https://router.vuejs.org/api/#mode
   linkActiveClass: 'active',
   scrollBehavior: () => ({ y: 0 }),
   routes: configRoutes()
 })
+
+router.beforeEach((to, from, next) => {
+  let isAuthenticated = store.getters.isAuthenticated;
+  if (to.name !== 'Login' && to.name !== 'Register' && !isAuthenticated){
+    next({ name: 'Login' })
+  }else{
+    next()
+  }
+})
+
+export default router;
 
 function configRoutes () {
   return [

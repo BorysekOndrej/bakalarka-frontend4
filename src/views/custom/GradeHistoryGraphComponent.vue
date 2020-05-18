@@ -77,13 +77,22 @@
                         let timestamp_moment_start_of_day = moment.unix(timestamp_numerical).startOf('day')
                         let timestamp_string_start_of_day = timestamp_moment_start_of_day.format(this.unified_date_format);
 
-                        if (targets_res[target_id][timestamp_string_start_of_day] !== undefined){
-                            console.warn("duplicate scan thrown away", targets_res[target_id][timestamp_string_start_of_day], single_scan.grade)
-                            // todo:
-                            continue
+                        let previousBest = targets_res[target_id][timestamp_string_start_of_day]
+                        let newContender = single_scan.grade
+
+                        if (previousBest !== undefined){
+                            console.debug(`Duplicate scan result for target on the same day. Previous best: ${previousBest}, new contender: ${newContender}`)
+                            if (newContender === undefined){
+                                console.debug("New contender was undefined. Skip.")
+                                continue
+                            }
+                            if (this.grades.indexOf(newContender) >= this.grades.indexOf(previousBest)){
+                                console.debug(`New contender is same or worse: previous best: ${previousBest}, new contender: ${newContender}. Skip.`)
+                                continue
+                            }
                         }
 
-                        targets_res[target_id][timestamp_string_start_of_day] = single_scan.grade
+                        targets_res[target_id][timestamp_string_start_of_day] = newContender
                     }
                 }
                 // console.debug("preprocessDataFromHistory2", targets_res)

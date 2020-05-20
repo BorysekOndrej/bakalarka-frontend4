@@ -12,13 +12,21 @@ import {
     callGetUserTargets, callGetScanResultHistory
 } from '../api'
 import {isValidJwt, EventBus} from '../utils'
+import moment from "moment";
 
+var JwtStatus = {
+    Valid: 1,
+    RefreshInProgress: 2,
+    LastRefreshFailed: 3,
+}
 
 const state = {
     sidebarShow: 'responsive',
     sidebarMinimize: false,
     user: {},
     jwt: '',
+    jwtLastRefreshStatus: JwtStatus.Valid,
+    jwtLastRefreshRequestTimestamp: null,
     userTargets: [],
     userTargetsLoading: false,
     userTargetsHistory: []
@@ -31,11 +39,17 @@ const actions = {
             .then(function (response) {
                 console.log("Setting jwt from login, response data ", response.data.access_token)
                 context.commit('setJwt', response.data.access_token)
+                if (store.getters.isAuthenticated) {
+                    context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
+                }else{
+                    context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
+                }
             })
             .catch(function (error) {
                 Vue.$log.warn('Error Authenticating: ', error)
                 console.log("jwt test3")
                 EventBus.$emit('failedAuthentication', error)
+                context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
                 return Promise.reject(error);
             })
     },
@@ -82,21 +96,35 @@ const actions = {
         // Vue.$log.debug(`refreshAccessTokenIfNeeded called. currently isAuthenticated=${context.getters.isAuthenticated}`)
         if (store.getters.isAuthenticated) {
             console.debug("Current jwt access token is still valid")
+            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
             return;
         }
         let tokenFromLocalStorage = localStorage.getItem("jwt_access_token");
         if (isValidJwt(tokenFromLocalStorage)) {
             context.commit('setJwt', tokenFromLocalStorage)
             console.debug("Valid jwt access token loaded from localStorage")
+            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
             return;
         }
+        if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed){
+            console.log("JWT refresh canceled, because last previous JWT refresh failed")
+            return
+        }
+        context.commit('set', ["jwtLastRefreshStatus", JwtStatus.RefreshInProgress])
+        context.commit('set', ["jwtLastRefreshRequestTimestamp", moment()])
         return jwtRefreshAccessToken()
             .then(function (response) {
                 console.log("Setting jwt from jwtRefreshAccessToken, response data ", response.data)
                 context.commit('setJwt', response.data.access_token)
+                if (store.getters.isAuthenticated) {
+                    context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
+                }else{
+                    context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
+                }
             })
             .catch(function (error) {
                 Vue.$log.warn('Error refreshing jwt access token: ', error)
+                context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
                 return Promise.reject(error);
             })
     },

@@ -70,6 +70,7 @@ import CertificateViewComponent from "../views/custom/CertificateViewComponent";
 import store from "../store";
 import SearchCertificateTransparency from "../views/custom/SearchCertificateTransparency";
 import CertificatesTable from "../views/custom/CertificatesTable";
+import {EventBus} from "../utils";
 
 
 Vue.use(Router)
@@ -85,12 +86,18 @@ const router = new Router(
 })
 
 router.beforeEach((to, from, next) => {
-  let isAuthenticated = store.getters.isAuthenticated;
-  if (to.name !== 'Login' && to.name !== 'Register' && !isAuthenticated){
-    next({ name: 'Login' })
-  }else{
-    next()
-  }
+  store.dispatch("refreshAccessTokenIfNeeded")
+      .then(function () {
+        let isAuthenticated = store.getters.isAuthenticated;
+        if (to.name !== 'Login' && to.name !== 'Register' && !isAuthenticated){
+          next({ name: 'Login' })
+        }else{
+          next()
+        }
+      })
+      .catch(function () {
+        next({ name: 'Login' })
+      })
 })
 
 export default router;

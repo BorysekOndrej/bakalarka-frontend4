@@ -7,6 +7,7 @@
 
 <script>
     import {CChartDoughnut} from "@coreui/vue-chartjs";
+    import {generalLevelColors} from "../../utils";
 
     export default {
         name: "GradesDonutComponent",
@@ -47,15 +48,7 @@
                 return ['A', 'B', 'C', 'D', 'E', 'F', 'Not scanned yet']
             },
             levelColors(){
-                return [
-                    '#639B4B', // A
-                    '#8AC271', // B
-                    '#F6B26B', // C
-                    '#E4834C', // D
-                    '#DD624E', // E
-                    '#CC0000', // F
-                    '#CED2D8', // Not scanned yet
-                ]
+                return generalLevelColors()
             }
         }
     }

@@ -88,3 +88,15 @@ export function testCertificate(){
         "thumbprint_sha256": "19:E6:87:BE:C8:BA:5E:AE:A0:F1:EB:AD:66:98:69:18:AC:8A:BA:6E:DB:86:90:C8:30:74:41:B5:44:F3:0C:09"
     }
 }
+
+export function generalLevelColors(){
+    return [
+        '#639B4B', // A
+        '#8AC271', // B
+        '#F6B26B', // C
+        '#E4834C', // D
+        '#DD624E', // E
+        '#CC0000', // F
+        '#CED2D8', // Not scanned yet
+    ]
+}

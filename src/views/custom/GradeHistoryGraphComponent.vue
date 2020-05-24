@@ -10,6 +10,7 @@
     import { CChartLine } from '@coreui/vue-chartjs'
     import { hexToRgba } from '@coreui/utils/src'
     import moment from "moment";
+    import {generalLevelColors} from "../../utils";
 
     export default {
         name: 'GradeHistoryGraphComponent',
@@ -222,15 +223,7 @@
                 }
             },
             levelColors(){
-                return [
-                    '#639B4B', // A
-                    '#8AC271', // B
-                    '#F6B26B', // C
-                    '#E4834C', // D
-                    '#DD624E', // E
-                    '#CC0000', // F
-                    '#CED2D8', // Not scanned yet
-                ]
+                return generalLevelColors()
             }
         },
         methods: {

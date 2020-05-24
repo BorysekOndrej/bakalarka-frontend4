@@ -31,7 +31,6 @@ const refreshAuthLogic = failedRequest => store.dispatch("refreshAccessTokenIfNe
     .then(function () {
             // todo: critical: if to many consecutive request failed, even after refresh,
             //  block all further communication to avoid flooding the server
-            store.dispatch("refreshAccessTokenIfNeeded");
             failedRequest.response.config.headers['Authorization'] = `Bearer ${getJwtAccesTokenLocalWrapper()}`;
             Vue.$log.info(`Resending request with new access_token ${getJwtAccesTokenLocalWrapper()}`);
             return Promise.resolve();

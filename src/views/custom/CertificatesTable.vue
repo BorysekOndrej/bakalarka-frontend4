@@ -35,7 +35,16 @@
                             {{ item.thumbprint_sha256 }}
                         </td>
                     </template>
-
+                    <template #notBefore="{item}">
+                        <td>
+                            {{ date_to_string(item.notBefore) }}
+                        </td>
+                    </template>
+                    <template #notAfter="{item}">
+                        <td>
+                            {{ date_to_string(item.notAfter) }}
+                        </td>
+                    </template>
                     <template #actions="{item}">
                         <td class="button_only_td">
                             <!-- The whole row could be clickable, but that would make the copying values for difficult.-->
@@ -63,8 +72,8 @@
 </template>
 
 <script>
-    import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
+    import moment from "moment";
     import { freeSet } from '@coreui/icons'
     import _ from "lodash" // Import the entire lodash library
 
@@ -236,6 +245,9 @@
                     case 'Not scanned yet':
                     default: return 'secondary'
                 }
+            },
+            date_to_string(date){
+                return moment(date, moment.ISO_8601).format('YYYY-MM-DD hh:mm:ss');
             },
             show_certificate_properties(row){
                 // todo:

@@ -103,7 +103,7 @@
             fields: {
                 type: Array,
                 default () {
-                    return ['sha256', 'subject', 'notBefore', 'notAfter', 'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments', {key:'actions', filter: false, sorter: false}]
+                    return ['subject', 'notBefore', 'notAfter', 'subject_alternative_name_list', 'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments', {key: 'thumbprint_sha256', label: 'SHA-256'}, {key:'actions', filter: false, sorter: false}]
                 }
             },
         },

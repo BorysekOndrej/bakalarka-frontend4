@@ -110,14 +110,14 @@
             if (minDepthForEachCert[uniqProperty] === undefined){
                 minDepthForEachCert[uniqProperty] = Number.MAX_VALUE
             }
-            let chainDepth = el.chainDepth || minDepthForEachCert[uniqProperty]
-            minDepthForEachCert[uniqProperty] = Math.min(chainDepth, minDepthForEachCert[uniqProperty])
+            let minDepthInCertChain = el.minDepthInCertChain || minDepthForEachCert[uniqProperty]
+            minDepthForEachCert[uniqProperty] = Math.min(minDepthInCertChain, minDepthForEachCert[uniqProperty])
 
             return !thisAlreadySeen;
         });
 
         for (const singleRes of deduplicatedRes){
-            singleRes.chainDepth = minDepthForEachCert[singleRes.thumbprint_sha256]
+            singleRes.minDepthInCertChain = minDepthForEachCert[singleRes.thumbprint_sha256]
         }
 
         // console.warn(minDepthForEachCert)
@@ -134,7 +134,7 @@
                 default () {
                     return ['subject', 'notBefore', 'notAfter', 'subject_alternative_name_list',
                         'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments',
-                        {key: 'chainDepth', label: 'Min Depth In Cert Chain'},
+                        'minDepthInCertChain',
                         {key: 'thumbprint_sha256', label: 'SHA-256'},
                         {key:'actions', filter: false, sorter: false}]
                 }
@@ -173,7 +173,7 @@
                     for (const verified_cert_chain of single_target.result_simplified.verified_certificate_chains_list) {
                         let currentDepth = 1 // this can't be zero, because elsewere I'm using `currentDepth || Number.MAX_VALUE`
                         for (const verified_cert of verified_cert_chain.certificate_chain) {
-                            let modified_cert = Object.assign(verified_cert, {"chainDepth": currentDepth})
+                            let modified_cert = Object.assign(verified_cert, {"minDepthInCertChain": currentDepth})
                             current_res.push(modified_cert)
                             currentDepth += 1
                         }
@@ -239,8 +239,8 @@
                         }
                     }
 
-                    if (obj.chainDepth === Number.MAX_VALUE){
-                        obj.chainDepth = "Not part of any verified chain"
+                    if (obj.minDepthInCertChain === Number.MAX_VALUE){
+                        obj.minDepthInCertChain = "Not part of any verified chain"
                     }
                 });
 

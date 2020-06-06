@@ -142,7 +142,7 @@
                 }
                 return res_per_target
             },
-            userCertsDataForTable(){
+            userCertsDeduplicated(){
                 let resPerTarget = this.userCertsPerTarget
                 let res = []
 
@@ -160,6 +160,18 @@
                 });
 
                 return deduplicatedRes
+            },
+            userCertsDataForTable(){
+                let certsDeduplicated = this.userCertsDeduplicated
+                let certsPerTarget = this.userCertsPerTarget
+
+                let res = certsDeduplicated
+
+                res.forEach(function(obj) {
+                    obj.subject_alternative_name_list = obj.subject_alternative_name_list.replace(/,/g, "\n");
+                });
+
+                return res
             },
 
             userTargetsLoading() {

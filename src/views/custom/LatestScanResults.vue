@@ -2,7 +2,7 @@
     <div>
         <h1>{{ msg }}</h1>
         <CCard>
-            <div v-for="x in last_scan_json.result.certificate_information.received_certificate_chain_list.verified_certificate_chain">
+            <div v-for="x in last_scan_json.result.certificate_information.received_certificate_chain_list.certificate_chain">
                 <CertificateViewComponent
                     :certificate="x"
                 ></CertificateViewComponent>

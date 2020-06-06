@@ -99,12 +99,29 @@
 
     function deduplicateArrayOfCerts(arrCerts){
         let sha256AlreadyInNewRes = new Set();
+        let minDepthForEachCert = new Map()
+        // console.warn(arrCerts)
+
         let deduplicatedRes = arrCerts.filter(el => {
             const uniqProperty = el.thumbprint_sha256
             const thisAlreadySeen = sha256AlreadyInNewRes.has(uniqProperty);
             sha256AlreadyInNewRes.add(uniqProperty);
+
+            if (minDepthForEachCert[uniqProperty] === undefined){
+                minDepthForEachCert[uniqProperty] = Number.MAX_VALUE
+            }
+            let chainDepth = el.chainDepth || minDepthForEachCert[uniqProperty]
+            minDepthForEachCert[uniqProperty] = Math.min(chainDepth, minDepthForEachCert[uniqProperty])
+
             return !thisAlreadySeen;
         });
+
+        for (const singleRes of deduplicatedRes){
+            singleRes.chainDepth = minDepthForEachCert[singleRes.thumbprint_sha256]
+        }
+
+        // console.warn(minDepthForEachCert)
+        // console.warn(deduplicatedRes)
         return deduplicatedRes
     }
 
@@ -115,7 +132,11 @@
             fields: {
                 type: Array,
                 default () {
-                    return ['subject', 'notBefore', 'notAfter', 'subject_alternative_name_list', 'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments', {key: 'thumbprint_sha256', label: 'SHA-256'}, {key:'actions', filter: false, sorter: false}]
+                    return ['subject', 'notBefore', 'notAfter', 'subject_alternative_name_list',
+                        'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments',
+                        {key: 'chainDepth', label: 'Min Depth In Cert Chain'},
+                        {key: 'thumbprint_sha256', label: 'SHA-256'},
+                        {key:'actions', filter: false, sorter: false}]
                 }
             },
         },
@@ -150,8 +171,11 @@
                         continue
                     }
                     for (const verified_cert_chain of single_target.result_simplified.verified_certificate_chains_list) {
+                        let currentDepth = 1 // this can't be zero, because elsewere I'm using `currentDepth || Number.MAX_VALUE`
                         for (const verified_cert of verified_cert_chain.certificate_chain) {
-                            current_res.push(verified_cert)
+                            let modified_cert = Object.assign(verified_cert, {"chainDepth": currentDepth})
+                            current_res.push(modified_cert)
+                            currentDepth += 1
                         }
                     }
                     for (const received_cert of single_target.result_simplified.received_certificate_chain_list.certificate_chain) {
@@ -167,7 +191,7 @@
                 let resPerTarget = this.userCertsPerTarget
                 let res = []
 
-                console.warn(resPerTarget)
+                //console.warn(resPerTarget)
                 for (const target_id in resPerTarget){
                     res.push(...resPerTarget[target_id])
                 }
@@ -180,6 +204,7 @@
                 let certsDeduplicated = this.userCertsDeduplicated
                 let certsPerTarget = this.userCertsPerTarget
                 let userTarget = this.userTargets
+                // let rawDataFromHistory = this.rawDataFromHistory
 
                 let res = _.cloneDeep(certsDeduplicated)
 
@@ -202,15 +227,20 @@
 
 
                     obj.numberOfActiveNotTrustedDeployments = 0
-                    for (const target_id of target_ids_using_cert){
+                    for (const target_id_str of target_ids_using_cert){
+                        let target_id = parseInt(target_id_str)
                         for (const x of userTarget) {
-                            if (x.id.toString() !== target_id) {
+                            if (x.id !== target_id) {
                                 continue
                             }
                             if (x.grade == "T"){ // todo: fix, I currently don't have grade T
                                 obj.numberOfActiveNotTrustedDeployments += 1
                             }
                         }
+                    }
+
+                    if (obj.chainDepth === Number.MAX_VALUE){
+                        obj.chainDepth = "Not part of any verified chain"
                     }
                 });
 

@@ -124,7 +124,7 @@
                 let test1 = this.rawDataFromHistory
                 let res = []
                 for (const single_target of test1) {
-                    console.warn(single_target);
+                    // console.warn(single_target);
                     if (single_target === undefined || single_target.result_simplified === undefined) {
                         continue
                     }
@@ -137,7 +137,16 @@
                         res.push(received_cert)
                     }
                 }
-                return res
+
+                let sha256AlreadyInNewRes = new Set();
+                let deduplicatedRes = res.filter(el => {
+                    const uniqProperty = el.thumbprint_sha256
+                    const thisAlreadySeen = sha256AlreadyInNewRes.has(uniqProperty);
+                    sha256AlreadyInNewRes.add(uniqProperty);
+                    return !thisAlreadySeen;
+                });
+
+                return deduplicatedRes
             },
             userTargetsLoading() {
                 return this.$store.state.userTargetsLoading // todo: fix, tie in to userTargetsHistory

@@ -43,38 +43,18 @@
                         <td class="button_only_td">
                             <!-- The whole row could be clickable, but that would make the copying values for difficult.-->
 
-                            <CButton v-if="item.active == 'yes'"
-                                     color="secondary"
-                                     class="btn-mi"
-                                     v-on:click="force_rescan(item)"
-                                     v-c-tooltip="{content: 'Scan Now'}"
-                            ><CIcon :content="freeSetVar.cilSync"/></CButton>
-
                             <CButton color="info"
                                      class="btn-mi"
                                      v-on:click="show_latest_scan_result(item)"
                                      v-c-tooltip="{content: 'Info'}"
                             ><CIcon name="cil-magnifying-glass"/></CButton>
 
-                            <CButton color="warning"
-                                     class="btn-mi"
-                                     v-on:click="edit_target(item)"
-                                     v-c-tooltip="{content: 'Edit'}"
-                            ><CIcon name="cil-pencil"/></CButton>
-
-                            <CButton v-if="item.active == 'yes'"
+                            <CButton
                                      color="danger"
                                      class="btn-mi"
                                      v-on:click="delete_target(item)"
                                      v-c-tooltip="{content: 'Archive'}"
-                            ><CIcon name="cil-ban"/></CButton>
-
-                            <CButton v-if="item.active == 'no'"
-                                     color="success"
-                                     class="btn-mi"
-                                     v-on:click="reenable_target(item)"
-                                     v-c-tooltip="{content: 'Enable'}"
-                            ><CIcon :content="freeSetVar.cilMediaPlay"/></CButton>
+                            ><CIcon name="cil-filter"/></CButton>
 
                         </td>
                     </template>
@@ -123,13 +103,13 @@
             fields: {
                 type: Array,
                 default () {
-                    return ['hostname', 'port', {key: 'ip_address', label: 'IP address'}, 'protocol', 'grade', 'expires', 'active', {key:'actions', filter: false, sorter: false}]
+                    return ['sha256', 'subject', 'notBefore', 'notAfter', 'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments', {key:'actions', filter: false, sorter: false}]
                 }
             },
         },
         data() {
             return {
-                caption: 'List of your targets',
+                caption: 'List of your certificates',
                 editTargetModalVisible: false,
                 latestScanResultsVisible: false,
                 latestScanResultsData: -1,
@@ -137,19 +117,11 @@
             }
         },
         created() {
-            this.$store.dispatch('syncUserTargetsWithBasicResults')
-
-            var self = this;
-            EventBus.$on('users-targets-modified', () => {
-                self.$store.dispatch('syncUserTargetsWithBasicResults')
-            });
+            this.$store.dispatch('syncUserTargetsHistory')
         },
         computed: {
-            userTargets() {
-                return this.$store.getters.getUserTargets
-            },
-            userTargetsLoading() {
-                return this.$store.state.userTargetsLoading
+            rawDataFromHistory(){
+                return this.$store.state.userTargetsHistory
             },
             freeSetVar(){
                 return freeSet

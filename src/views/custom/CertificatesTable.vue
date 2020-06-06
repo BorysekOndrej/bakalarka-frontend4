@@ -114,7 +114,7 @@
                 default () {
                     return ['subject', 'notBefore', 'notAfter', 'subject_alternative_name_list',
                         'numberOfActiveDeployments', 'numberOfActiveNotTrustedDeployments',
-                        'minDepthInCertChain',
+                        {key: 'minDepthInCertChain', label: 'Min Depth In Verified Cert Chain'},
                         {key: 'thumbprint_sha256', label: 'SHA-256'},
                         {key:'actions', filter: false, sorter: false}]
                 }

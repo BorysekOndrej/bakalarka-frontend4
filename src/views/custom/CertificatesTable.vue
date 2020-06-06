@@ -9,7 +9,7 @@
             <CCardBody>
 
                 <CDataTable
-                    :items="userTargets"
+                    :items="userCerts"
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
@@ -120,6 +120,28 @@
             this.$store.dispatch('syncUserTargetsHistory')
         },
         computed: {
+            userCerts(){
+                let test1 = this.rawDataFromHistory
+                let res = []
+                for (const single_target of test1) {
+                    console.warn(single_target);
+                    if (single_target === undefined || single_target.result_simplified === undefined) {
+                        continue
+                    }
+                    for (const verified_cert_chain of single_target.result_simplified.verified_certificate_chains_list) {
+                        for (const verified_cert of verified_cert_chain.certificate_chain) {
+                            res.push(verified_cert)
+                        }
+                    }
+                    for (const received_cert of single_target.result_simplified.received_certificate_chain_list.certificate_chain) {
+                        res.push(received_cert)
+                    }
+                }
+                return res
+            },
+            userTargetsLoading() {
+                return this.$store.state.userTargetsLoading // todo: fix, tie in to userTargetsHistory
+            },
             rawDataFromHistory(){
                 return this.$store.state.userTargetsHistory
             },

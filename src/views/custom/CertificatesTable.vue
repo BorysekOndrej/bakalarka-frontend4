@@ -30,6 +30,12 @@
                         </td>
                     </template>
 
+                    <template #thumbprint_sha256="{item}">
+                        <td class="sha256LimitWidth">
+                            {{ item.thumbprint_sha256 }}
+                        </td>
+                    </template>
+
                     <template #actions="{item}">
                         <td class="button_only_td">
                             <!-- The whole row could be clickable, but that would make the copying values for difficult.-->
@@ -294,5 +300,8 @@
         min-width: 155px;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
+    }
+    .sha256LimitWidth {
+        max-width: 185px;
     }
 </style>

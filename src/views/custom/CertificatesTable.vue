@@ -24,18 +24,9 @@
                     :loading="userTargetsLoading"
                     :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                 >
-                    <template #grade="{item}">
-                        <td style="padding-top: 0px; padding-bottom: 0px; vertical-align: middle;">
-                            <h3><CBadge :color="getBadge(item.grade)">{{item.grade}}</CBadge></h3>
-                        </td>
-                    </template>
-
-                    <template #ip_address="{item}">
-                        <td v-if="item.ip_address">
-                            {{ item.ip_address }}
-                        </td>
-                        <td v-else>
-                            DNS
+                    <template #minDepthInCertChain="{item}">
+                        <td>
+                            {{ item.minDepthInCertChain }} {{ (item.minDepthInCertChain === 1)? "(leaf)" : "" }}
                         </td>
                     </template>
 

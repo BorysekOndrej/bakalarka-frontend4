@@ -236,17 +236,6 @@
             }
         },
         methods: {
-            getBadge (status) {
-                switch (status) {
-                    case 'A': return 'success';
-                    case 'B': return 'secondary';
-                    case 'C': return 'warning';
-                    case 'D':
-                    case 'E': return 'danger';
-                    case 'Not scanned yet':
-                    default: return 'secondary'
-                }
-            },
             date_to_moment(date){
                 return moment(date, moment.ISO_8601)
             },

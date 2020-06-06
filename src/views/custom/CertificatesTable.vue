@@ -130,6 +130,13 @@
         },
         created() {
             this.$store.dispatch('syncUserTargetsHistory')
+            this.$store.dispatch('syncUserTargetsWithBasicResults')
+
+            // todo: sync also syncUserTargetsHistory
+            var self = this;
+            EventBus.$on('users-targets-modified', () => {
+                self.$store.dispatch('syncUserTargetsWithBasicResults')
+            });
         },
         computed: {
             userCertsPerTarget(){
@@ -172,27 +179,48 @@
             userCertsDataForTable(){
                 let certsDeduplicated = this.userCertsDeduplicated
                 let certsPerTarget = this.userCertsPerTarget
+                let userTarget = this.userTargets
 
                 let res = _.cloneDeep(certsDeduplicated)
 
                 res.forEach(function(obj) {
                     obj.subject_alternative_name_list = obj.subject_alternative_name_list.replace(/,/g, "\n");
 
-                    let countOfTargetsUsingCert = 0
+                    let target_ids_using_cert = new Set()
                     Object.keys(certsPerTarget).forEach(function(key) {
                         let filterToCurrentCert = certsPerTarget[key].filter(x =>
                             x.thumbprint_sha256 === "19:E6:87:BE:C8:BA:5E:AE:A0:F1:EB:AD:66:98:69:18:AC:8A:BA:6E:DB:86:90:C8:30:74:41:B5:44:F3:0C:09")
-                        countOfTargetsUsingCert += filterToCurrentCert.length
+                        if (filterToCurrentCert.length){
+                            target_ids_using_cert.add(key)
+                        }
                     });
-                    obj.numberOfActiveDeployments = countOfTargetsUsingCert
 
+                    obj.numberOfActiveDeployments = target_ids_using_cert.size
+
+                    // console.log(target_ids_using_cert)
+                    // console.log(userTarget)
+
+
+                    obj.numberOfActiveNotTrustedDeployments = 0
+                    for (const target_id of target_ids_using_cert){
+                        for (const x of userTarget) {
+                            if (x.id.toString() !== target_id) {
+                                continue
+                            }
+                            if (x.grade == "T"){ // todo: fix, I currently don't have grade T
+                                obj.numberOfActiveNotTrustedDeployments += 1
+                            }
+                        }
+                    }
                 });
 
                 return res
             },
-
+            userTargets() {
+                return this.$store.getters.getUserTargets
+            },
             userTargetsLoading() {
-                return this.$store.state.userTargetsLoading // todo: fix, tie in to userTargetsHistory
+                return this.$store.state.userTargetsLoading // todo: fix, duplicate it for userTargetsHistory
             },
             rawDataFromHistory(){
                 return this.$store.state.userTargetsHistory

@@ -42,16 +42,16 @@
 
                             <CButton color="info"
                                      class="btn-mi"
-                                     v-on:click="show_latest_scan_result(item)"
-                                     v-c-tooltip="{content: 'Info'}"
+                                     v-on:click="show_certificate_properties(item)"
+                                     v-c-tooltip="{content: 'Show all certificate properties'}"
                             ><CIcon name="cil-magnifying-glass"/></CButton>
 
                             <CButton
-                                     color="danger"
+                                     color="secondary"
                                      class="btn-mi"
-                                     v-on:click="delete_target(item)"
-                                     v-c-tooltip="{content: 'Archive'}"
-                            ><CIcon name="cil-filter"/></CButton>
+                                     v-on:click="go_to_targets_using_cert(item)"
+                                     v-c-tooltip="{content: 'Go to table of targets filtered to targets using this certificate'}"
+                            ><CIcon :content="freeSetVar.cilFilter"/></CButton>
 
                         </td>
                     </template>
@@ -59,36 +59,10 @@
 
             </CCardBody>
         </CCard>
-        <CModal
-                title="Existing target"
-                :show.sync="editTargetModalVisible"
-        >
-            <AddTargetComponent
-                    :modifying_existing="true"
-                    :prefill="true"
-                    :target="targetToEdit"
-            ></AddTargetComponent>
-            <template #footer>
-                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
-            </template>
-        </CModal>
-        <CModal
-                title="Latest scan result for this target"
-                :show.sync="latestScanResultsVisible"
-                size="xl"
-        >
-            <LatestScanResults
-                :target_id="latestScanResultsData"
-            ></LatestScanResults>
-            <template #footer>
-                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
-            </template>
-        </CModal>
     </div>
 </template>
 
 <script>
-    import AddTargetComponent from "./AddTargetComponent";
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
     import { freeSet } from '@coreui/icons'
@@ -124,7 +98,6 @@
 
     export default {
         name: 'CertificatesTable',
-        components: {AddTargetComponent, LatestScanResults},
         props: {
             fields: {
                 type: Array,
@@ -140,10 +113,6 @@
         data() {
             return {
                 caption: 'List of your certificates',
-                editTargetModalVisible: false,
-                latestScanResultsVisible: false,
-                latestScanResultsData: -1,
-                targetToEdit: null,
             }
         },
         created() {
@@ -268,22 +237,10 @@
                     default: return 'secondary'
                 }
             },
-            show_latest_scan_result(row){
-                this.latestScanResultsData = row.id;
-                this.latestScanResultsVisible = true;
-            },
-            edit_target(row){
-                console.log("edit_target", {...row});
-                this.targetToEdit = filterObjToTargetDefinition({...row});
-                this.editTargetModalVisible = true;
-            },
-            delete_target(row){
-                this.$store.dispatch('removeTarget', row.id)
-            },
-            reenable_target(row){
+            show_certificate_properties(row){
                 // todo:
             },
-            force_rescan(row){
+            go_to_targets_using_cert(row){
                 // todo:
             }
         }

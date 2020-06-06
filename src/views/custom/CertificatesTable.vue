@@ -9,7 +9,7 @@
             <CCardBody>
 
                 <CDataTable
-                    :items="userCerts"
+                    :items="userCertsDataForTable"
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
@@ -120,22 +120,35 @@
             this.$store.dispatch('syncUserTargetsHistory')
         },
         computed: {
-            userCerts(){
+            userCertsPerTarget(){
                 let test1 = this.rawDataFromHistory
-                let res = []
+                let res_per_target = {}
                 for (const single_target of test1) {
+                    let target_id = single_target.target.id
+                    let current_res = []
                     // console.warn(single_target);
                     if (single_target === undefined || single_target.result_simplified === undefined) {
                         continue
                     }
                     for (const verified_cert_chain of single_target.result_simplified.verified_certificate_chains_list) {
                         for (const verified_cert of verified_cert_chain.certificate_chain) {
-                            res.push(verified_cert)
+                            current_res.push(verified_cert)
                         }
                     }
                     for (const received_cert of single_target.result_simplified.received_certificate_chain_list.certificate_chain) {
-                        res.push(received_cert)
+                        current_res.push(received_cert)
                     }
+                    res_per_target[target_id] = current_res
+                }
+                return res_per_target
+            },
+            userCertsDataForTable(){
+                let resPerTarget = this.userCertsPerTarget
+                let res = []
+
+                console.warn(resPerTarget)
+                for (const target_id in resPerTarget){
+                    res.push(...resPerTarget[target_id])
                 }
 
                 let sha256AlreadyInNewRes = new Set();
@@ -148,6 +161,7 @@
 
                 return deduplicatedRes
             },
+
             userTargetsLoading() {
                 return this.$store.state.userTargetsLoading // todo: fix, tie in to userTargetsHistory
             },

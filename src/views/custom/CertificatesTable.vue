@@ -36,12 +36,12 @@
                         </td>
                     </template>
                     <template #notBefore="{item}">
-                        <td>
+                        <td v-bind:style="getStyleIfOutsideRange({ notBefore: date_to_moment(item.notBefore) })">
                             {{ date_to_string(item.notBefore) }}
                         </td>
                     </template>
                     <template #notAfter="{item}">
-                        <td>
+                        <td v-bind:style="getStyleIfOutsideRange({ notAfter: date_to_moment(item.notAfter) } )">
                             {{ date_to_string(item.notAfter) }}
                         </td>
                     </template>
@@ -72,10 +72,11 @@
 </template>
 
 <script>
-    import {filterObjToTargetDefinition, EventBus} from "../../utils";
+    import {EventBus} from "../../utils";
     import moment from "moment";
     import { freeSet } from '@coreui/icons'
     import _ from "lodash" // Import the entire lodash library
+    import { getColor } from '@coreui/utils/src'
 
     function deduplicateArrayOfCerts(arrCerts){
         let sha256AlreadyInNewRes = new Set();
@@ -246,14 +247,29 @@
                     default: return 'secondary'
                 }
             },
+            date_to_moment(date){
+                return moment(date, moment.ISO_8601)
+            },
             date_to_string(date){
-                return moment(date, moment.ISO_8601).format('YYYY-MM-DD hh:mm:ss');
+                return this.date_to_moment(date).format('YYYY-MM-DD hh:mm:ss');
             },
             show_certificate_properties(row){
                 // todo:
             },
             go_to_targets_using_cert(row){
                 // todo:
+            },
+            getStyleIfOutsideRange(params){
+                if (params.date === undefined){
+                    params.date = moment()
+                }
+                if (
+                    (params.notBefore && params.date < params.notBefore) ||
+                    (params.notAfter && params.date > params.notAfter)
+                ){
+                    return { color: getColor("warning") }
+                }
+                return {}
             }
         }
     }

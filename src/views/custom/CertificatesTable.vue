@@ -95,6 +95,18 @@
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
     import { freeSet } from '@coreui/icons'
+    import _ from "lodash" // Import the entire lodash library
+
+    function deduplicateArrayOfCerts(arrCerts){
+        let sha256AlreadyInNewRes = new Set();
+        let deduplicatedRes = arrCerts.filter(el => {
+            const uniqProperty = el.thumbprint_sha256
+            const thisAlreadySeen = sha256AlreadyInNewRes.has(uniqProperty);
+            sha256AlreadyInNewRes.add(uniqProperty);
+            return !thisAlreadySeen;
+        });
+        return deduplicatedRes
+    }
 
     export default {
         name: 'CertificatesTable',
@@ -138,8 +150,10 @@
                     for (const received_cert of single_target.result_simplified.received_certificate_chain_list.certificate_chain) {
                         current_res.push(received_cert)
                     }
-                    res_per_target[target_id] = current_res
+                    let current_res_deduplicated = deduplicateArrayOfCerts(current_res)
+                    res_per_target[target_id] = current_res_deduplicated
                 }
+
                 return res_per_target
             },
             userCertsDeduplicated(){
@@ -151,13 +165,7 @@
                     res.push(...resPerTarget[target_id])
                 }
 
-                let sha256AlreadyInNewRes = new Set();
-                let deduplicatedRes = res.filter(el => {
-                    const uniqProperty = el.thumbprint_sha256
-                    const thisAlreadySeen = sha256AlreadyInNewRes.has(uniqProperty);
-                    sha256AlreadyInNewRes.add(uniqProperty);
-                    return !thisAlreadySeen;
-                });
+                let deduplicatedRes = deduplicateArrayOfCerts(res)
 
                 return deduplicatedRes
             },
@@ -165,10 +173,19 @@
                 let certsDeduplicated = this.userCertsDeduplicated
                 let certsPerTarget = this.userCertsPerTarget
 
-                let res = certsDeduplicated
+                let res = _.cloneDeep(certsDeduplicated)
 
                 res.forEach(function(obj) {
                     obj.subject_alternative_name_list = obj.subject_alternative_name_list.replace(/,/g, "\n");
+
+                    let countOfTargetsUsingCert = 0
+                    Object.keys(certsPerTarget).forEach(function(key) {
+                        let filterToCurrentCert = certsPerTarget[key].filter(x =>
+                            x.thumbprint_sha256 === "19:E6:87:BE:C8:BA:5E:AE:A0:F1:EB:AD:66:98:69:18:AC:8A:BA:6E:DB:86:90:C8:30:74:41:B5:44:F3:0C:09")
+                        countOfTargetsUsingCert += filterToCurrentCert.length
+                    });
+                    obj.numberOfActiveDeployments = countOfTargetsUsingCert
+
                 });
 
                 return res

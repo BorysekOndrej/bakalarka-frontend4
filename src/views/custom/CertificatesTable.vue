@@ -263,7 +263,17 @@
                 this.currentCertDetails = {...row}
             },
             go_to_targets_using_cert(row){
-                // todo:
+                let arrOfIDsUsingCert = []
+                let userCertsPerTarget = this.userCertsPerTarget
+                for (const target_id in userCertsPerTarget){
+                    let res1 = userCertsPerTarget[target_id].filter(el => {
+                        return el.thumbprint_sha256 === row.thumbprint_sha256
+                    });
+                    if (res1.length){
+                        arrOfIDsUsingCert.push(target_id)
+                    }
+                }
+                this.$router.push({ name: 'List of targets', params: { target_id: arrOfIDsUsingCert.join(",") } })
             },
             getStyleIfOutsideRange(params){
                 if (params.date === undefined){

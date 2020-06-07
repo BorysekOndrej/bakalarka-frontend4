@@ -131,7 +131,7 @@ const actions = {
 
         if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
             console.log("JWT refresh canceled, because last previous JWT refresh failed")
-            // todo: maybe show toast? or retry after 1 minute?
+            // todo: or retry after 1 minute?
             return
         }
 
@@ -267,6 +267,9 @@ const getters = {
     getMainBarMessage(state) {
         let res_arr = []
         res_arr.push(state.messageForMainBar)
+        if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
+            res_arr.push("Jwt last refresh failed. Not retrying. New login will be needed.")
+        }
         if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
             res_arr.push("Jwt refresh in progress")
         }

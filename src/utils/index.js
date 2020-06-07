@@ -19,6 +19,9 @@ export function jwtValidUntil(jwt){
 export function isValidJwt(jwt) {
     console.log(`Checking validity of jwt ${jwt}`)
     const exp = jwtValidUntil(jwt)
+    if (exp === false){
+        return false
+    }
     console.log(`Jwt expires on ${exp}`)
     const now = new Date()
     return now < exp

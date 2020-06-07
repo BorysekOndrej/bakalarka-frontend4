@@ -42,7 +42,7 @@ const actions = {
             .then(function (response) {
                 console.log("Setting jwt from login, response data ", response.data.access_token)
                 context.commit('setJwt', response.data.access_token)
-                if (store.getters.isAuthenticated) {
+                if (store.getters.isAuthenticated()) {
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
                 }else{
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
@@ -105,7 +105,7 @@ const actions = {
     },
     async refreshAccessTokenIfNeeded(context) {
         // Vue.$log.debug(`refreshAccessTokenIfNeeded called. currently isAuthenticated=${context.getters.isAuthenticated}`)
-        if (store.getters.isAuthenticated) {
+        if (store.getters.isAuthenticated()) {
             console.debug("Current jwt access token is still valid")
             context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
             return;
@@ -136,7 +136,7 @@ const actions = {
         while(store.state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress){
             await sleep(50);
         }
-        if (store.getters.isAuthenticated) {
+        if (store.getters.isAuthenticated()) {
             console.debug("Valid jwt loaded as part of different request.")
             return;
         }
@@ -147,7 +147,7 @@ const actions = {
             .then(function (response) {
                 console.log("Setting jwt from jwtRefreshAccessToken, response data ", response.data)
                 context.commit('setJwt', response.data.access_token)
-                if (store.getters.isAuthenticated) {
+                if (store.getters.isAuthenticated()) {
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
                 }else{
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
@@ -230,8 +230,12 @@ const mutations = {
 }
 
 const getters = {
-    isAuthenticated(state) { // this can't be computed, because it would get cached and never update base on time.
-        return state.jwt !== undefined && isValidJwt(state.jwt)
+    isAuthenticated(state) {
+        // this can't be computed or simple getter, because it would get cached and never update base on time.
+        // https://forum.vuejs.org/t/vuex-getter-not-re-evaluating-return-cached-data/55697/5
+        return function () {
+            return state.jwt !== undefined && isValidJwt(state.jwt)
+        }
     },
     getJwt(state) {
         return state.jwt;

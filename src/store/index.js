@@ -13,6 +13,7 @@ import {
 } from '../api'
 import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
+// import router from '../router'
 
 var JwtStatus = {
     Valid: 1,
@@ -20,16 +21,18 @@ var JwtStatus = {
     LastRefreshFailed: 3,
 }
 
-const state = {
-    sidebarShow: 'responsive',
-    sidebarMinimize: false,
-    user: {},
-    jwt: '',
-    jwtLastRefreshStatus: JwtStatus.Valid,
-    jwtLastRefreshRequestTimestamp: null,
-    userTargets: [],
-    userTargetsLoading: false,
-    userTargetsHistory: []
+function initialState () {
+    return {
+        sidebarShow: 'responsive',
+        sidebarMinimize: false,
+        user: {},
+        jwt: '',
+        jwtLastRefreshStatus: JwtStatus.Valid,
+        jwtLastRefreshRequestTimestamp: null,
+        userTargets: [],
+        userTargetsLoading: false,
+        userTargetsHistory: []
+    }
 }
 
 const actions = {
@@ -66,14 +69,17 @@ const actions = {
             })
     },
     logout(context) {
-        callGetLogout().then(() =>
-            context.commit('setJwt', "logout")
-        ).catch(() => {
-            context.commit('setJwt', "logout")
-            // todo: emit error
-        })
+        callGetLogout()
+            .finally(function() {
+                context.commit('setJwt', "logout") // This is needed. It also erases the localStorage
 
-        // todo: cleanup all private info client side after logout
+                // https://github.com/vuejs/vuex/issues/1118#issuecomment-356286218
+                context.commit("reset")
+
+                // https://github.com/vuejs/vuex/issues/1118#issuecomment-472640928
+                // The following would clear Vuex even more thoroughly, but forces refresh. Not ideal, current solution is sufficient.
+                // router.go()
+            })
     },
     removeTarget(context, userData) {
         Vue.$log.debug("Remove scan order triggered")
@@ -202,7 +208,17 @@ const mutations = {
     targetAdded(state, payload) {
         console.log(state, payload)
         //Vue.$log.debug('New target added = ', payload)
-    }
+    },
+
+    // https://github.com/vuejs/vuex/issues/1118#issuecomment-356286218
+    reset (state) {
+        // acquire initial state
+        const s = initialState()
+        Object.keys(s).forEach(key => {
+            state[key] = s[key]
+        })
+    },
+
 }
 
 const getters = {
@@ -221,14 +237,14 @@ const getters = {
     getUserID(state){
         return getters.getJwt(state) ? getters.getUserIdentity(state).id : null
     },
-    getUserTargets(){
+    getUserTargets(state){
         return state.userTargets;
     }
 }
 
 const store = new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production', // todo: check that i set this variable
-    state,
+    state: initialState,
     actions,
     mutations,
     getters

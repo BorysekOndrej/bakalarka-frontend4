@@ -13,7 +13,6 @@
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
-                    :columnFilterValue="{ active: 'yes' }"
                     sorter
                     pagination
                     hover

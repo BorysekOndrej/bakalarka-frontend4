@@ -268,7 +268,7 @@ const getters = {
         let res_arr = []
         res_arr.push(state.messageForMainBar)
         if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
-            res_arr.push("Jwt last refresh failed. Not retrying. New login will be needed.")
+            res_arr.push("Jwt last refresh failed. Not retrying, new login will be needed.")
         }
         if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
             res_arr.push("Jwt refresh in progress")

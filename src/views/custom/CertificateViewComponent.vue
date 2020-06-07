@@ -46,6 +46,10 @@
             <th scope="row">Issuer</th>
             <td>{{certificate.issuer}}</td>
         </tr>
+        <tr>
+            <th scope="row">As PEM</th>
+            <td class="monospaceFont">{{certificate.as_pem}}</td>
+        </tr>
         </tbody>
         <tfoot>
         <tr>
@@ -90,5 +94,7 @@
 </script>
 
 <style scoped>
-
+    .monospaceFont {
+        font-family: monospace;
+    }
 </style>

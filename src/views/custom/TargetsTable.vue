@@ -13,7 +13,7 @@
                     :fields="fields"
                     :items-per-page=10
                     columnFilter
-                    :columnFilterValue="{ active: 'yes' }"
+                    :columnFilterValue="colFilter"
                     sorter
                     pagination
                     hover
@@ -141,6 +141,7 @@
                 latestScanResultsVisible: false,
                 latestScanResultsData: -1,
                 targetToEdit: null,
+                colFilter: { active: 'yes' }
             }
         },
         created() {

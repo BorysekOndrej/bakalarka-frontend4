@@ -138,7 +138,7 @@
             return {
                 caption: 'List of your certificates',
                 showCertificateDetails: false,
-                currentCertDetails: null
+                currentCertDetails: {}
             }
         },
         created() {
@@ -206,7 +206,7 @@
                     let target_ids_using_cert = new Set()
                     Object.keys(certsPerTarget).forEach(function(key) {
                         let filterToCurrentCert = certsPerTarget[key].filter(x =>
-                            x.thumbprint_sha256 === "19:E6:87:BE:C8:BA:5E:AE:A0:F1:EB:AD:66:98:69:18:AC:8A:BA:6E:DB:86:90:C8:30:74:41:B5:44:F3:0C:09")
+                            x.thumbprint_sha256 === obj.thumbprint_sha256)
                         if (filterToCurrentCert.length){
                             target_ids_using_cert.add(key)
                         }
@@ -259,7 +259,7 @@
                 return this.date_to_moment(date).format('YYYY-MM-DD hh:mm:ss');
             },
             show_certificate_properties(row){
-                console.log("show_certificate_properties", {...row});
+                // console.log("show_certificate_properties", {...row});
                 this.showCertificateDetails = true;
                 this.currentCertDetails = {...row}
             },

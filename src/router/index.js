@@ -60,7 +60,7 @@ const User = () => import('@/views/users/User')
 // Custom
 import AddTargetTestModal from "../views/custom/AddTargetTestModal";
 import AddTargetPage from "../views/custom/AddTargetPage";
-import TargetsTable from "../views/custom/TargetsTable";
+import TargetsTablePage from "../views/custom/TargetsTablePage";
 import RegisterCustom from "../views/custom/RegisterCustom";
 import LoginCustom from "../views/custom/LoginCustom";
 import NotificationSettingsStandalone from "../views/custom/NotificationSettingsStandalone";
@@ -88,7 +88,7 @@ const router = new Router(
 router.beforeEach((to, from, next) => {
   store.dispatch("refreshAccessTokenIfNeeded")
       .then(function () {
-        let isAuthenticated = store.getters.isAuthenticated;
+        let isAuthenticated = store.getters.isAuthenticated();
         if (to.name !== 'Login' && to.name !== 'Register' && !isAuthenticated){
           next({ name: 'Login' })
         }else{
@@ -121,9 +121,9 @@ function configRoutes () {
           component: AddTargetTestModal
         },
         {
-          path: 'listTargets',
+          path: 'listTargets/:target_id?',
           name: 'List of targets',
-          component: TargetsTable
+          component: TargetsTablePage
         },
         {
           path: 'login',
@@ -169,7 +169,7 @@ function configRoutes () {
 
         {
           path: 'dashboardOriginal',
-          name: 'Dashboard',
+          name: 'Dashboard Original',
           component: Dashboard
         },
         {

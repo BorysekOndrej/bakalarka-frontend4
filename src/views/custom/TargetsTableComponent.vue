@@ -124,7 +124,7 @@
     import {callGetReenableTarget, callGetSSLyzeEnqueueNow} from "../../api";
 
     export default {
-        name: 'TargetsTable',
+        name: 'TargetsTableComponent',
         components: {AddTargetComponent, LatestScanResults},
         props: {
             fields: {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ msg }}</h1>
-        <CCard>
+        <CCard v-if="last_scan_json.result">
             <div v-for="x in last_scan_json.result.certificate_information.received_certificate_chain_list.certificate_chain">
                 <CertificateViewComponent
                     :certificate="x"

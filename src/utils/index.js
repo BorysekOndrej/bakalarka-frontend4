@@ -100,3 +100,7 @@ export function generalLevelColors(){
         '#CED2D8', // Not scanned yet
     ]
 }
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

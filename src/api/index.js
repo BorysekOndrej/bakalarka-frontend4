@@ -25,6 +25,9 @@ apiAxios.interceptors.request.use( async (request) => {
     return request;
 }, (error) => {
     return Promise.reject(error);
+}, {
+    skipWhileRefreshing: false // default: true
+    // todo: this should be reworked when the following issue is solved: https://github.com/Flyrell/axios-auth-refresh/issues/90
 });
 
 

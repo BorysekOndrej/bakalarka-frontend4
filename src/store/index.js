@@ -11,7 +11,7 @@ import {
     callDeleteTarget,
     callGetUserTargets, callGetScanResultHistory
 } from '../api'
-import {isValidJwt, EventBus} from '../utils'
+import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
 
 var JwtStatus = {
@@ -92,13 +92,14 @@ const actions = {
                 return Promise.reject(error);
             })
     },
-    refreshAccessTokenIfNeeded(context) {
+    async refreshAccessTokenIfNeeded(context) {
         // Vue.$log.debug(`refreshAccessTokenIfNeeded called. currently isAuthenticated=${context.getters.isAuthenticated}`)
         if (store.getters.isAuthenticated) {
             console.debug("Current jwt access token is still valid")
             context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
             return;
         }
+
         let tokenFromLocalStorage = localStorage.getItem("jwt_access_token");
         if (isValidJwt(tokenFromLocalStorage)) {
             context.commit('setJwt', tokenFromLocalStorage)
@@ -106,10 +107,21 @@ const actions = {
             context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
             return;
         }
+
         if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed){
             console.log("JWT refresh canceled, because last previous JWT refresh failed")
+            // todo: maybe show toast? or retry after 1 minute?
             return
         }
+
+        while(store.state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress){
+            await sleep(50);
+        }
+        if (store.getters.isAuthenticated) {
+            console.debug("Valid jwt loaded as part of different request.")
+            return;
+        }
+
         context.commit('set', ["jwtLastRefreshStatus", JwtStatus.RefreshInProgress])
         context.commit('set', ["jwtLastRefreshRequestTimestamp", moment()])
         return jwtRefreshAccessToken()

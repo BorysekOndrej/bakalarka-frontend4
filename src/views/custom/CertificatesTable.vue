@@ -68,15 +68,28 @@
 
             </CCardBody>
         </CCard>
+        <CModal
+                title="Certificate details"
+                :show.sync="showCertificateDetails"
+                size="xl"
+        >
+            <CertificateViewComponent
+                    :certificate="currentCertDetails"
+            ></CertificateViewComponent>
+            <template #footer>
+                <div><!-- This hides default buttons. The div is needed, empty template doesn't work. --></div>
+            </template>
+        </CModal>
     </div>
 </template>
 
 <script>
-    import {EventBus} from "../../utils";
+    import {EventBus, filterObjToTargetDefinition} from "../../utils";
     import moment from "moment";
     import { freeSet } from '@coreui/icons'
     import _ from "lodash" // Import the entire lodash library
     import { getColor } from '@coreui/utils/src'
+    import CertificateViewComponent from "./CertificateViewComponent";
 
     function deduplicateArrayOfCerts(arrCerts){
         let sha256AlreadyInNewRes = new Set();
@@ -108,6 +121,7 @@
 
     export default {
         name: 'CertificatesTable',
+        components: {CertificateViewComponent},
         props: {
             fields: {
                 type: Array,
@@ -123,6 +137,8 @@
         data() {
             return {
                 caption: 'List of your certificates',
+                showCertificateDetails: false,
+                currentCertDetails: null
             }
         },
         created() {
@@ -243,7 +259,9 @@
                 return this.date_to_moment(date).format('YYYY-MM-DD hh:mm:ss');
             },
             show_certificate_properties(row){
-                // todo:
+                console.log("show_certificate_properties", {...row});
+                this.showCertificateDetails = true;
+                this.currentCertDetails = {...row}
             },
             go_to_targets_using_cert(row){
                 // todo:

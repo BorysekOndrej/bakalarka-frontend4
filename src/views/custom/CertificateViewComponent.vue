@@ -54,7 +54,9 @@
         </tr>
         </tfoot>
     </table>
-
+    <CCard v-if="displayDebugInUI">
+        <pre class="m-0" style="text-align: left;">{{ certificate }}</pre>
+    </CCard>
     </CCard>
 </template>
 

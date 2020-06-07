@@ -14,7 +14,9 @@
                 :result="last_scan_json.result"
             ></SSLTLS>
             <hr>
-            <pre class="m-0" style="text-align: left;">{{ last_scan_json }}</pre>
+            <CCard v-if="displayDebugInUI">
+                <pre class="m-0" style="text-align: left;">{{ last_scan_json }}</pre>
+            </CCard>
         </CCard>
     </div>
 </template>

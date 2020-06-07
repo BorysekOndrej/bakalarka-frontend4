@@ -185,9 +185,10 @@ const actions = {
     syncUserTargetsHistory(context) {
         context.commit('set', ["userTargetsHistoryLoading", true])
 
-        callGetScanResultHistory().then(function (response) {
-            context.commit('set', ["userTargetsHistory", response.data])
-        })
+        callGetScanResultHistory()
+            .then(function (response) {
+                context.commit('set', ["userTargetsHistory", response.data])
+            })
             .catch(function (error) {
                 Vue.$log.warn('syncUserTargetsHistory error', error)
                 return Promise.reject(error);

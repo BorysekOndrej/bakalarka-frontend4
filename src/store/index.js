@@ -9,7 +9,7 @@ import {
     callAddTarget,
     jwtRefreshAccessToken,
     callDeleteTarget,
-    callGetUserTargets, callGetScanResultHistory
+    callGetUserTargets, callGetScanResultHistory, callGetLogout
 } from '../api'
 import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
@@ -66,8 +66,13 @@ const actions = {
             })
     },
     logout(context) {
-        context.commit('setJwt', "logout")
-        // todo: emit server side logout
+        callGetLogout().then(() =>
+            context.commit('setJwt', "logout")
+        ).catch(() => {
+            context.commit('setJwt', "logout")
+            // todo: emit error
+        })
+
         // todo: cleanup all private info client side after logout
     },
     removeTarget(context, userData) {

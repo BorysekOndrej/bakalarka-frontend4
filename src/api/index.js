@@ -25,9 +25,6 @@ apiAxios.interceptors.request.use( async (request) => {
     return request;
 }, (error) => {
     return Promise.reject(error);
-}, {
-    skipWhileRefreshing: false // default: true
-    // todo: this should be reworked when the following issue is solved: https://github.com/Flyrell/axios-auth-refresh/issues/90
 });
 
 
@@ -132,4 +129,9 @@ export function callGetCertificateTransparency(hostname){
 
 export function callGetSSLyzeEnqueueNow(target_id){
     return getFromAPI(`/api/v1/sslyze_enqueue_now/${target_id}`);
+}
+
+export function callGetLogout(){
+    // return getFromAPI(`/api/v1/logout`);
+    return nonBearerAxios.get(`${API_URL}/api/v1/logout`, options_non_jwt_access_endpoints)
 }

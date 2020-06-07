@@ -112,6 +112,14 @@ const actions = {
         }
 
         let tokenFromLocalStorage = localStorage.getItem("jwt_access_token");
+        if (tokenFromLocalStorage === "logout" || tokenFromLocalStorage === null){
+            console.debug("Skiping JWT refresh, because LocalStorage has no value or saved logout.")
+            // todo: It's possible that the localStorage could get wiped, but the cookie survived.
+            //  Currently (Q2 2020) I consider it unlikely scenario and favor including the check for null to save on the request on first visit.
+            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed ])
+            return;
+        }
+
         if (isValidJwt(tokenFromLocalStorage)) {
             context.commit('setJwt', tokenFromLocalStorage)
             console.debug("Valid jwt access token loaded from localStorage")

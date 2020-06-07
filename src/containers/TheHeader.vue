@@ -13,24 +13,17 @@
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
       <CIcon name="logo" height="48" alt="Logo"/>
     </CHeaderBrand>
-    <CHeaderNav class="d-md-down-none mr-auto">
+    <CHeaderNav class="d-md-down-none">
       <CHeaderNavItem class="px-3">
         <CHeaderNavLink to="/dashboard">
           Dashboard
         </CHeaderNavLink>
       </CHeaderNavItem>
-      <!--
-      <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/users" exact>
-          Users
-        </CHeaderNavLink>
+    </CHeaderNav>
+    <CHeaderNav class="ml-auto mr-auto">
+      <CHeaderNavItem class="d-md-down-none" v-if="$store.getters.getMainBarMessage">
+        <CAlert show color="light" style="margin: auto;">{{$store.getters.getMainBarMessage}}</CAlert>
       </CHeaderNavItem>
-      <CHeaderNavItem class="px-3">
-        <CHeaderNavLink>
-          Settings
-        </CHeaderNavLink>
-      </CHeaderNavItem>
-      -->
     </CHeaderNav>
     <CHeaderNav class="mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">

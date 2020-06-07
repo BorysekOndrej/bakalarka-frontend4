@@ -31,7 +31,9 @@ function initialState () {
         jwtLastRefreshRequestTimestamp: null,
         userTargets: [],
         userTargetsLoading: false,
-        userTargetsHistory: []
+        userTargetsHistory: [],
+        userTargetsHistoryLoading: false,
+        messageForMainBar: "",
     }
 }
 
@@ -167,25 +169,30 @@ const actions = {
             let original_data = store.getters.getUserTargets
             if (original_data === response.data){
                 console.log("callGetUserTargets refresh returned the same result as was already saved")
-                context.commit('set', ["userTargetsLoading", false])
                 return;
             }
             context.commit('set', ["userTargets", response.data])
-            context.commit('set', ["userTargetsLoading", false])
         })
         .catch(function (error) {
             Vue.$log.warn('callGetUserTargets error', error)
-            context.commit('set', ["userTargetsLoading", false])
             return Promise.reject(error);
+        })
+        .finally(function () {
+            context.commit('set', ["userTargetsLoading", false])
         })
     },
     syncUserTargetsHistory(context){
+        context.commit('set', ["userTargetsHistoryLoading", true])
+        
         callGetScanResultHistory().then(function (response) {
             context.commit('set', ["userTargetsHistory", response.data])
         })
         .catch(function (error) {
             Vue.$log.warn('syncUserTargetsHistory error', error)
             return Promise.reject(error);
+        })
+        .finally(function () {
+            context.commit('set', ["userTargetsHistoryLoading", false])
         })
     },
 
@@ -216,6 +223,9 @@ const mutations = {
     targetAdded(state, payload) {
         console.log(state, payload)
         //Vue.$log.debug('New target added = ', payload)
+    },
+    setMainBarMessage(state, payload) {
+        state.messageForMainBar = payload
     },
 
     // https://github.com/vuejs/vuex/issues/1118#issuecomment-356286218
@@ -251,6 +261,21 @@ const getters = {
     },
     getUserTargets(state){
         return state.userTargets;
+    },
+    getMainBarMessage(state){
+        let res_arr = []
+        res_arr.push(state.messageForMainBar)
+        if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress){
+            res_arr.push("Jwt refresh in progress")
+        }
+        if (state.userTargetsLoading){
+            res_arr.push("Refreshing local copy of targets.")
+        }
+        if (state.userTargetsHistoryLoading){
+            res_arr.push("Refreshing local copy of history.")
+        }
+
+        return res_arr.join("; ")
     }
 }
 

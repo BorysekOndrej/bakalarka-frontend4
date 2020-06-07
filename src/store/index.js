@@ -268,19 +268,19 @@ const getters = {
         let res_arr = []
         res_arr.push(state.messageForMainBar)
         if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
-            res_arr.push("Jwt last refresh failed. Not retrying, new login will be needed.")
+            res_arr.push("Jwt last refresh failed. Not retrying, new login will be needed")
         }
         if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
             res_arr.push("Jwt refresh in progress")
         }
         if (state.userTargetsLoading) {
-            res_arr.push("Refreshing local copy of targets.")
+            res_arr.push("Refreshing local copy of targets")
         }
         if (state.userTargetsHistoryLoading) {
-            res_arr.push("Refreshing local copy of history.")
+            res_arr.push("Refreshing local copy of history")
         }
 
-        return res_arr.join("; ")
+        return res_arr.filter(x => x).join("  |  ")
     }
 }
 

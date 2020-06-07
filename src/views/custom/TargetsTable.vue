@@ -133,6 +133,12 @@
                     return ['hostname', 'port', {key: 'ip_address', label: 'IP address'}, 'protocol', 'grade', 'expires', 'active', {key:'actions', filter: false, sorter: false}]
                 }
             },
+            limit_to_ids: {
+                type: Array,
+                default () {
+                    return null
+                }
+            }
         },
         data() {
             return {
@@ -154,7 +160,13 @@
         },
         computed: {
             userTargets() {
-                return this.$store.getters.getUserTargets
+                if (this.limit_to_ids === null){
+                    return this.$store.getters.getUserTargets
+                }
+                let res = this.$store.getters.getUserTargets.filter(function(x) {
+                    return this.limit_to_ids.includes(x.id);
+                });
+                return res
             },
             userTargetsLoading() {
                 return this.$store.state.userTargetsLoading

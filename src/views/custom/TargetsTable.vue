@@ -115,6 +115,7 @@
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
     import { freeSet } from '@coreui/icons'
+    import {callGetSSLyzeEnqueueNow} from "../../api";
 
     export default {
         name: 'TargetsTable',
@@ -183,7 +184,7 @@
                 // todo:
             },
             force_rescan(row){
-                // todo:
+                callGetSSLyzeEnqueueNow(row.id)
             }
         }
     }

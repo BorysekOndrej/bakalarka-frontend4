@@ -121,3 +121,7 @@ export function callGetCertificateTransparency(hostname){
     return getFromAPI(`/api/v1/ct_get_subdomains/${hostname}`);
 }
 
+export function callGetSSLyzeEnqueueNow(target_id){
+    return getFromAPI(`/api/v1/sslyze_enqueue_now/${target_id}`);
+}
+

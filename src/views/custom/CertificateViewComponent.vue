@@ -82,10 +82,16 @@
         },
         computed: {
             censys: function(){
+                if (this.certificate.thumbprint_sha256 === undefined){
+                    return ""
+                }
                 let a = this.certificate.thumbprint_sha256.replace(/:/g, "")
                 return "https://censys.io/certificates/" + a
             },
             crtsh: function(){
+                if (this.certificate.thumbprint_sha256 === undefined){
+                    return ""
+                }
                 let a = this.certificate.thumbprint_sha256.replace(/:/g, "")
                 return "https://crt.sh/?q=" + a
             }

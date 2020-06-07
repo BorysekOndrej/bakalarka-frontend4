@@ -20,8 +20,8 @@
                     border
                     style="text-align: center"
                     caption="Primary test table"
-                    :loading="userTargetsLoading"
-                    :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
+                    :loading="isLoading"
+                    :noItemsView="{ noResults: 'No results matching filter.', noItems: 'There are either no active scans or the targets are yet to be scanned or they don\'t supply any certificates.' }"
                 >
                     <template #minDepthInCertChain="{item}">
                         <td>
@@ -240,14 +240,14 @@
             userTargets() {
                 return this.$store.getters.getUserTargets
             },
-            userTargetsLoading() {
-                return this.$store.state.userTargetsLoading // todo: fix, duplicate it for userTargetsHistory
-            },
             rawDataFromHistory(){
                 return this.$store.state.userTargetsHistory
             },
             freeSetVar(){
                 return freeSet
+            },
+            isLoading(){
+                return this.$store.state.userTargetsLoading || this.$store.state.userTargetsHistoryLoading
             }
         },
         methods: {

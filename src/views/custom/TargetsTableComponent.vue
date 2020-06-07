@@ -7,7 +7,16 @@
                 </slot>
             </CCardHeader>
             <CCardBody>
-
+                <CAlert v-if="limit_to_ids" color="info">
+                    Additional filtering of targets by IDs is {{ respectLimitToIDs ? "enabled" : "disabled"}}.
+                    You can {{ !respectLimitToIDs ? "enable" : "disable"}} it by clicking
+                    <a v-on:click="toggle_ids_filtering" class="alert-link">this link</a>
+                    .
+                    <br>
+                    <span v-if="respectLimitToIDs">
+                        Currently are shown only targets with IDs: {{limit_to_ids.join(", ")}}
+                    </span>
+                </CAlert>
                 <CDataTable
                     :items="userTargets"
                     :fields="fields"
@@ -147,7 +156,8 @@
                 latestScanResultsVisible: false,
                 latestScanResultsData: -1,
                 targetToEdit: null,
-                colFilter: { active: 'yes' }
+                colFilter: { active: 'yes' },
+                respectLimitToIDs: true,
             }
         },
         created() {
@@ -160,7 +170,7 @@
         },
         computed: {
             userTargets() {
-                if (this.limit_to_ids === null){
+                if (this.limit_to_ids === null || this.respectLimitToIDs === false){
                     return this.$store.getters.getUserTargets
                 }
                 let self = this
@@ -205,6 +215,9 @@
             },
             force_rescan(row){
                 callGetSSLyzeEnqueueNow(row.id)
+            },
+            toggle_ids_filtering(){
+                this.respectLimitToIDs = !this.respectLimitToIDs
             }
         }
     }

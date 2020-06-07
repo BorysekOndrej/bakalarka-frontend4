@@ -163,8 +163,9 @@
                 if (this.limit_to_ids === null){
                     return this.$store.getters.getUserTargets
                 }
+                let self = this
                 let res = this.$store.getters.getUserTargets.filter(function(x) {
-                    return this.limit_to_ids.includes(x.id);
+                    return self.limit_to_ids.includes(x.id);
                 });
                 return res
             },

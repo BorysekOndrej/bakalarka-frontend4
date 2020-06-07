@@ -121,7 +121,7 @@
     import LatestScanResults from "./LatestScanResults";
     import {filterObjToTargetDefinition, EventBus} from "../../utils";
     import { freeSet } from '@coreui/icons'
-    import {callGetSSLyzeEnqueueNow} from "../../api";
+    import {callGetReenableTarget, callGetSSLyzeEnqueueNow} from "../../api";
 
     export default {
         name: 'TargetsTable',
@@ -187,7 +187,7 @@
                 this.$store.dispatch('removeTarget', row.id)
             },
             reenable_target(row){
-                // todo:
+                callGetReenableTarget(row.id)
             },
             force_rescan(row){
                 callGetSSLyzeEnqueueNow(row.id)

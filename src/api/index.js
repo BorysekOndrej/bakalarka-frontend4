@@ -3,6 +3,7 @@ import store from '../store'
 
 import Vue from 'vue'
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import {EventBus} from "../utils";
 
 const API_URL = process.env.VUE_APP_API_URL ? process.env.VUE_APP_API_URL : 'http://bakalarka3.borysek:5000';
 const options_non_jwt_access_endpoints = {withCredentials: true} // allow cookies
@@ -101,6 +102,11 @@ export function callDeleteTarget(target_id){
     return deleteToAPI('/api/v1/target/' + target_id);
 }
 
+export function callGetReenableTarget(target_id){
+    return getFromAPI('/api/v1/enable_target_scan/' + target_id)
+        .then(() => EventBus.$emit('users-targets-modified'));
+}
+
 export function callGetResultForTarget(target_id){
     return getFromAPI('/api/v1/get_result_for_target/' + target_id);
 }
@@ -124,4 +130,3 @@ export function callGetCertificateTransparency(hostname){
 export function callGetSSLyzeEnqueueNow(target_id){
     return getFromAPI(`/api/v1/sslyze_enqueue_now/${target_id}`);
 }
-

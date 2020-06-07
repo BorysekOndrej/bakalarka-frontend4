@@ -62,20 +62,26 @@
                                      v-c-tooltip="{content: 'Edit'}"
                             ><CIcon name="cil-pencil"/></CButton>
 
-                            <CButton v-if="item.active == 'yes'"
+                            <span v-if="item.active == 'yes'">
+                                <CButton
                                      color="danger"
                                      class="btn-mi"
                                      v-on:click="delete_target(item)"
                                      v-c-tooltip="{content: 'Archive'}"
-                            ><CIcon name="cil-ban"/></CButton>
-
-                            <CButton v-if="item.active == 'no'"
-                                     color="success"
-                                     class="btn-mi"
-                                     v-on:click="reenable_target(item)"
-                                     v-c-tooltip="{content: 'Enable'}"
-                            ><CIcon :content="freeSetVar.cilMediaPlay"/></CButton>
-
+                                ><CIcon name="cil-ban"/></CButton>
+                            </span>
+                            <span v-else>
+                                <CButton
+                                        color="success"
+                                        class="btn-mi"
+                                        v-on:click="reenable_target(item)"
+                                        v-c-tooltip="{content: 'Enable'}"
+                                ><CIcon :content="freeSetVar.cilMediaPlay"/></CButton>
+                                <!-- todo: this tooltip doesn't work, probably because it's being assigned to an element that is not in DOM by default.
+                                    I haven't found a good way to fix it. No issue opened on github. Best documentation is for different version.
+                                    https://coreui.io/docs/components/bootstrap/tooltips/
+                                -->
+                            </span>
                         </td>
                     </template>
                 </CDataTable>

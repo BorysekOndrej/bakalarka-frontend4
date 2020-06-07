@@ -21,7 +21,7 @@ var JwtStatus = {
     LastRefreshFailed: 3,
 }
 
-function initialState () {
+function initialState() {
     return {
         sidebarShow: 'responsive',
         sidebarMinimize: false,
@@ -46,7 +46,7 @@ const actions = {
                 context.commit('setJwt', response.data.access_token)
                 if (store.getters.isAuthenticated()) {
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
-                }else{
+                } else {
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
                 }
             })
@@ -60,7 +60,7 @@ const actions = {
     },
     register(context, userData) {
         return register(userData)
-            .then(function(response) {
+            .then(function (response) {
                 console.warn("Register: dispatching load after response: ", response)
                 context.dispatch('login', userData) // todo: this doesn't work partially. Not sure why.
             })
@@ -72,7 +72,7 @@ const actions = {
     },
     logout(context) {
         callGetLogout()
-            .finally(function() {
+            .finally(function () {
                 context.commit('setJwt', "logout") // This is needed. It also erases the localStorage
 
                 // https://github.com/vuejs/vuex/issues/1118#issuecomment-356286218
@@ -109,33 +109,33 @@ const actions = {
         // Vue.$log.debug(`refreshAccessTokenIfNeeded called. currently isAuthenticated=${context.getters.isAuthenticated}`)
         if (store.getters.isAuthenticated()) {
             console.debug("Current jwt access token is still valid")
-            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
+            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
             return;
         }
 
         let tokenFromLocalStorage = localStorage.getItem("jwt_access_token");
-        if (tokenFromLocalStorage === "logout" || tokenFromLocalStorage === null){
+        if (tokenFromLocalStorage === "logout" || tokenFromLocalStorage === null) {
             console.debug("Skiping JWT refresh, because LocalStorage has no value or saved logout.")
             // todo: It's possible that the localStorage could get wiped, but the cookie survived.
             //  Currently (Q2 2020) I consider it unlikely scenario and favor including the check for null to save on the request on first visit.
-            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed ])
+            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
             return;
         }
 
         if (isValidJwt(tokenFromLocalStorage)) {
             context.commit('setJwt', tokenFromLocalStorage)
             console.debug("Valid jwt access token loaded from localStorage")
-            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid ])
+            context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
             return;
         }
 
-        if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed){
+        if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
             console.log("JWT refresh canceled, because last previous JWT refresh failed")
             // todo: maybe show toast? or retry after 1 minute?
             return
         }
 
-        while(store.state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress){
+        while (store.state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
             await sleep(50);
         }
         if (store.getters.isAuthenticated()) {
@@ -151,7 +151,7 @@ const actions = {
                 context.commit('setJwt', response.data.access_token)
                 if (store.getters.isAuthenticated()) {
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.Valid])
-                }else{
+                } else {
                     context.commit('set', ["jwtLastRefreshStatus", JwtStatus.LastRefreshFailed])
                 }
             })
@@ -161,39 +161,40 @@ const actions = {
                 return Promise.reject(error);
             })
     },
-    syncUserTargetsWithBasicResults(context){
+    syncUserTargetsWithBasicResults(context) {
         context.commit('set', ["userTargetsLoading", true])
 
-        callGetUserTargets().then(function (response) {
-            console.log("callGetUserTargets result received", response.data)
-            let original_data = store.getters.getUserTargets
-            if (original_data === response.data){
-                console.log("callGetUserTargets refresh returned the same result as was already saved")
-                return;
-            }
-            context.commit('set', ["userTargets", response.data])
-        })
-        .catch(function (error) {
-            Vue.$log.warn('callGetUserTargets error', error)
-            return Promise.reject(error);
-        })
-        .finally(function () {
-            context.commit('set', ["userTargetsLoading", false])
-        })
+        callGetUserTargets()
+            .then(function (response) {
+                console.log("callGetUserTargets result received", response.data)
+                let original_data = store.getters.getUserTargets
+                if (original_data === response.data) {
+                    console.log("callGetUserTargets refresh returned the same result as was already saved")
+                    return;
+                }
+                context.commit('set', ["userTargets", response.data])
+            })
+            .catch(function (error) {
+                Vue.$log.warn('callGetUserTargets error', error)
+                return Promise.reject(error);
+            })
+            .finally(function () {
+                context.commit('set', ["userTargetsLoading", false])
+            })
     },
-    syncUserTargetsHistory(context){
+    syncUserTargetsHistory(context) {
         context.commit('set', ["userTargetsHistoryLoading", true])
-        
+
         callGetScanResultHistory().then(function (response) {
             context.commit('set', ["userTargetsHistory", response.data])
         })
-        .catch(function (error) {
-            Vue.$log.warn('syncUserTargetsHistory error', error)
-            return Promise.reject(error);
-        })
-        .finally(function () {
-            context.commit('set', ["userTargetsHistoryLoading", false])
-        })
+            .catch(function (error) {
+                Vue.$log.warn('syncUserTargetsHistory error', error)
+                return Promise.reject(error);
+            })
+            .finally(function () {
+                context.commit('set', ["userTargetsHistoryLoading", false])
+            })
     },
 
 }
@@ -208,7 +209,7 @@ const mutations = {
         state.sidebarShow = sidebarClosed ? true : 'responsive'
     },
     set(state, [variable, value]) {
-        console.debug('Set: ', variable,' = ', value)
+        console.debug('Set: ', variable, ' = ', value)
         state[variable] = value
     },
     setJwt(state, access_token) {
@@ -229,7 +230,7 @@ const mutations = {
     },
 
     // https://github.com/vuejs/vuex/issues/1118#issuecomment-356286218
-    reset (state) {
+    reset(state) {
         // acquire initial state
         const s = initialState()
         Object.keys(s).forEach(key => {
@@ -250,28 +251,28 @@ const getters = {
     getJwt(state) {
         return state.jwt;
     },
-    getJwtData(state){
+    getJwtData(state) {
         return getters.getJwt(state) ? JSON.parse(atob(getters.getJwt(state).split('.')[1])) : null
     },
-    getUserIdentity(state){
+    getUserIdentity(state) {
         return getters.getJwt(state) ? getters.getJwtData(state).identity : null
     },
-    getUserID(state){
+    getUserID(state) {
         return getters.getJwt(state) ? getters.getUserIdentity(state).id : null
     },
-    getUserTargets(state){
+    getUserTargets(state) {
         return state.userTargets;
     },
-    getMainBarMessage(state){
+    getMainBarMessage(state) {
         let res_arr = []
         res_arr.push(state.messageForMainBar)
-        if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress){
+        if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
             res_arr.push("Jwt refresh in progress")
         }
-        if (state.userTargetsLoading){
+        if (state.userTargetsLoading) {
             res_arr.push("Refreshing local copy of targets.")
         }
-        if (state.userTargetsHistoryLoading){
+        if (state.userTargetsHistoryLoading) {
             res_arr.push("Refreshing local copy of history.")
         }
 

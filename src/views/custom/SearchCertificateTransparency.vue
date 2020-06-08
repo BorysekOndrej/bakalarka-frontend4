@@ -105,8 +105,13 @@
             },
             cleanupHostnamesForAdding(hostnamesArr){
                 let hostnamesSet = new Set()
-                let hostnamesArr2 = hostnamesArr.map(x => x.replace(/^(?:\*\.)/,""))
-                hostnamesArr2.forEach(el => hostnamesSet.add(el))
+                hostnamesArr = hostnamesArr.map(x => x.replace(/^(?:\*\.)/,"")) // this makes *.example.com -> example.com
+                hostnamesArr = hostnamesArr.map(x => {
+                    let splitRes = x.split("@")
+                    return splitRes[splitRes.length-1]
+                    }
+                ) // this makes lorem@example.com -> example.com
+                hostnamesArr.forEach(el => hostnamesSet.add(el))
                 return [...hostnamesSet].join(",")
             }
         },

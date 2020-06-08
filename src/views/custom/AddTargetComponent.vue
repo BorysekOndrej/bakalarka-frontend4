@@ -9,13 +9,17 @@
             </CCardHeader>
             <CCardBody>
 
-            <CInput
+            <CTextarea
                     label="Hostname:"
                     :value.sync="form.target.hostname"
                     type="text"
                     horizontal
                     required
-                    placeholder="Enter hostname or IP, will be used for SNI"
+                    placeholder="example.com
+example.org
+www.example.org
+"
+                    addInputClasses="hostnames-text-area"
             />
 
                 <template v-if="superEasyMode == false">
@@ -296,5 +300,12 @@
     }
     a {
         color: #42b983;
+    }
+</style>
+
+<style>
+    textarea.hostnames-text-area {
+        /* this for some reason doesn't work when it's in scoped section */
+        min-height: 100px;
     }
 </style>

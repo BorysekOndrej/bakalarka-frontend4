@@ -241,6 +241,10 @@ www.example.org
                     this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()
                 }
 
+                if (this.form.target && this.form.target.hostname){
+                    this.form.target.hostname = this.form.target.hostname.split(",").join("\n")
+                }
+
                 if (this.target === null || this.target.id === null){
                     return;
                 }
@@ -262,7 +266,9 @@ www.example.org
             onSubmit(evt) {
                 evt.preventDefault();
                 console.log(JSON.stringify(this.form))
-                this.$store.dispatch('addTarget', JSON.stringify(this.form))
+                let formNormalized = this.form
+                formNormalized.target.hostname = formNormalized.target.hostname.split("\n").join(";")
+                this.$store.dispatch('addTarget', JSON.stringify(formNormalized))
                     .then(() => this.$router.push('/'))
                     .then(() => {
                         if (this.modifying_existing && this.target_definition_changed){

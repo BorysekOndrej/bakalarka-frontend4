@@ -111,7 +111,7 @@ function configRoutes () {
       component: TheContainer,
       children: [
         {
-          path: 'addTarget',
+          path: 'addTarget/:hostnames?',
           name: 'Add Target',
           component: AddTargetPage
         },

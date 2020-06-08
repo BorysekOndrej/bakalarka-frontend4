@@ -86,7 +86,7 @@
     import {EventBus, filterObjToTargetDefinition} from "../../utils";
     import moment from "moment";
     import { freeSet } from '@coreui/icons'
-    import _ from "lodash" // Import the entire lodash library
+    import _ from "lodash"
     import { getColor } from '@coreui/utils/src'
     import CertificateViewComponent from "./CertificateViewComponent";
 

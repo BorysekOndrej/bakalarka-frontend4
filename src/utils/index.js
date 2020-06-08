@@ -3,6 +3,7 @@
 
 import Vue from 'vue'
 import moment from "moment";
+import _ from "lodash"
 
 export const EventBus = new Vue()
 const target_properties = ['id', 'hostname', 'port', 'ip_address', 'protocol']
@@ -40,8 +41,20 @@ export function makeColumnsSortable(all_column_names, except_column_names){
 }
 
 
-export function filterObjToTargetDefinition(obj){
+export function defaultTargetDefinition(){
+    return {
+        id: null,
+        hostname: '',
+        port: null,
+        ip_address: null,
+        protocol: 'HTTPS',
+    }
+}
+
+export function filterObjToTargetDefinition(obj, merge_with_default=false){
     // https://stackoverflow.com/a/38750895/5769940
+    let defaultDef = defaultTargetDefinition()
+
     const filtered = Object.keys(obj)
         .filter(key => target_properties.includes(key))
         .reduce((answer, key) => {
@@ -49,7 +62,11 @@ export function filterObjToTargetDefinition(obj){
             return answer;
         }, {});
 
-    return filtered
+    let res = filtered
+    if (merge_with_default){
+        res = _.extend({}, defaultDef, filtered)
+    }
+    return res
 }
 
 

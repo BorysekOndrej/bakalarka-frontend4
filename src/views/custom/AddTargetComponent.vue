@@ -158,6 +158,7 @@
 <script>
     import {callGetTargetInfoForEditDialog} from "../../api";
     import NotificationsSettings from "./NotificationsSettings";
+    import {defaultTargetDefinition} from "../../utils";
 
     export default {
         name: "addTargetComponent",
@@ -178,13 +179,9 @@
             },
             target: {
                 type: Object,
-                default: () => ({
-                    id: null,
-                    hostname: '',
-                    port: null,
-                    ip_address: null,
-                    protocol: 'HTTPS',
-                })
+                default () {
+                    return defaultTargetDefinition()
+                }
             },
             scanOrder: {
                 type: Object,

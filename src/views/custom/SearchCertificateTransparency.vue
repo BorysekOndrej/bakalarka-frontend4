@@ -26,8 +26,12 @@
                 </CCard>
             </CCardBody>
             <CCardFooter>
-                <CButton type="submit" size="sm" color="primary" v-on:click="onSubmit"><CIcon name="cil-check-circle"/> Submit</CButton>
+                <CButton type="submit" size="sm" color="primary" v-on:click="onSubmit"><CIcon name="cil-check-circle"/> Search</CButton>
                 <CButton type="reset" size="sm" color="danger" v-on:click="onReset" ><CIcon name="cil-ban"/> Reset</CButton>
+
+                <CButton type="submit" size="sm" color="success" v-on:click="forwardToAddTarget" style="float: right;">
+                    <CIcon :content="freeSetVar.cilShareAll" /> Add result as targets
+                </CButton>
             </CCardFooter>
         </CCard>
         <CCard v-if="displayDebugInUI">
@@ -38,6 +42,7 @@
 
 <script>
     import {callGetCertificateTransparency} from "../../api";
+    import {freeSet} from "@coreui/icons";
 
     export default {
         name: "SearchCertificateTransparency",
@@ -86,8 +91,24 @@
             onReset(evt) {
                 evt.preventDefault();
                 this.prefillFormToDefaultOrPassedValues()
+            },
+            forwardToAddTarget(evt) {
+                if (this.result === undefined || this.result === null ||
+                    this.result.result === undefined || this.result.result === null ||
+                    this.result.length === 0){
+                    console.log("Redirect stopped, because the result is not worth redirecting.")
+                    return
+                }
+                console.log(this.result.result)
+                // todo: solve wildcards
+                this.$router.push({ name: 'Add Target', params: { hostnames: this.result.result.join(",") } })
             }
         },
+        computed: {
+            freeSetVar(){
+                return freeSet
+            },
+        }
     }
 </script>
 

@@ -267,7 +267,7 @@ const getters = {
     getMainBarMessage(state) {
         let res_arr = []
         res_arr.push(state.messageForMainBar)
-        if (store.state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
+        if (state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
             res_arr.push("Jwt last refresh failed. Not retrying, new login will be needed")
         }
         if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
@@ -279,9 +279,18 @@ const getters = {
         if (state.userTargetsHistoryLoading) {
             res_arr.push("Refreshing local copy of history")
         }
-
         return res_arr.filter(x => x).join("  |  ")
+    },
+    getMainBarColor(state){
+        if (state.jwtLastRefreshStatus === JwtStatus.LastRefreshFailed) {
+            return 'danger';
+        }
+        if (state.jwtLastRefreshStatus === JwtStatus.RefreshInProgress) {
+            return 'warning'
+        }
+        return 'light'
     }
+
 }
 
 const store = new Vuex.Store({

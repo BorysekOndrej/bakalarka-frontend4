@@ -22,7 +22,7 @@
     </CHeaderNav>
     <CHeaderNav class="ml-auto mr-auto">
       <CHeaderNavItem class="d-md-down-none" v-if="$store.getters.getMainBarMessage">
-        <CAlert show color="light" style="margin: auto;">{{$store.getters.getMainBarMessage}}</CAlert>
+        <CAlert show :color="$store.getters.getMainBarColor" style="margin: auto;">{{$store.getters.getMainBarMessage}}</CAlert>
       </CHeaderNavItem>
     </CHeaderNav>
     <CHeaderNav class="mr-4">

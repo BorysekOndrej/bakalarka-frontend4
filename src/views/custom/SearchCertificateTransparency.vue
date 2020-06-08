@@ -100,8 +100,14 @@
                     return
                 }
                 console.log(this.result.result)
-                // todo: solve wildcards
-                this.$router.push({ name: 'Add Target', params: { hostnames: this.result.result.join(",") } })
+
+                this.$router.push({ name: 'Add Target', params: { hostnames: this.cleanupHostnamesForAdding(this.result.result) } })
+            },
+            cleanupHostnamesForAdding(hostnamesArr){
+                let hostnamesSet = new Set()
+                let hostnamesArr2 = hostnamesArr.map(x => x.replace(/^(?:\*\.)/,""))
+                hostnamesArr2.forEach(el => hostnamesSet.add(el))
+                return [...hostnamesSet].join(",")
             }
         },
         computed: {

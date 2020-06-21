@@ -35,6 +35,7 @@ function initialState() {
         userTargetsHistoryLoading: false,
         messageForMainBar: "",
         slackConnections: [],
+        slackConnectionsLoading: false,
     }
 }
 

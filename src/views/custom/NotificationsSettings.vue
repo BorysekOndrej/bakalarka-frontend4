@@ -1,5 +1,5 @@
 <template>
-    <div style="max-width: 500px; margin: auto;">
+    <div style="max-width: 800px; margin: auto;">
         <h1>{{ msg }}</h1>
         <transition name="fade">
             <CCard v-if="show">
@@ -70,6 +70,34 @@
                                 />
                             </div>
                         </div>
+                        <CDataTable
+                                :items="slackConnections"
+                                :items-per-page=10
+                                :fields="slack_fields"
+                                columnFilter
+                                sorter
+                                pagination
+                                hover
+                                striped
+                                border
+                                style="text-align: center"
+                                caption="Primary test table"
+                                :loading="slackConnectionsLoading"
+                                :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
+                        >
+
+                            <template #actions="{item}">
+                                <td class="button_only_td">
+                                    <CButton
+                                            color="danger"
+                                            class="btn-mi"
+                                            v-on:click="delete_target(item)"
+                                            v-c-tooltip="{content: 'Archive'}"
+                                    ><CIcon name="cil-ban"/></CButton>
+                                </td>
+                            </template>
+                        </CDataTable>
+
                         <CButton type="submit" size="sm" color="primary" v-on:click="addNewSlackConnection">
                             <CIcon :content="brands.cibSlack" style="margin-right: 0.5em;"/>  Add new Slack connection</CButton>
                     </CCard>
@@ -98,6 +126,12 @@
                     emails_list: ""
                 })
             },
+            slack_fields: {
+                type: Array,
+                default () {
+                    return ['team_name', 'channel_name', 'team_id', 'channel_id', 'actions']
+                }
+            },
         },
         created() {
             this.$store.dispatch('syncSlackConnections')
@@ -116,6 +150,13 @@
             brands(){
                 return brandSet
             },
+            slackConnections() {
+                return this.$store.state.slackConnections
+            },
+            slackConnectionsLoading() {
+                return this.$store.state.slackConnectionsLoading
+            },
+
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {

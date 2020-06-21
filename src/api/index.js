@@ -135,3 +135,7 @@ export function callGetLogout(){
     // return getFromAPI(`/api/v1/logout`);
     return nonBearerAxios.get(`${API_URL}/api/v1/logout`, options_non_jwt_access_endpoints)
 }
+
+export function callGetSlackAddURL(){
+    return getFromAPI(`/api/debug/slack/begin_auth`);
+}

@@ -17,10 +17,10 @@
                 <CCollapse :show="visible_mail_options">
                     <CCard>
                         <div class="form-group row">
-                            <label for="scanNotificationsActive" class="col-sm-8 col-form-label">Send notifications via email</label>
+                            <label for="scanMailNotificationsActive" class="col-sm-8 col-form-label">Send notifications via email</label>
                             <div class="col-sm-2">
                                 <CSwitch
-                                        id="scanNotificationsActive"
+                                        id="scanMailNotificationsActive"
                                         class="mx-1"
                                         color="success"
                                         shape="pill"
@@ -42,6 +42,39 @@
                 </CCollapse>
             </CCard>
         </transition>
+        <transition name="fade">
+            <CCard v-if="show">
+                <CCardHeader>
+                    <CIcon name="cil-pencil"/> Slack
+                    <div class="card-header-actions">
+                        <CLink
+                                class="card-header-action btn-minimize"
+                                @click="visible_slack_options=!visible_slack_options"
+                        >
+                            <CIcon :name="`cil-chevron-${visible_slack_options ? 'bottom' : 'top'}`"/>
+                        </CLink>
+                    </div>
+                </CCardHeader>
+                <CCollapse :show="visible_slack_options">
+                    <CCard>
+                        <div class="form-group row">
+                            <label for="scanSlackNotificationsActive" class="col-sm-8 col-form-label">Send notifications via slack</label>
+                            <div class="col-sm-2">
+                                <CSwitch
+                                        id="scanSlackNotificationsActive"
+                                        class="mx-1"
+                                        color="success"
+                                        shape="pill"
+                                        horizontal
+                                        :checked.sync="value.slacks_active"
+                                />
+                            </div>
+                        </div>
+                        <CButton type="submit" size="sm" color="primary" v-on:click="addNewSlackConnection"><CIcon name="cil-check-circle"/> Add new Slack connection</CButton>
+                    </CCard>
+                </CCollapse>
+            </CCard>
+        </transition>
         <CCard v-if="displayDebugInUI">
             <pre class="m-0" style="text-align: left;">{{ value }}</pre>
         </CCard>
@@ -49,6 +82,8 @@
 </template>
 
 <script>
+    import {callGetSlackAddURL} from "../../api";
+
     export default {
         name: "NotificationsSettings",
         props: {
@@ -57,6 +92,7 @@
                 type: Object,
                 default: () => ({
                     emails_active: true,
+                    slacks_active: true,
                     emails_list: ""
                 })
             },
@@ -65,6 +101,7 @@
             return {
                 show: true,
                 visible_mail_options: true,
+                visible_slack_options: true,
             }
         },
         methods: {
@@ -75,6 +112,19 @@
                     this.show = true;
                 })
             },
+            addNewSlackConnection(evt) {
+                evt.preventDefault();
+
+                // The following trick let's me open an new window without popup blocker.
+                // todo: make the window contain information about loading
+                let slackAuthWindow = window.open("about:blank",'slackAuthWindow', 'height=750,width=550');
+                callGetSlackAddURL()
+                    .then(function (response) {
+                        slackAuthWindow.open(response.data,'slackAuthWindow');
+                    })
+
+            },
+
         },
     }
 </script>

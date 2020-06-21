@@ -4,7 +4,7 @@
         <transition name="fade">
             <CCard v-if="show">
                 <CCardHeader>
-                    <CIcon name="cil-pencil"/> Email
+                    <CIcon name="cil-envelope-open"/> Email
                     <div class="card-header-actions">
                         <CLink
                                 class="card-header-action btn-minimize"
@@ -45,7 +45,7 @@
         <transition name="fade">
             <CCard v-if="show">
                 <CCardHeader>
-                    <CIcon name="cil-pencil"/> Slack
+                    <CIcon :content="brands.cibSlack"/> Slack
                     <div class="card-header-actions">
                         <CLink
                                 class="card-header-action btn-minimize"
@@ -70,7 +70,8 @@
                                 />
                             </div>
                         </div>
-                        <CButton type="submit" size="sm" color="primary" v-on:click="addNewSlackConnection"><CIcon name="cil-check-circle"/> Add new Slack connection</CButton>
+                        <CButton type="submit" size="sm" color="primary" v-on:click="addNewSlackConnection">
+                            <CIcon :content="brands.cibSlack" style="margin-right: 0.5em;"/>  Add new Slack connection</CButton>
                     </CCard>
                 </CCollapse>
             </CCard>
@@ -83,6 +84,7 @@
 
 <script>
     import {callGetSlackAddURL} from "../../api";
+    import {freeSet, brandSet} from "@coreui/icons";
 
     export default {
         name: "NotificationsSettings",
@@ -103,6 +105,14 @@
                 visible_mail_options: true,
                 visible_slack_options: true,
             }
+        },
+        computed: {
+            freeSetVar(){
+                return freeSet
+            },
+            brands(){
+                return brandSet
+            },
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {

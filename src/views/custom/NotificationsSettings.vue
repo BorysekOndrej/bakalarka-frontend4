@@ -99,6 +99,9 @@
                 })
             },
         },
+        created() {
+            this.$store.dispatch('syncSlackConnections')
+        },
         data() {
             return {
                 show: true,

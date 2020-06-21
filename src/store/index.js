@@ -9,7 +9,7 @@ import {
     callAddTarget,
     jwtRefreshAccessToken,
     callDeleteTarget,
-    callGetUserTargets, callGetScanResultHistory, callGetLogout
+    callGetUserTargets, callGetScanResultHistory, callGetLogout, callGetSlackConnections
 } from '../api'
 import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
@@ -34,6 +34,7 @@ function initialState() {
         userTargetsHistory: [],
         userTargetsHistoryLoading: false,
         messageForMainBar: "",
+        slackConnections: [],
     }
 }
 
@@ -195,6 +196,21 @@ const actions = {
             })
             .finally(function () {
                 context.commit('set', ["userTargetsHistoryLoading", false])
+            })
+    },
+    syncSlackConnections(context) {
+        context.commit('set', ["slackConnectionsLoading", true])
+
+        callGetSlackConnections()
+            .then(function (response) {
+                context.commit('set', ["slackConnections", response.data])
+            })
+            .catch(function (error) {
+                Vue.$log.warn('syncSlackConnections error', error)
+                return Promise.reject(error);
+            })
+            .finally(function () {
+                context.commit('set', ["slackConnectionsLoading", false])
             })
     },
 

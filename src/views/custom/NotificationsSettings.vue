@@ -184,6 +184,14 @@
                         slackAuthWindow.open(response.data,'slackAuthWindow');
                     })
 
+                // https://stackoverflow.com/a/38165968
+                let popupTick = setInterval(function() {
+                    if (slackAuthWindow.closed) {
+                        clearInterval(popupTick);
+                        EventBus.$emit('slack-connections-modified')
+                    }
+                }, 500);
+
             },
             deleteSlackConnection(row){
                 console.warn(row)

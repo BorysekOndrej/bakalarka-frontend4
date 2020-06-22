@@ -9,7 +9,7 @@ import {
     callAddTarget,
     jwtRefreshAccessToken,
     callDeleteTarget,
-    callGetUserTargets, callGetScanResultHistory, callGetLogout, callGetSlackConnections
+    callGetUserTargets, callGetScanResultHistory, callGetLogout, callGetSlackConnections, callDeleteSlackConnection
 } from '../api'
 import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
@@ -91,6 +91,15 @@ const actions = {
             .then(() => EventBus.$emit('users-targets-modified'))
             .catch(error => {
                 Vue.$log.warn('Error removing scan order: ', error)
+                return Promise.reject(error);
+            })
+    },
+    removeSlackConnection(context, payload) {
+        Vue.$log.debug("Remove slack connection triggered")
+        return callDeleteSlackConnection(payload["team_id"], payload["channel_id"])
+            .then(() => EventBus.$emit('slack-connections-modified'))
+            .catch(error => {
+                Vue.$log.warn('Error removing slack connection: ', error)
                 return Promise.reject(error);
             })
     },

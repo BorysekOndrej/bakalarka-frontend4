@@ -91,8 +91,8 @@
                                     <CButton
                                             color="danger"
                                             class="btn-mi"
-                                            v-on:click="delete_target(item)"
-                                            v-c-tooltip="{content: 'Archive'}"
+                                            v-on:click="deleteSlackConnection(item)"
+                                            v-c-tooltip="{content: 'Delete'}"
                                     ><CIcon name="cil-ban"/></CButton>
                                 </td>
                             </template>
@@ -113,6 +113,7 @@
 <script>
     import {callGetSlackAddURL} from "../../api";
     import {freeSet, brandSet} from "@coreui/icons";
+    import {EventBus} from "../../utils";
 
     export default {
         name: "NotificationsSettings",
@@ -135,6 +136,12 @@
         },
         created() {
             this.$store.dispatch('syncSlackConnections')
+
+            let self = this;
+            EventBus.$on('slack-connections-modified', () => {
+                self.$store.dispatch('syncSlackConnections')
+            });
+
         },
         data() {
             return {
@@ -178,7 +185,10 @@
                     })
 
             },
-
+            deleteSlackConnection(row){
+                console.warn(row)
+                this.$store.dispatch('removeSlackConnection', {'team_id': row.team_id, 'channel_id': row.channel_id})
+            },
         },
     }
 </script>

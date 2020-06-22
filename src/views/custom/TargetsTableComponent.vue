@@ -163,7 +163,7 @@
         created() {
             this.$store.dispatch('syncUserTargetsWithBasicResults')
 
-            var self = this;
+            let self = this;
             EventBus.$on('users-targets-modified', () => {
                 self.$store.dispatch('syncUserTargetsWithBasicResults')
             });

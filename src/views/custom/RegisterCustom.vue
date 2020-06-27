@@ -125,7 +125,9 @@ export default {
         console.warn("Register button pressed even when it should have been disabled.")
         return;
       }
-      this.$store.dispatch('register', { username: this.form.username, password: this.form.password })
+      let toSend = {...this.form}
+      delete toSend['password_again']
+      this.$store.dispatch('register', toSend)
               .then(() => this.$router.push('/'))
     },
   },

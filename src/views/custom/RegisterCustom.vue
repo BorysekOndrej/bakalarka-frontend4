@@ -11,7 +11,7 @@
                 <CInput
                   placeholder="Username"
                   autocomplete="username"
-                  v-model="username"
+                  v-model="form.username"
                 >
                   <template #prepend-content><CIcon name="cil-user"/></template>
                 </CInput>
@@ -20,14 +20,14 @@
                   autocomplete="email"
                   prepend="@"
                   type="email"
-                  v-model="email"
+                  v-model="form.email"
                 />
 
                 <CInput
                   placeholder="Password"
                   type="password"
                   autocomplete="new-password"
-                  v-model="password"
+                  v-model="form.password"
                   invalid-feedback="The password needs to have at least 6 characters."
                   :is-valid="password_validator"
                 >
@@ -38,7 +38,7 @@
                   type="password"
                   autocomplete="new-password"
                   class="mb-4"
-                  v-model="password_again"
+                  v-model="form.password_again"
                   invalid-feedback="The two password fields don't match."
                   :is-valid="password_compare"
                 >
@@ -66,11 +66,12 @@ export default {
   name: 'Register',
   data () {
     return {
-      username: '',
-      email: '',
-      password: '',
-      password_again: '',
-
+      form: {
+        username: '',
+        email: '',
+        password: '',
+        password_again: '',
+      },
       errorMsg: ''
     }
   },/*
@@ -93,7 +94,7 @@ export default {
   },*/
   computed: {
     disable_submit_button: function () {
-      let a = ( Boolean(this.username && this.email && this.password && this.password_again &&
+      let a = ( Boolean(this.form.username && this.form.email && this.form.password && this.form.password_again &&
               this.password_validator() && this.password_compare() && this.email_validator()))
       let b = !a
       console.log(b); // todo: this returns correct value, but doesn't disable as I've expected
@@ -103,14 +104,14 @@ export default {
   methods: {
     password_validator (){
       // todo: make validators consistent (flash vs requirements to send)
-      return this.password ? this.password.length >= requiredPasswordLen : undefined;
+      return this.form.password ? this.form.password.length >= requiredPasswordLen : undefined;
     },
     password_compare (){
-      return this.password_again ?  this.password === this.password_again : undefined;
+      return this.form.password_again ?  this.form.password === this.form.password_again : undefined;
     },
     email_validator(){
-      // console.log(this.validEmail(this.email))
-      return this.validEmail(this.email)
+      // console.log(this.validEmail(this.form.email))
+      return this.validEmail(this.form.email)
     },
     validEmail: function (email) { // taken from https://vuejs.org/v2/cookbook/form-validation.html
       // todo: this might not be the same validator as is used for type="mail"
@@ -124,7 +125,7 @@ export default {
         console.warn("Register button pressed even when it should have been disabled.")
         return;
       }
-      this.$store.dispatch('register', { username: this.username, password: this.password })
+      this.$store.dispatch('register', { username: this.form.username, password: this.form.password })
               .then(() => this.$router.push('/'))
     },
   },

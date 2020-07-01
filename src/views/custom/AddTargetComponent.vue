@@ -126,6 +126,7 @@ www.example.org
                             <NotificationsSettings
                                     v-model="form.notifications"
                                     ref="notificationsComponent"
+                                    :slack_fields="['team_name', 'channel_name']"
                             ></NotificationsSettings>
                         </CCollapse>
 

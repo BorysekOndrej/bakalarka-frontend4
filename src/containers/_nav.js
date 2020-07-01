@@ -15,6 +15,12 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
+        name: 'Add target - Super Easy Mode',
+        to: '/addTargetSuperEasyMode',
+        icon: 'cil-cursor',
+      },
+      {
+        _name: 'CSidebarNavItem',
         name: 'Certificate Transparency',
         to: '/certificateTransparency',
         icon: 'cil-cursor',

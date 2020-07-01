@@ -71,6 +71,7 @@ import store from "../store";
 import SearchCertificateTransparency from "../views/custom/SearchCertificateTransparency";
 import CertificatesTable from "../views/custom/CertificatesTable";
 import {EventBus} from "../utils";
+import AddTargetPageSuperEasyModePage from "../views/custom/AddTargetPageSuperEasyModePage";
 
 
 Vue.use(Router)
@@ -114,6 +115,11 @@ function configRoutes () {
           path: 'addTarget/:hostnames?',
           name: 'Add Target',
           component: AddTargetPage
+        },
+        {
+          path: 'addTargetSuperEasyMode/:hostnames?',
+          name: 'Add Target - Super Easy Mode',
+          component: AddTargetPageSuperEasyModePage
         },
         {
           path: 'addTargetTestModal',

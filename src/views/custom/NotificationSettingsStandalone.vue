@@ -66,8 +66,9 @@
         },
         methods: {
             load_values_from_server(){
+                // todo: call on local change
                 let self = this
-                callGetNotificationSettings(this.user_id, this.target_id).then(function (response) {
+                callGetNotificationSettings(this.target_id).then(function (response) {
                     self.form = response.data
                 })
             },

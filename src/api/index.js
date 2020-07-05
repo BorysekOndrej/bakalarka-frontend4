@@ -112,6 +112,9 @@ export function callGetResultForTarget(target_id){
 }
 
 export function callGetNotificationSettings(target_id){
+    if (target_id === undefined){ // this slightly beautifies developer tools network tab in browser
+        return getFromAPI(`/api/v1/notification_settings`);
+    }
     return getFromAPI(`/api/v1/notification_settings/${target_id}`);
 }
 

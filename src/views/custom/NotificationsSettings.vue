@@ -25,21 +25,23 @@
                                         color="success"
                                         shape="pill"
                                         horizontal
-                                        :checked.sync="value.emails_active"
+                                        :checked.sync="emailInverted"
+                                        @update:checked="toggleEmail"
+
                                 />
                             </div>
                         </div>
 
                         <CInput
-                                label="Emails:"
-                                :value.sync="value.emails_list"
+                                label="Add new emails:"
+                                :value.sync="value.add_new_emails"
                                 type="text"
                                 horizontal
                                 required
                                 placeholder="Email(s) to which notifications should be sent. Separate by semicolon."
                         />
                         <CDataTable
-                                :items="emailConnections"
+                                :items="value.email"
                                 :items-per-page=10
                                 :fields="email_fields"
                                 columnFilter
@@ -93,12 +95,13 @@
                                         color="success"
                                         shape="pill"
                                         horizontal
-                                        :checked.sync="value.slacks_active"
+                                        :checked.sync="slackInverted"
+                                        @update:checked="toggleSlack"
                                 />
                             </div>
                         </div>
                         <CDataTable
-                                :items="slackConnections"
+                                :items="value.slack"
                                 :items-per-page=10
                                 :fields="slack_fields"
                                 columnFilter
@@ -140,19 +143,24 @@
 <script>
     import {callGetSlackAddURL} from "../../api";
     import {freeSet, brandSet} from "@coreui/icons";
-    import {EventBus} from "../../utils";
+    import {default_notifications_settings, EventBus} from "../../utils";
 
     export default {
         name: "NotificationsSettings",
         props: {
             msg: String,
-            value: {
+            current_preferences: {
                 type: Object,
                 default: () => ({
-                    emails_active: true,
-                    slacks_active: true,
-                    emails_list: ""
+                    email: [],
+                    slack: [],
                 })
+            },
+            value: {
+                type: Object,
+                default () {
+                    return default_notifications_settings()
+                }
             },
             slack_fields: {
                 type: Array,
@@ -168,6 +176,8 @@
             },
         },
         created() {
+            // The following only applies to global state, i.e. target_id = None, but happens also when target_id != None
+            // todo: solve better
             this.$store.dispatch('syncNotificationConnections')
 
             let self = this;
@@ -199,6 +209,12 @@
             emailConnections() {
                 return this.$store.state.emailConnections // todo: email not slack
             },
+            slackInverted(){
+                return !this.value.slack.force_disable
+            },
+            emailInverted(){
+                return !this.value.email.force_disable
+            }
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {
@@ -207,6 +223,12 @@
                 this.$nextTick(() => {
                     this.show = true;
                 })
+            },
+            toggleSlack(){
+                this.value.slack.force_disable = !this.value.slack.force_disable
+            },
+            toggleEmail(){
+                this.value.email.force_disable = !this.value.email.force_disable
             },
             addNewSlackConnection(evt) {
                 evt.preventDefault();

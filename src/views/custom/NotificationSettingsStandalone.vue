@@ -83,7 +83,7 @@
             onSubmit(evt) {
                 evt.preventDefault();
                 console.log(JSON.stringify(this.form))
-                callPostNotificationSettings(this.user_id, this.target_id, JSON.stringify(this.form))
+                callPostNotificationSettings(this.target_id, JSON.stringify(this.form))
                     .then(() => {
                     // todo: flash
                     })

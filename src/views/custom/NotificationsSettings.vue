@@ -38,6 +38,33 @@
                                 required
                                 placeholder="Email(s) to which notifications should be sent. Separate by semicolon."
                         />
+                        <CDataTable
+                                :items="emailConnections"
+                                :items-per-page=10
+                                :fields="email_fields"
+                                columnFilter
+                                sorter
+                                pagination
+                                hover
+                                striped
+                                border
+                                style="text-align: center"
+                                caption="Primary test table"
+                                :loading="notificationConnectionsLoading"
+                                :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
+                        >
+
+                            <template #actions="{item}">
+                                <td class="button_only_td">
+                                    <CButton
+                                            color="danger"
+                                            class="btn-mi"
+                                            v-on:click="deleteSlackConnection(item)"
+                                            v-c-tooltip="{content: 'Delete'}"
+                                    ><CIcon name="cil-ban"/></CButton>
+                                </td>
+                            </template>
+                        </CDataTable>
                     </CCard>
                 </CCollapse>
             </CCard>
@@ -82,7 +109,7 @@
                                 border
                                 style="text-align: center"
                                 caption="Primary test table"
-                                :loading="slackConnectionsLoading"
+                                :loading="notificationConnectionsLoading"
                                 :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                         >
 
@@ -133,13 +160,19 @@
                     return ['team_name', 'channel_name', 'team_id', 'channel_id', 'actions']
                 }
             },
+            email_fields: {
+                type: Array,
+                default () {
+                    return ['email', 'validated', 'enabled', 'active', 'actions']
+                }
+            },
         },
         created() {
-            this.$store.dispatch('syncSlackConnections')
+            this.$store.dispatch('syncNotificationConnections')
 
             let self = this;
             EventBus.$on('slack-connections-modified', () => {
-                self.$store.dispatch('syncSlackConnections')
+                self.$store.dispatch('syncNotificationConnections')
             });
 
         },
@@ -160,10 +193,12 @@
             slackConnections() {
                 return this.$store.state.slackConnections
             },
-            slackConnectionsLoading() {
-                return this.$store.state.slackConnectionsLoading
+            notificationConnectionsLoading() {
+                return this.$store.state.notificationConnectionsLoading
             },
-
+            emailConnections() {
+                return this.$store.state.emailConnections // todo: email not slack
+            },
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {

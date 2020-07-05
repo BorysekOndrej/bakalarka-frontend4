@@ -111,12 +111,12 @@ export function callGetResultForTarget(target_id){
     return getFromAPI('/api/v1/get_result_for_target/' + target_id);
 }
 
-export function callGetNotificationSettings(user_id, target_id){
-    return getFromAPI(`/api/v1/notification_settings/${user_id}/${target_id}`);
+export function callGetNotificationSettings(target_id){
+    return getFromAPI(`/api/v1/notification_settings/${target_id}`);
 }
 
-export function callPostNotificationSettings(user_id, target_id, data){
-    return postToAPI(`/api/v1/notification_settings/${user_id}/${target_id}`, data);
+export function callPostNotificationSettings(target_id, data){
+    return postToAPI(`/api/v1/notification_settings/${target_id}`, data);
 }
 
 export function callGetScanResultHistory(){
@@ -138,10 +138,6 @@ export function callGetLogout(){
 
 export function callGetSlackAddURL(){
     return getFromAPI(`/api/debug/slack/begin_auth`);
-}
-
-export function callGetSlackConnections(){
-    return getFromAPI(`/api/debug/slack_connections`);
 }
 
 export function callDeleteSlackConnection(team_id, channel_id){

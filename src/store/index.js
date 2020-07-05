@@ -9,7 +9,11 @@ import {
     callAddTarget,
     jwtRefreshAccessToken,
     callDeleteTarget,
-    callGetUserTargets, callGetScanResultHistory, callGetLogout, callGetSlackConnections, callDeleteSlackConnection
+    callGetUserTargets,
+    callGetScanResultHistory,
+    callGetLogout,
+    callDeleteSlackConnection,
+    callGetNotificationSettings
 } from '../api'
 import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
@@ -34,8 +38,9 @@ function initialState() {
         userTargetsHistory: [],
         userTargetsHistoryLoading: false,
         messageForMainBar: "",
+        emailConnections: [],
         slackConnections: [],
-        slackConnectionsLoading: false,
+        notificationConnectionsLoading: false,
     }
 }
 
@@ -208,19 +213,20 @@ const actions = {
                 context.commit('set', ["userTargetsHistoryLoading", false])
             })
     },
-    syncSlackConnections(context) {
-        context.commit('set', ["slackConnectionsLoading", true])
+    syncNotificationConnections(context, target_id = null) {
+        context.commit('set', ["notificationConnectionsLoading", true])
 
-        callGetSlackConnections()
+        callGetNotificationSettings(target_id)
             .then(function (response) {
-                context.commit('set', ["slackConnections", response.data])
+                context.commit('set', ["slackConnections", response.data.slack])
+                context.commit('set', ["emailConnections", response.data.email])
             })
             .catch(function (error) {
-                Vue.$log.warn('syncSlackConnections error', error)
+                Vue.$log.warn('syncNotificationConnections error', error)
                 return Promise.reject(error);
             })
             .finally(function () {
-                context.commit('set', ["slackConnectionsLoading", false])
+                context.commit('set', ["notificationConnectionsLoading", false])
             })
     },
 

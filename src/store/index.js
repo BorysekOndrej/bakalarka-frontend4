@@ -213,7 +213,7 @@ const actions = {
                 context.commit('set', ["userTargetsHistoryLoading", false])
             })
     },
-    syncNotificationConnections(context, target_id = null) {
+    syncNotificationConnections(context, target_id) {
         context.commit('set', ["notificationConnectionsLoading", true])
 
         callGetNotificationSettings(target_id)

@@ -161,16 +161,20 @@
                     if (single_target === undefined || single_target.result_simplified === undefined) {
                         continue
                     }
-                    for (const verified_cert_chain of single_target.result_simplified.verified_certificate_chains_list) {
-                        let currentDepth = 1 // this can't be zero, because elsewere I'm using `currentDepth || Number.MAX_VALUE`
-                        for (const verified_cert of verified_cert_chain.certificate_chain) {
-                            let modified_cert = Object.assign(verified_cert, {"minDepthInCertChain": currentDepth})
-                            current_res.push(modified_cert)
-                            currentDepth += 1
+                    if (single_target.result_simplified.verified_certificate_chains_list) {
+                        for (const verified_cert_chain of single_target.result_simplified.verified_certificate_chains_list) {
+                            let currentDepth = 1 // this can't be zero, because elsewere I'm using `currentDepth || Number.MAX_VALUE`
+                            for (const verified_cert of verified_cert_chain.certificate_chain) {
+                                let modified_cert = Object.assign(verified_cert, {"minDepthInCertChain": currentDepth})
+                                current_res.push(modified_cert)
+                                currentDepth += 1
+                            }
                         }
                     }
-                    for (const received_cert of single_target.result_simplified.received_certificate_chain_list.certificate_chain) {
-                        current_res.push(received_cert)
+                    if (single_target.result_simplified.received_certificate_chain_list) {
+                        for (const received_cert of single_target.result_simplified.received_certificate_chain_list.certificate_chain) {
+                            current_res.push(received_cert)
+                        }
                     }
                     let current_res_deduplicated = deduplicateArrayOfCerts(current_res)
                     res_per_target[target_id] = current_res_deduplicated

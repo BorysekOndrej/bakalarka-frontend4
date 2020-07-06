@@ -16,7 +16,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 # Using `sed` to replace {{ API_URL }} with the actual API URL,
 # which is given to the container at RUN TIME !
-CMD sed -i -e "s/{{ API_URL }}/$API_URL/g" /app/app.*.js && \
+CMD sed -i -e "s@{{ API_URL }}@$API_URL@g" /app/js/app.*.js && \
     nginx -g "daemon off;"
 
 # to add API_URL: docker run -e API_URL=https://api.example.com ui

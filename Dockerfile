@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY ./ .
-ENV VUE_APP_API_URL http://example.com
+# ENV VUE_APP_API_URL http://example.com
 RUN npm run build
 
 FROM nginx as production-stage

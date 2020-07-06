@@ -118,6 +118,13 @@ export function callGetNotificationSettings(target_id){
     return getFromAPI(`/api/v1/notification_settings/${target_id}`);
 }
 
+export function callGetNotificationSettingsRaw(target_id){
+    if (target_id === undefined){ // this slightly beautifies developer tools network tab in browser
+        return getFromAPI(`/api/v1/notification_settings_raw`);
+    }
+    return getFromAPI(`/api/v1/notification_settings_raw/${target_id}`);
+}
+
 export function callPostNotificationSettings(target_id, data){
     return postToAPI(`/api/v1/notification_settings/${target_id}`, data);
 }

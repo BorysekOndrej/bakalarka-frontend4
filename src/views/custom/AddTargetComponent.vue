@@ -127,6 +127,7 @@ www.example.org
                                     v-model="form.notifications"
                                     ref="notificationsComponent"
                                     :slack_fields="['team_name', 'channel_name']"
+                                    :effective_notifications_options="effective_notifications_options"
                             ></NotificationsSettings>
                         </CCollapse>
 
@@ -161,9 +162,13 @@ www.example.org
 </template>
 
 <script>
-    import {callGetTargetInfoForEditDialog} from "../../api";
+    import {
+        callGetNotificationSettings,
+        callGetNotificationSettingsRaw,
+        callGetTargetInfoForEditDialog
+    } from "../../api";
     import NotificationsSettings from "./NotificationsSettings";
-    import {defaultTargetDefinition} from "../../utils";
+    import {default_notifications_settings, defaultTargetDefinition} from "../../utils";
 
     export default {
         name: "addTargetComponent",
@@ -197,10 +202,9 @@ www.example.org
             },
             notifications: {
                 type: Object,
-                default: () => ({
-                    emails_active: true,
-                    emails_list: ""
-                })
+                default () {
+                    return default_notifications_settings()
+                }
             },
         },
         data() {
@@ -215,7 +219,12 @@ www.example.org
                 show: true,
                 visible_target_advanced_options: false,
                 visible_scan_order_options: false,
-                visible_notification_options: false
+                visible_notification_options: false,
+                current_preferences_raw: null,
+                effective_notifications_options: {
+                    slack: null,
+                    email: null
+                },
             }
         },
         created() {
@@ -233,6 +242,18 @@ www.example.org
             }
         },
         methods: {
+            load_values_from_server(){
+                if (!this.target.id){
+                    return;
+                }
+                let self = this
+                callGetNotificationSettings(this.target.id).then(function (response) {
+                    self.effective_notifications_options = response.data
+                })
+                callGetNotificationSettingsRaw(this.target.id).then(function (response) {
+                    self.form.notifications = response.data
+                })
+            },
             prefillFormToDefaultOrPassedValues(beforeMounted=false) {
                 this.form.target = {...this.target};
                 this.form.scanOrder = {...this.scanOrder};

@@ -25,7 +25,7 @@
                                         color="success"
                                         shape="pill"
                                         horizontal
-                                        :checked.sync="emailInverted"
+                                        :checked="emailInverted"
                                         @update:checked="toggleEmail"
 
                                 />
@@ -34,14 +34,14 @@
 
                         <CInput
                                 label="Add new emails:"
-                                :value.sync="value.add_new_emails"
+                                :value.sync="value.email.add_new_emails"
                                 type="text"
                                 horizontal
                                 required
                                 placeholder="Email(s) to which notifications should be sent. Separate by semicolon."
                         />
                         <CDataTable
-                                :items="value.email"
+                                :items="emailConnections"
                                 :items-per-page=10
                                 :fields="email_fields"
                                 columnFilter
@@ -95,13 +95,13 @@
                                         color="success"
                                         shape="pill"
                                         horizontal
-                                        :checked.sync="slackInverted"
+                                        :checked="slackInverted"
                                         @update:checked="toggleSlack"
                                 />
                             </div>
                         </div>
                         <CDataTable
-                                :items="value.slack"
+                                :items="slackConnections"
                                 :items-per-page=10
                                 :fields="slack_fields"
                                 columnFilter
@@ -149,11 +149,11 @@
         name: "NotificationsSettings",
         props: {
             msg: String,
-            current_preferences: {
+            effective_notifications_options: {
                 type: Object,
                 default: () => ({
-                    email: [],
-                    slack: [],
+                    email: null,
+                    slack: null,
                 })
             },
             value: {
@@ -201,13 +201,19 @@
                 return brandSet
             },
             slackConnections() {
+                if (this.effective_notifications_options.slack){
+                    return this.effective_notifications_options.slack
+                }
                 return this.$store.state.slackConnections
             },
             notificationConnectionsLoading() {
                 return this.$store.state.notificationConnectionsLoading
             },
             emailConnections() {
-                return this.$store.state.emailConnections // todo: email not slack
+                if (this.effective_notifications_options.email){
+                    return this.effective_notifications_options.email
+                }
+                return this.$store.state.emailConnections
             },
             slackInverted(){
                 return !this.value.slack.force_disable

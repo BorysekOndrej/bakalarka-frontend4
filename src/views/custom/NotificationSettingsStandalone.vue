@@ -6,6 +6,7 @@
                 <NotificationsSettings
                         v-model="form"
                         ref="notificationsComponent"
+                        :effective_notifications_options="effective_notifications_options"
                 ></NotificationsSettings>
             </CCardBody>
             <CCardFooter>
@@ -22,6 +23,7 @@
 <script>
     import {callGetNotificationSettings, callPostNotificationSettings} from "../../api";
     import NotificationsSettings from "./NotificationsSettings";
+    import {default_notifications_settings} from "../../utils";
 
     export default {
         name: "NotificationSettingsStandalone",
@@ -31,13 +33,6 @@
             prefill: {
                 type: Boolean,
                 default: false
-            },
-            form_default: {
-                type: Object,
-                default: () => ({
-                    emails_active: true,
-                    emails_list: ""
-                })
             },
             user_id_prop: {
                 type: Number,
@@ -51,7 +46,11 @@
             return {
                 form: null,
                 show: true,
-                visible_notification_options: false
+                visible_notification_options: false,
+                effective_notifications_options: {
+                    slack: null,
+                    email: null
+                },
             }
         },
         computed: {
@@ -69,11 +68,11 @@
                 // todo: call on local change
                 let self = this
                 callGetNotificationSettings(this.target_id).then(function (response) {
-                    self.form = response.data
+                    self.effective_notifications_options = response.data
                 })
             },
             prefillFormToDefaultOrPassedValues() {
-                this.form = {...this.form_default};
+                this.form = default_notifications_settings()
 
                 // Trick to reset/clear native browser form validation state
                 this.show = false;

@@ -124,3 +124,19 @@ export function generalLevelColors(){
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export function default_notifications_settings(){
+    return {
+        email: {
+            add_new_emails: "",
+                force_disable: false,
+                force_enabled_ids: [],
+                force_disabled_ids: []
+        },
+        slack: {
+            force_disable: false,
+                force_enabled_ids: [],
+                force_disabled_ids: []
+        }
+    }
+}

@@ -125,9 +125,9 @@ www.example.org
                         <CCollapse :show="visible_notification_options">
                             <NotificationsSettings
                                     v-model="form.notifications"
-                                    ref="notificationsComponent"
                                     :slack_fields="['team_name', 'channel_name']"
                                     :effective_notifications_options="effective_notifications_options"
+                                    ref="notificationsComponent"
                             ></NotificationsSettings>
                         </CCollapse>
 
@@ -243,9 +243,11 @@ www.example.org
         },
         methods: {
             load_values_from_server(){
+                // console.warn("----------------- A")
                 if (!this.target.id){
                     return;
                 }
+                // console.warn("----------------- B")
                 let self = this
                 callGetNotificationSettings(this.target.id).then(function (response) {
                     self.effective_notifications_options = response.data
@@ -276,8 +278,11 @@ www.example.org
                     callGetTargetInfoForEditDialog(this.form.target.id)
                         .then(function (response) {
                             self.form.scanOrder = response.data.scanOrder
-                            self.form.notifications = response.data.notifications
+                            self.effective_notifications_options = response.data.notifications
                         })
+                    callGetNotificationSettingsRaw(this.target.id).then(function (response) {
+                        self.form.notifications = response.data
+                    })
                 }
                 // Trick to reset/clear native browser form validation state
                 this.show = false;

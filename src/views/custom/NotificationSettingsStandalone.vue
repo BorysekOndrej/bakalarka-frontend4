@@ -7,6 +7,8 @@
                         v-model="form"
                         ref="notificationsComponent"
                         :effective_notifications_options="effective_notifications_options"
+                        slack_fields="['team_name', 'channel_name', 'team_id', 'channel_id', {key: 'single_order', label: 'Local preference'}, 'actions']"
+                        email_fields="['email', 'validated', 'enabled', {key: 'single_order', label: 'Local preference'}, 'active', 'actions']"
                 ></NotificationsSettings>
             </CCardBody>
             <CCardFooter>

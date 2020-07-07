@@ -50,13 +50,13 @@
             slack_fields: {
                 type: Array,
                 default () {
-                    return ['team_name', 'channel_name', 'team_id', 'channel_id', {key: 'single_order', label: 'Local preference'}, 'actions']
+                    return ['team_name', 'channel_name', 'team_id', 'channel_id', {key: 'single_order', label: 'Local preference'}, 'active']
                 }
             },
             email_fields: {
                 type: Array,
                 default () {
-                    return ['email', 'validated', 'enabled', {key: 'single_order', label: 'Local preference'}, 'active', 'actions']
+                    return ['email', 'validated', 'enabled', {key: 'single_order', label: 'Local preference'}, 'active']
                 }
             },
         },

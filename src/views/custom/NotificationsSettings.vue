@@ -4,7 +4,7 @@
         <NotificationsSettingsSingleChannel
                 channel_name="email"
                 :channel_icon="$options.freeSet.cilEnvelopeOpen"
-                v-model="value.slack"
+                v-model="value.email"
                 :effective_notifications_options_channel="effective_notifications_options.email"
                 :tableFields="email_fields"
         ></NotificationsSettingsSingleChannel>

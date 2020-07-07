@@ -136,7 +136,7 @@
                 })
             },
             toggleChannel(){
-                this.force_disable = !this.force_disable
+                this.value.force_disable = !this.value.force_disable
             },
             toggleChannelAllowedNeutralDisabled(id){
                 let channelPref = this.value

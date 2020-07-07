@@ -125,7 +125,7 @@ www.example.org
                         <CCollapse :show="visible_notification_options">
                             <NotificationsSettings
                                     v-model="form.notifications"
-                                    :slack_fields="['team_name', 'channel_name']"
+                                    :slack_fields="['team_name', 'channel_name', {key: 'single_order', label: 'Local preference'}]"
                                     :effective_notifications_options="effective_notifications_options"
                                     ref="notificationsComponent"
                             ></NotificationsSettings>

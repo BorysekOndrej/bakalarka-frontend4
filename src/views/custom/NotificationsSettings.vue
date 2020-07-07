@@ -55,7 +55,19 @@
                                 :loading="notificationConnectionsLoading"
                                 :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
                         >
-
+                            <template #single_order="{item}">
+                                <td class="button_only_td">
+                                    <CButton
+                                            color="dark"
+                                            variant="outline"
+                                            v-on:click="toggleChannelAllowedNeutralDisabled(value.email, item.id)"
+                                    >
+                                        <CIcon
+                                               :content="channelAllowedNeutralDisabledIcon(value.email, item.id)"
+                                        />
+                                    </CButton>
+                                </td>
+                            </template>
                             <template #actions="{item}">
                                 <td class="button_only_td">
                                     <CButton
@@ -147,6 +159,7 @@
 
     export default {
         name: "NotificationsSettings",
+        freeSet,
         props: {
             msg: String,
             effective_notifications_options: {
@@ -171,7 +184,7 @@
             email_fields: {
                 type: Array,
                 default () {
-                    return ['email', 'validated', 'enabled', 'active', 'actions']
+                    return ['email', 'validated', 'enabled', 'single_order', 'active', 'actions']
                 }
             },
         },
@@ -194,9 +207,6 @@
             }
         },
         computed: {
-            freeSetVar(){
-                return freeSet
-            },
             brands(){
                 return brandSet
             },
@@ -235,6 +245,33 @@
             },
             toggleEmail(){
                 this.value.email.force_disable = !this.value.email.force_disable
+            },
+            toggleChannelAllowedNeutralDisabled(channelPref, id){
+                if (this.isChannelForceAllowed(channelPref, id) === this.isChannelForceDisabled(channelPref, id)){
+                    channelPref.force_enabled_ids.push(id)
+                    return
+                }
+                if (this.isChannelForceDisabled(channelPref, id)){
+                    channelPref.force_disabled_ids = channelPref.force_disabled_ids.filter(e => e !== id)
+                    return
+                }
+                channelPref.force_enabled_ids = channelPref.force_enabled_ids.filter(e => e !== id)
+                channelPref.force_disabled_ids.push(id)
+            },
+            channelAllowedNeutralDisabledIcon(channelPref, id){
+                if (this.isChannelForceAllowed(channelPref, id)){
+                    return this.$options.freeSet.cilCheckCircle
+                }
+                if (this.isChannelForceDisabled(channelPref, id)){
+                    return this.$options.freeSet.cilXCircle
+                }
+                return this.$options.freeSet.cilCircle
+            },
+            isChannelForceAllowed(channelPref, id){
+                return channelPref.force_enabled_ids.includes(id)
+            },
+            isChannelForceDisabled(channelPref, id){
+                return channelPref.force_disabled_ids.includes(id)
             },
             addNewSlackConnection(evt) {
                 evt.preventDefault();

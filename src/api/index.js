@@ -154,3 +154,10 @@ export function callDeleteSlackConnection(team_id, channel_id){
     return deleteToAPI(`/api/debug/slack_connections/${team_id}/${channel_id}`);
 }
 
+export function callDeleteChannelConnection(channel_name, channel_id){
+    return deleteToAPI(`/api/v1/channel_connection/${channel_name}/${channel_id}`);
+}
+
+export function callPostRequestEmailValidation(email){
+    return postToAPI(`/api/v1/send_validation_email`, {"email": email});
+}

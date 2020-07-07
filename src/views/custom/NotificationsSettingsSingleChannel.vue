@@ -1,5 +1,5 @@
 <template>
-    <div style="max-width: 800px; margin: auto;">
+    <div>
         <h1>{{ msg }}</h1>
         <transition name="fade">
             <CCard v-if="show">
@@ -73,9 +73,16 @@
                             <template #actions="{item}">
                                 <td class="button_only_td">
                                     <CButton
+                                            v-if="channel_name == 'email' && item.validated == false"
+                                            color="primary"
+                                            class="btn-mi"
+                                            v-on:click="callPostRequestEmailValidation(item.email)"
+                                            v-c-tooltip="{content: 'Resend validation email'}"
+                                    ><CIcon :content="$options.freeSet.cilEnvelopeLetter"/></CButton>
+                                    <CButton
                                             color="danger"
                                             class="btn-mi"
-                                            v-on:click="deleteChannelConnection(item.id)"
+                                            v-on:click="deleteChannelConnection(item)"
                                             v-c-tooltip="{content: 'Delete'}"
                                     ><CIcon name="cil-ban"/></CButton>
                                 </td>
@@ -181,13 +188,13 @@
                 let popupTick = setInterval(function() {
                     if (slackAuthWindow.closed) {
                         clearInterval(popupTick);
-                        EventBus.$emit('slack-connections-modified')
+                        EventBus.$emit('connections-modified')
                     }
                 }, 500);
 
             },
             deleteChannelConnection(row){
-                this.$store.dispatch('removeChannelConnection', {'channel_name': this.channel_name, 'id': row.channel_id})
+                this.$store.dispatch('removeChannelConnection', {'channel_name': this.channel_name, 'channel_id': row.id})
             },
         },
     }

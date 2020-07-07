@@ -66,7 +66,7 @@
             this.$store.dispatch('syncNotificationConnections')
 
             let self = this;
-            EventBus.$on('slack-connections-modified', () => {
+            EventBus.$on('connections-modified', () => {
                 self.$store.dispatch('syncNotificationConnections')
             });
 
@@ -160,7 +160,7 @@
                 let popupTick = setInterval(function() {
                     if (slackAuthWindow.closed) {
                         clearInterval(popupTick);
-                        EventBus.$emit('slack-connections-modified')
+                        EventBus.$emit('connections-modified')
                     }
                 }, 500);
 

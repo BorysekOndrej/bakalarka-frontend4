@@ -12,8 +12,8 @@ import {
     callGetUserTargets,
     callGetScanResultHistory,
     callGetLogout,
-    callDeleteSlackConnection,
-    callGetNotificationSettings
+    callGetNotificationSettings,
+    callDeleteChannelConnection,
 } from '../api'
 import {isValidJwt, EventBus, sleep} from '../utils'
 import moment from "moment";
@@ -99,12 +99,12 @@ const actions = {
                 return Promise.reject(error);
             })
     },
-    removeSlackConnection(context, payload) {
-        Vue.$log.debug("Remove slack connection triggered")
-        return callDeleteSlackConnection(payload["team_id"], payload["channel_id"])
-            .then(() => EventBus.$emit('slack-connections-modified'))
+    removeChannelConnection(context, payload) {
+        Vue.$log.debug("Remove channel connection triggered")
+        return callDeleteChannelConnection(payload["channel_name"], payload["channel_id"])
+            .then(() => EventBus.$emit('connections-modified'))
             .catch(error => {
-                Vue.$log.warn('Error removing slack connection: ', error)
+                Vue.$log.warn('Error removing channel connection: ', error)
                 return Promise.reject(error);
             })
     },

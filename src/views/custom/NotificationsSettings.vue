@@ -1,151 +1,21 @@
 <template>
     <div style="max-width: 800px; margin: auto;">
         <h1>{{ msg }}</h1>
-        <transition name="fade">
-            <CCard v-if="show">
-                <CCardHeader>
-                    <CIcon name="cil-envelope-open"/> Email
-                    <div class="card-header-actions">
-                        <CLink
-                                class="card-header-action btn-minimize"
-                                @click="visible_mail_options=!visible_mail_options"
-                        >
-                            <CIcon :name="`cil-chevron-${visible_mail_options ? 'bottom' : 'top'}`"/>
-                        </CLink>
-                    </div>
-                </CCardHeader>
-                <CCollapse :show="visible_mail_options">
-                    <CCard>
-                        <div class="form-group row">
-                            <label for="scanMailNotificationsActive" class="col-sm-8 col-form-label">Send notifications via email</label>
-                            <div class="col-sm-2">
-                                <CSwitch
-                                        id="scanMailNotificationsActive"
-                                        class="mx-1"
-                                        color="success"
-                                        shape="pill"
-                                        horizontal
-                                        :checked="emailInverted"
-                                        @update:checked="toggleEmail"
+        <NotificationsSettingsSingleChannel
+                channel_name="email"
+                :channel_icon="$options.freeSet.cilEnvelopeOpen"
+                v-model="value.slack"
+                :effective_notifications_options_channel="effective_notifications_options.email"
+                :tableFields="email_fields"
+        ></NotificationsSettingsSingleChannel>
+        <NotificationsSettingsSingleChannel
+                channel_name="slack"
+                :channel_icon="brands.cibSlack"
+                v-model="value.slack"
+                :effective_notifications_options_channel="effective_notifications_options.slack"
+                :tableFields="slack_fields"
+        ></NotificationsSettingsSingleChannel>
 
-                                />
-                            </div>
-                        </div>
-
-                        <CInput
-                                label="Add new emails:"
-                                :value.sync="value.email.add_new_emails"
-                                type="text"
-                                horizontal
-                                required
-                                placeholder="Email(s) to which notifications should be sent. Separate by semicolon."
-                        />
-                        <CDataTable
-                                :items="emailConnections"
-                                :items-per-page=10
-                                :fields="email_fields"
-                                columnFilter
-                                sorter
-                                pagination
-                                hover
-                                striped
-                                border
-                                style="text-align: center"
-                                caption="Primary test table"
-                                :loading="notificationConnectionsLoading"
-                                :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
-                        >
-                            <template #single_order="{item}">
-                                <td class="button_only_td">
-                                    <CButton
-                                            color="dark"
-                                            variant="outline"
-                                            v-on:click="toggleChannelAllowedNeutralDisabled(value.email, item.id)"
-                                    >
-                                        <CIcon
-                                               :content="channelAllowedNeutralDisabledIcon(value.email, item.id)"
-                                        />
-                                    </CButton>
-                                </td>
-                            </template>
-                            <template #actions="{item}">
-                                <td class="button_only_td">
-                                    <CButton
-                                            color="danger"
-                                            class="btn-mi"
-                                            v-on:click="deleteSlackConnection(item)"
-                                            v-c-tooltip="{content: 'Delete'}"
-                                    ><CIcon name="cil-ban"/></CButton>
-                                </td>
-                            </template>
-                        </CDataTable>
-                    </CCard>
-                </CCollapse>
-            </CCard>
-        </transition>
-        <transition name="fade">
-            <CCard v-if="show">
-                <CCardHeader>
-                    <CIcon :content="brands.cibSlack"/> Slack
-                    <div class="card-header-actions">
-                        <CLink
-                                class="card-header-action btn-minimize"
-                                @click="visible_slack_options=!visible_slack_options"
-                        >
-                            <CIcon :name="`cil-chevron-${visible_slack_options ? 'bottom' : 'top'}`"/>
-                        </CLink>
-                    </div>
-                </CCardHeader>
-                <CCollapse :show="visible_slack_options">
-                    <CCard>
-                        <div class="form-group row">
-                            <label for="scanSlackNotificationsActive" class="col-sm-8 col-form-label">Send notifications via slack</label>
-                            <div class="col-sm-2">
-                                <CSwitch
-                                        id="scanSlackNotificationsActive"
-                                        class="mx-1"
-                                        color="success"
-                                        shape="pill"
-                                        horizontal
-                                        :checked="slackInverted"
-                                        @update:checked="toggleSlack"
-                                />
-                            </div>
-                        </div>
-                        <CDataTable
-                                :items="slackConnections"
-                                :items-per-page=10
-                                :fields="slack_fields"
-                                columnFilter
-                                sorter
-                                pagination
-                                hover
-                                striped
-                                border
-                                style="text-align: center"
-                                caption="Primary test table"
-                                :loading="notificationConnectionsLoading"
-                                :noItemsView="{ noResults: 'No results matching filter.', noItems: 'No targets' }"
-                        >
-
-                            <template #actions="{item}">
-                                <td class="button_only_td">
-                                    <CButton
-                                            color="danger"
-                                            class="btn-mi"
-                                            v-on:click="deleteSlackConnection(item)"
-                                            v-c-tooltip="{content: 'Delete'}"
-                                    ><CIcon name="cil-ban"/></CButton>
-                                </td>
-                            </template>
-                        </CDataTable>
-
-                        <CButton type="submit" size="sm" color="primary" v-on:click="addNewSlackConnection">
-                            <CIcon :content="brands.cibSlack" style="margin-right: 0.5em;"/>  Add new Slack connection</CButton>
-                    </CCard>
-                </CCollapse>
-            </CCard>
-        </transition>
         <CCard v-if="displayDebugInUI">
             <pre class="m-0" style="text-align: left;">{{ value }}</pre>
         </CCard>
@@ -156,9 +26,11 @@
     import {callGetSlackAddURL} from "../../api";
     import {freeSet, brandSet} from "@coreui/icons";
     import {default_notifications_settings, EventBus} from "../../utils";
+    import NotificationsSettingsSingleChannel from "./NotificationsSettingsSingleChannel";
 
     export default {
         name: "NotificationsSettings",
+        components: {NotificationsSettingsSingleChannel},
         freeSet,
         props: {
             msg: String,
@@ -178,7 +50,7 @@
             slack_fields: {
                 type: Array,
                 default () {
-                    return ['team_name', 'channel_name', 'team_id', 'channel_id', 'actions']
+                    return ['team_name', 'channel_name', 'team_id', 'channel_id', {key: 'single_order', label: 'Local preference'}, 'actions']
                 }
             },
             email_fields: {

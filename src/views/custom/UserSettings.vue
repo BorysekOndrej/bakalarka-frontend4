@@ -1,5 +1,5 @@
 <template>
-    <div style="max-width: 800px; margin: auto;">
+    <div style="max-width: 85%; margin: auto;">
         <h1>{{ msg }}</h1>
         <CCard>
             <CCardBody>

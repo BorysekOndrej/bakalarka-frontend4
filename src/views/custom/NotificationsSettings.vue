@@ -1,5 +1,5 @@
 <template>
-    <div style="max-width: 800px; margin: auto;">
+    <div>
         <h1>{{ msg }}</h1>
         <NotificationsSettingsSingleChannel
                 channel_name="email"

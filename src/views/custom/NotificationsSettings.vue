@@ -184,7 +184,7 @@
             email_fields: {
                 type: Array,
                 default () {
-                    return ['email', 'validated', 'enabled', 'single_order', 'active', 'actions']
+                    return ['email', 'validated', 'enabled', {key: 'single_order', label: 'Local preference'}, 'active', 'actions']
                 }
             },
         },

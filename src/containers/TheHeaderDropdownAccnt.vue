@@ -27,10 +27,6 @@
       <strong>Account</strong>
     </CDropdownHeader>
     <CDropdownItem>
-      <CIcon name="cil-bell"/> Updates
-      <CBadge color="info" class="ml-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownItem>
       <router-link class="routerLink" :to="{ name: 'Profile' }"> <CIcon name="cil-user" />Profile & Settings</router-link>
     </CDropdownItem>
     <CDropdownItem>

@@ -36,9 +36,6 @@
                 type: Boolean,
                 default: false
             },
-            user_id_prop: {
-                type: Number,
-            },
             target_id: {
                 type: Number,
                 default: null
@@ -56,9 +53,6 @@
             }
         },
         computed: {
-            user_id: function(){
-                return this.user_id_prop ? this.user_id_prop : this.$store.getters.getUserID
-            }
         },
 
         created() {

@@ -11,10 +11,10 @@
         size="custom-size" 
         :height="35" 
       />
-      <h3
+      <h2
               v-if="!minimize"
               style="white-space: nowrap; overflow: hidden;"
-      >TLS Inventory</h3>
+      >TLS Inventory</h2>
     </CSidebarBrand>
 
     <CRenderFunction flat :content-to-render="$options.nav"/>

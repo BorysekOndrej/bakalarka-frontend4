@@ -4,8 +4,6 @@
         <CCard>
             <CCardBody>
                 <CForm>
-                    <h1>Login</h1>
-                    <p class="text-muted">Change password</p>
                     <CInput
                             placeholder="Your current password"
                             type="password"

@@ -8,10 +8,18 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
+          <CIcon
+              :content="freeIcons.cilUser"
+              class="c-avatar-img "
+          />
+          <!--
+
           <img
             src="img/avatars/6.jpg"
             class="c-avatar-img "
-          />
+          >
+                    -->
+
         </div>
       </CHeaderNavLink>
     </template>
@@ -34,9 +42,11 @@
 </template>
 
 <script>
+import {freeSet} from "@coreui/icons";
 
 export default {
   name: 'TheHeaderDropdownAccnt',
+  freeSet,
   data () {
     return { 
       itemsCount: 42
@@ -47,6 +57,11 @@ export default {
       console.debug("logout")
       this.$store.dispatch("logout");
       this.$router.push({ name: 'Login'})
+    }
+  },
+  computed: {
+    freeIcons(){
+      return freeSet
     }
   }
 }

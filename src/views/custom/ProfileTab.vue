@@ -23,7 +23,7 @@
                             horizontal
                             readonly
                             type="text"
-                            v-model="form.apiKey"
+                            v-model="form.main_api_key"
                     ></CInput>
                 </CForm>
 
@@ -58,7 +58,7 @@
                     return {
                         username: "",
                         email: "",
-                        apiKey: "",
+                        main_api_key: "",
                     }
                 }
             },

@@ -42,12 +42,7 @@
 </template>
 
 <script>
-    /*
-    import {
-        callPostChangePassword,
-    } from "../../api";
-    */
-    import {callGetNotificationSettings, callGetNotificationSettingsRaw, callGetUserProfile} from "../../api";
+    import {callGetUserProfile} from "../../api";
 
     export default {
         name: "ProfileTab",

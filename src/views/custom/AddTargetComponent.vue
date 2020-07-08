@@ -243,16 +243,15 @@ www.example.org
         },
         methods: {
             load_values_from_server(){
-                // console.warn("----------------- A")
-                if (!this.target.id){
-                    return;
-                }
-                // console.warn("----------------- B")
                 let self = this
-                callGetNotificationSettings(this.target.id).then(function (response) {
+                let target_id = null
+                if (this.target){
+                    target_id = this.target.id
+                }
+                callGetNotificationSettings(target_id).then(function (response) {
                     self.effective_notifications_options = response.data
                 })
-                callGetNotificationSettingsRaw(this.target.id).then(function (response) {
+                callGetNotificationSettingsRaw(target_id).then(function (response) {
                     self.form.notifications = response.data
                 })
             },
@@ -260,6 +259,7 @@ www.example.org
                 this.form.target = {...this.target};
                 this.form.scanOrder = {...this.scanOrder};
                 this.form.notifications = {...this.notifications};
+                this.load_values_from_server()
 
                 if (!beforeMounted){
                     this.$refs.notificationsComponent.prefillFormToDefaultOrPassedValues()

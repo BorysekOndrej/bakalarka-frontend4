@@ -161,3 +161,7 @@ export function callDeleteChannelConnection(channel_name, channel_id){
 export function callPostRequestEmailValidation(email){
     return postToAPI(`/api/v1/send_validation_email`, {"email": email});
 }
+
+export function callPostChangePassword(payload){
+    return postToAPI(`/api/v1/user/change_password`, payload);
+}

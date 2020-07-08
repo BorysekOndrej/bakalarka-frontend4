@@ -8,7 +8,7 @@
                         Here will be form with main user email and other properties.
                     </CTab>
                     <CTab title="Change password" active>
-                        Here will be form for changing password.
+                        <ChangePassword></ChangePassword>
                     </CTab>
                     <CTab title="Notification settings" active>
                         <NotificationSettingsStandalone
@@ -22,10 +22,11 @@
 
 <script>
     import NotificationSettingsStandalone from "./NotificationSettingsStandalone";
+    import ChangePassword from "./ChangePassword";
 
     export default {
         name: "UserSettings",
-        components: {NotificationSettingsStandalone},
+        components: {NotificationSettingsStandalone, ChangePassword},
         props: {
             msg: String,
         },

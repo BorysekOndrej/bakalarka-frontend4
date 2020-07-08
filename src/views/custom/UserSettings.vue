@@ -5,7 +5,7 @@
             <CCardBody>
                 <CTabs>
                     <CTab title="Profile" active>
-                        Here will be form with main user email and other properties.
+                        <ProfileTab></ProfileTab>
                     </CTab>
                     <CTab title="Change password" active>
                         <ChangePassword></ChangePassword>
@@ -23,10 +23,11 @@
 <script>
     import NotificationSettingsStandalone from "./NotificationSettingsStandalone";
     import ChangePassword from "./ChangePassword";
+    import ProfileTab from "./ProfileTab";
 
     export default {
         name: "UserSettings",
-        components: {NotificationSettingsStandalone, ChangePassword},
+        components: {NotificationSettingsStandalone, ChangePassword, ProfileTab},
         props: {
             msg: String,
         },

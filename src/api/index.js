@@ -165,3 +165,7 @@ export function callPostRequestEmailValidation(email){
 export function callPostChangePassword(payload){
     return postToAPI(`/api/v1/user/change_password`, payload);
 }
+
+export function callGetUserProfile(user_id){
+    return getFromAPI(`/api/v1/user/${user_id}`);
+}

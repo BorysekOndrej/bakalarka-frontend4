@@ -76,7 +76,7 @@
                                             v-if="channel_name == 'email' && item.validated == false"
                                             color="primary"
                                             class="btn-mi"
-                                            v-on:click="callPostRequestEmailValidation(item.email)"
+                                            v-on:click="requestEmailValidation(item)"
                                             v-c-tooltip="{content: 'Resend validation email'}"
                                     ><CIcon :content="$options.freeSet.cilEnvelopeLetter"/></CButton>
                                     <CButton
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-    import {callGetSlackAddURL} from "../../api";
+    import {callGetSlackAddURL, callPostRequestEmailValidation} from "../../api";
     import {freeSet} from "@coreui/icons";
     import {EventBus} from "../../utils";
 
@@ -196,6 +196,9 @@
             deleteChannelConnection(row){
                 this.$store.dispatch('removeChannelConnection', {'channel_name': this.channel_name, 'channel_id': row.id})
             },
+            requestEmailValidation(row){
+                callPostRequestEmailValidation(row.email)
+            }
         },
     }
 </script>

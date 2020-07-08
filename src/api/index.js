@@ -125,8 +125,8 @@ export function callGetNotificationSettingsRaw(target_id){
     return getFromAPI(`/api/v1/notification_settings_raw/${target_id}`);
 }
 
-export function callPostNotificationSettings(target_id, data){
-    return postToAPI(`/api/v1/notification_settings/${target_id}`, data);
+export function callPostNotificationSettingsRaw(target_id, data){
+    return postToAPI(`/api/v1/notification_settings_raw/${target_id}`, data);
 }
 
 export function callGetScanResultHistory(){

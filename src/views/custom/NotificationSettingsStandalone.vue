@@ -23,7 +23,11 @@
 </template>
 
 <script>
-    import {callGetNotificationSettings, callPostNotificationSettings} from "../../api";
+    import {
+        callGetNotificationSettings,
+        callGetNotificationSettingsRaw,
+        callPostNotificationSettingsRaw
+    } from "../../api";
     import NotificationsSettings from "./NotificationsSettings";
     import {default_notifications_settings} from "../../utils";
 
@@ -63,12 +67,16 @@
             load_values_from_server(){
                 // todo: call on local change
                 let self = this
+                callGetNotificationSettingsRaw(this.target_id).then(function (response) {
+                    self.form = response.data
+                })
                 callGetNotificationSettings(this.target_id).then(function (response) {
                     self.effective_notifications_options = response.data
                 })
             },
             prefillFormToDefaultOrPassedValues() {
                 this.form = default_notifications_settings()
+                this.load_values_from_server()
 
                 // Trick to reset/clear native browser form validation state
                 this.show = false;
@@ -79,7 +87,7 @@
             onSubmit(evt) {
                 evt.preventDefault();
                 console.log(JSON.stringify(this.form))
-                callPostNotificationSettings(this.target_id, JSON.stringify(this.form))
+                callPostNotificationSettingsRaw(this.target_id, JSON.stringify(this.form))
                     .then(() => {
                     // todo: flash
                     })

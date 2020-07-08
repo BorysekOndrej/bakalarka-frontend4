@@ -59,8 +59,8 @@
 
 <script>
 import { EventBus } from '@/utils'
+import {password_validator_util} from "../../utils";
 // import {required, minLength, sameAs, email} from "vuelidate/lib/validators";
-const requiredPasswordLen = 6;
 
 export default {
   name: 'Register',
@@ -103,14 +103,12 @@ export default {
   },
   methods: {
     password_validator (){
-      // todo: make validators consistent (flash vs requirements to send)
-      return this.form.password ? this.form.password.length >= requiredPasswordLen : undefined;
+      return password_validator_util(this.form.password)
     },
     password_compare (){
       return this.form.password_again ?  this.form.password === this.form.password_again : undefined;
     },
     email_validator(){
-      // console.log(this.validEmail(this.form.email))
       return this.validEmail(this.form.email)
     },
     validEmail: function (email) { // taken from https://vuejs.org/v2/cookbook/form-validation.html

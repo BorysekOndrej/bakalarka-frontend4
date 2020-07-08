@@ -69,8 +69,7 @@
 </template>
 
 <script>
-import { EventBus } from '@/utils'
-const requiredPasswordLen = 6;
+import { EventBus, password_validator_util } from '@/utils'
 
 export default {
   name: 'Login',
@@ -92,8 +91,7 @@ export default {
   },
   methods: {
     password_validator (){
-      // todo: make validators consistent (flash vs requirements to send)
-      return this.password ? this.password.length >= requiredPasswordLen : undefined;
+      return password_validator_util(this.password)
     },
     authenticate () {
       if (this.disable_submit_button){

@@ -7,6 +7,8 @@ import _ from "lodash"
 
 export const EventBus = new Vue()
 const target_properties = ['id', 'hostname', 'port', 'ip_address', 'protocol']
+const requiredPasswordLen = 6;
+
 
 export function jwtValidUntil(jwt){
     if (!jwt || jwt.split('.').length < 3) {
@@ -139,4 +141,8 @@ export function default_notifications_settings(){
                 force_disabled_ids: []
         }
     }
+}
+
+export function password_validator_util(password){
+    return password ? password.length >= requiredPasswordLen : undefined;
 }

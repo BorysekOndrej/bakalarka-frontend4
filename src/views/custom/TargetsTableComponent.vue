@@ -100,7 +100,7 @@
         <CModal
                 title="Existing target"
                 :show.sync="editTargetModalVisible"
-                style="max-width: 900px;"
+                size="xl"
         >
             <AddTargetComponent
                     :modifying_existing="true"

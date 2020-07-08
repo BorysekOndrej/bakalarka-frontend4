@@ -97,12 +97,6 @@
                 }
                 return this.$store.state.emailConnections
             },
-            slackInverted(){
-                return !this.value.slack.force_disable
-            },
-            emailInverted(){
-                return !this.value.email.force_disable
-            }
         },
         methods: {
             prefillFormToDefaultOrPassedValues() {
@@ -111,12 +105,6 @@
                 this.$nextTick(() => {
                     this.show = true;
                 })
-            },
-            toggleSlack(){
-                this.value.slack.force_disable = !this.value.slack.force_disable
-            },
-            toggleEmail(){
-                this.value.email.force_disable = !this.value.email.force_disable
             },
             toggleChannelAllowedNeutralDisabled(channelPref, id){
                 if (this.isChannelForceAllowed(channelPref, id) === this.isChannelForceDisabled(channelPref, id)){
@@ -164,10 +152,6 @@
                     }
                 }, 500);
 
-            },
-            deleteSlackConnection(row){
-                console.warn(row)
-                this.$store.dispatch('removeSlackConnection', {'team_id': row.team_id, 'channel_id': row.channel_id})
             },
         },
     }

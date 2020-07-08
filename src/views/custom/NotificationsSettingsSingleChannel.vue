@@ -88,6 +88,15 @@
                                 </td>
                             </template>
                         </CDataTable>
+                        <CButton
+                                v-if="channel_name == 'slack'"
+                                type="submit"
+                                size="sm"
+                                color="primary"
+                                v-on:click="addNewSlackConnection"
+                        >
+                            <CIcon :content="brands.cibSlack" style="margin-right: 0.5em;"/>  Add new Slack connection
+                        </CButton>
                     </CCard>
                 </CCollapse>
             </CCard>
@@ -97,7 +106,7 @@
 
 <script>
     import {callGetSlackAddURL, callPostRequestEmailValidation} from "../../api";
-    import {freeSet} from "@coreui/icons";
+    import {freeSet, brandSet} from "@coreui/icons";
     import {EventBus} from "../../utils";
 
     export default {
@@ -132,6 +141,9 @@
             },
             channelInverted(){
                 return !this.value.force_disable
+            },
+            brands(){
+                return brandSet
             }
         },
         methods: {

@@ -133,26 +133,6 @@
             isChannelForceDisabled(channelPref, id){
                 return channelPref.force_disabled_ids.includes(id)
             },
-            addNewSlackConnection(evt) {
-                evt.preventDefault();
-
-                // The following trick let's me open an new window without popup blocker.
-                // todo: make the window contain information about loading
-                let slackAuthWindow = window.open("about:blank",'slackAuthWindow', 'height=750,width=550');
-                callGetSlackAddURL()
-                    .then(function (response) {
-                        slackAuthWindow.open(response.data,'slackAuthWindow');
-                    })
-
-                // https://stackoverflow.com/a/38165968
-                let popupTick = setInterval(function() {
-                    if (slackAuthWindow.closed) {
-                        clearInterval(popupTick);
-                        EventBus.$emit('connections-modified')
-                    }
-                }, 500);
-
-            },
         },
     }
 </script>

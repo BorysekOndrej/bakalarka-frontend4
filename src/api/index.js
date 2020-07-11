@@ -147,11 +147,7 @@ export function callGetLogout(){
 }
 
 export function callGetSlackAddURL(){
-    return getFromAPI(`/api/debug/slack/begin_auth`);
-}
-
-export function callDeleteSlackConnection(team_id, channel_id){
-    return deleteToAPI(`/api/debug/slack_connections/${team_id}/${channel_id}`);
+    return getFromAPI(`/api/v1/slack/begin_auth`);
 }
 
 export function callDeleteChannelConnection(channel_name, channel_id){

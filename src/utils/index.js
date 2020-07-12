@@ -86,6 +86,7 @@ export function expiresToGradeIndex(expires_string, expiration_levels) {
         if (day_diff > cur_level){
             return i
         }
+        i++;
     }
     return 5
 }

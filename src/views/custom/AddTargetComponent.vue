@@ -196,7 +196,7 @@ www.example.org
             scanOrder: {
                 type: Object,
                 default: () => ({
-                    periodicity: 5*60,
+                    periodicity: 12*60*60,
                     active: true
                 })
             },
@@ -215,7 +215,7 @@ www.example.org
                     notifications: null
                 },
                 ssl_protocols: ['HTTPS', 'SMTPS'],
-                periodicity_options: [{label: '5 minutes', value: 5*60}, {label: '12 hours', value: 12*60*60}],
+                periodicity_options: [{label: 'Twice per day', value: 12*60*60}, {label: 'Once a day', value: 24*60*60}, {label: 'Once per week', value: 7*24*60*60}],
                 show: true,
                 visible_target_advanced_options: false,
                 visible_scan_order_options: false,

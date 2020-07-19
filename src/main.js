@@ -14,10 +14,10 @@ Vue.use(Vuelidate)
 Vue.prototype.$log = console.log.bind(console)
 
 // logging
-const isProduction = false; // || process.env.NODE_ENV === 'production'; // todo: fix env
+const isProduction = process.env.NODE_ENV === 'production';
 const options = {
   isEnabled: true,
-  logLevel: isProduction ? 'error' : 'debug',
+  logLevel: 'debug', //isProduction ? 'error' : 'debug',
   stringifyArguments: false,
   showLogLevel: true,
   showMethodName: true,
@@ -38,8 +38,6 @@ Vue.mixin({
     }
   }
 })
-
-// Vue.prototype.$displayDebugInUI = !isProduction // todo: make this work
 
 
 // https://vuejs.org/v2/guide/filters.html

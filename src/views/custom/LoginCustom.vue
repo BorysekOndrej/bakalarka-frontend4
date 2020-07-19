@@ -52,10 +52,10 @@
             body-wrapper
           >
             <h2>Sign up</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>Do you want to get notification before the certificates on you site expire?</p>
             <router-link to="/register" tag="span" >
             <CButton
-              color="primary"
+              color="secondary"
               class="active mt-3"
             >
               Register Now!

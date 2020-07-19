@@ -26,12 +26,14 @@
       </CHeaderNavItem>
     </CHeaderNav>
     <CHeaderNav class="mr-4">
+      <!--
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
           <CIcon name="cil-bell"/>
           <CBadge color="info" class="ml-auto">42</CBadge>
         </CHeaderNavLink>
       </CHeaderNavItem>
+      -->
       <!--
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>

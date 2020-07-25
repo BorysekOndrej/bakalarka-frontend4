@@ -15,7 +15,7 @@
     "@coreui/vue-chartjs": "^1.0.5",
     "axios": "^0.19.2",
     "axios-auth-refresh": "^2.2.7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.26.0",
     "vue": "~2.6.11",
     "vue-router": "^3.3.2",
